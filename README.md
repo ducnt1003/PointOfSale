@@ -7,6 +7,12 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-
-
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+Step 1: composer install
+Step 2: cp .env.example .env
+       then config .env file
+Step 3:	php artisan storage:link
+		php artisan migrate
+        php artisan db:seed
+Step 4: Run on localhost
