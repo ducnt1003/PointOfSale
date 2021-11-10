@@ -11,6 +11,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'price',
+        'import_price',
         'description',
         'brand_id',
         'color',
@@ -32,6 +33,6 @@ class Product extends Model
     public function brand(){
        return $this->belongsTo(Brand::class,'brand_id');
     }
-   
+
 }
 

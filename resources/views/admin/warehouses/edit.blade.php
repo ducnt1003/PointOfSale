@@ -32,25 +32,27 @@
         method:"POST", // phương thức gửi dữ liệu.
         data:{query:query, _token:_token},
         success:function(data){ //dữ liệu nhận về
-        $('#queryList').fadeIn();  
+        $('#queryList').fadeIn();
         $('#queryList').html(data); //nhận dữ liệu dạng html và gán vào cặp thẻ có id là countryList
                 }
             });
         }
     });
 
-    $(document).on('click', 'li', function(){  
-        $('#query').val($(this).text());  
-        $('queryList').fadeOut();  
-    });  
+    $(document).on('click', 'li', function(){
+        $('#query').val($(this).text());
+        $('queryList').fadeOut();
+    });
 });
 </script> -->
 @stop
 @section('content')
     <table id="example3" class="display nowrap" cellspacing="0" width="100%">
         <thead>
-            <tr style="font-weight:600">    
+            <tr style="font-weight:600">
                 <td>Tên sản phẩm</td>
+                <td>Giá nhập</td>
+                <td>Giá bán</td>
                 <td>Số lượng</td>
             </tr>
         </thead>
@@ -58,6 +60,8 @@
         @forelse($stocks as $stock)
             <tr>
                 <td> {{$stock->name}}</td>
+                <td> {{$stock->import_price}}</td>
+                <td> {{$stock->price}}</td>
                 <td> {{$stock->quantity}}</td>
             </tr>
         @empty
@@ -73,7 +77,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.2/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
-        $('#example3').DataTable( {     
+        $('#example3').DataTable( {
             "info": true,
         } );
     } );

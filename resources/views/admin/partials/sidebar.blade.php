@@ -70,27 +70,13 @@
                 </li>
                 <!-- product-->
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('admin.products.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-store"></i>
                         <p>
                             Sản phẩm
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('admin.products.create')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Thêm sản phẩm</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('admin.products.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách sản phẩm</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <!-- end product-->
 
