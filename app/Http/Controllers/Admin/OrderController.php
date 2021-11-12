@@ -26,8 +26,8 @@ class OrderController extends Controller
         ->join('products', 'products.id', '=', 'warehouses.product_id')
         ->where('store_id',$store->id)
         ->get();
-              
-        return view('admin.orders.pos',[           
+
+        return view('admin.orders.pos',[
             'stocks'=>$stocks,
         ]);
     }
@@ -35,9 +35,9 @@ class OrderController extends Controller
     public function addToCart($id)
     {
         $product = Product::findOrFail($id);
-          
+
         $cart = session()->get('cart', []);
-  
+
         if(isset($cart[$id])) {
             $cart[$id]['quantity']++;
         } else {
@@ -49,7 +49,7 @@ class OrderController extends Controller
                 "image" => $product->image
             ];
         }
-          
+
         session()->put('cart', $cart);
         return redirect()->back();
     }
@@ -78,8 +78,8 @@ class OrderController extends Controller
 
     public function cancel(){
         session()->forget('cart');
-        return redirect()->back();      
-    } 
+        return redirect()->back();
+    }
 
     public function charge(){
         return view('admin.orders.order');
@@ -90,21 +90,21 @@ class OrderController extends Controller
             'phone' => 'required'
         ]);
         $customer = Customer::where('phone',$request->phone)->first();
-        
-        if(!$customer){    
+
+        if(!$customer){
             $customer = new Customer();
             $customer->name = $request->name;
             $customer->phone = $request->phone;
             $customer->email = "sample@email.com";
             $customer->save();
         }
-        
+
         $carts = session()->get('cart');
         $user = Auth::user();
-        $order = new Order(); 
-        $order->customer_id = $customer->id; 
-        $order->save();  
-        $total = 0; 
+        $order = new Order();
+        $order->customer_id = $customer->id;
+        $order->save();
+        $total = 0;
         foreach($carts as $cart){
             $warehouse = Warehouse::where('product_id',$cart['product_id'])
             ->where('store_id',$user->store_id)->first();
@@ -139,12 +139,12 @@ class OrderController extends Controller
         }
         $order->price = $total;
         $order->update();
-        
+
         $this->cancel();
         return redirect(route('admin.orders.order'));
     }
 
-    public function print(){       
-        return view('admin.orders.order-print');      
-    } 
+    public function print(){
+        return view('admin.orders.order-print');
+    }
 }

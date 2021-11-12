@@ -121,6 +121,31 @@
 					</span>
 				</div>
 				<div class="col-md-4">
+                    <div class="card">
+                        <h5 class="text-center">Customer</h5>
+                        <table class="table table-hover shopping-cart-wrap">
+                            <thead class="text-muted">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <input name="name" class="form-control">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input name="phone" class="form-control">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 					<div class="card">
 						<span id="cart">
 							<table class="table table-hover shopping-cart-wrap">
