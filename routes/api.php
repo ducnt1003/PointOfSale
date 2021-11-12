@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BrandController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('brands')->group(function(){
+    Route::get('', [BrandController::class, 'indexBrand']);
+    //Route::get('show/{id}', [BrandController::class, 'show']);
+    Route::get('/edit/{id}', [BrandController::class, 'editBrand']);
+    Route::post('/store',[BrandController::class,'storeBrand']);
+    Route::put('update/{id}',[BrandController::class,'updateBrand']);
+    Route::delete('delete/{id}',[BrandController::class,'deleteBrand']);
 });
