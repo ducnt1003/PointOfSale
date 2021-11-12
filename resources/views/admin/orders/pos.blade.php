@@ -127,7 +127,7 @@
 								<thead class="text-muted">
 									<tr>
 										<th scope="col">Item</th>
-										<th scope="col" width="120">Qty</th>
+										<th scope="col" width="200">Qty</th>
 										<th scope="col" width="120">Price</th>
 										<th scope="col" width="100">Total</th>
 										<th scope="col" class="text-right" width="200">Delete</th>
