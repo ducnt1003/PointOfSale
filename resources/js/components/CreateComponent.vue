@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     addBrand() {
-      let uri = "http://127.0.0.1:8000/api/brands/store";
+      let uri = 'http://127.0.0.1:8000/api/brands/store';
       this.axios.post(uri, this.brand).then((response) => {
         this.$router.push({ name: "posts" });
       });
