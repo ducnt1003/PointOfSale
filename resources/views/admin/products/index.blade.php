@@ -15,7 +15,7 @@
             <td>Tên sản phẩm</td>
             <td>Danh mục</td>
             <td>Mô tả</td>
-            <td>Giá</td>
+            <td>Giá bán</td>
             <td>Giá nhập</td>
             <td>Màu sắc</td>
 {{--            <td>Nhãn hiệu</td>--}}

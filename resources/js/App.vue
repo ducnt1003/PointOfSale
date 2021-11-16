@@ -1,18 +1,73 @@
 <template>
-  <div class="container">
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <router-link to="/brands/home" class="nav-link">Home</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/brands/create" class="nav-link">Create Post</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/brands/posts" class="nav-link">Posts</router-link>
-        </li>
-      </ul>
-    </nav><br />
+  <div >
+    <section class="header-main">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-3">
+            <div class="brand-wrap">
+              <img class="logo" src="/template/web/images/favicon.png" />
+              <h2 class="logo-text">RHUST POS</h2>
+            </div>
+            <!-- brand-wrap.// -->
+          </div>
+          <div class="col-lg-6 col-sm-6">
+            <form action="#" class="search-wrap">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" />
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+            <!-- search-wrap .end// -->
+          </div>
+          <!-- col.// -->
+          <div class="col-lg-3 col-sm-6">
+            <div class="widgets-wrap d-flex justify-content-end">
+              <div class="widget-header">
+                <a href="#" class="icontext">
+                  <a
+                    href="#"
+                    class="btn btn-primary m-btn m-btn--icon m-btn--icon-only"
+                  >
+                    <i class="fa fa-home"></i>
+                  </a>
+                </a>
+              </div>
+              <!-- widget .// -->
+              <div class="widget-header dropdown">
+                <a
+                  href="#"
+                  class="ml-3 icontext"
+                  data-toggle="dropdown"
+                  data-offset="20,10"
+                >
+                  <img
+                    src="/assets/images/avatars/bshbsh.png"
+                    class="avatar"
+                    alt=""
+                  />
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item" href="#"
+                    ><i class="fa fa-sign-out-alt"></i> Logout</a
+                  >
+                </div>
+                <!--  dropdown-menu .// -->
+              </div>
+              <!-- widget  dropdown.// -->
+            </div>
+            <!-- widgets-wrap.// -->
+          </div>
+          <!-- col.// -->
+          <!-- row.// -->
+        </div>
+      </div>
+      <!-- container.// -->
+    </section>
+    <br />
     <transition name="fade">
       <router-view></router-view>
     </transition>
@@ -20,16 +75,28 @@
 </template>
 
 <style>
-    .fade-enter-active, .fade-leave-active {
-      transition: opacity .5s
-    }
-    .fade-enter, .fade-leave-active {
-      opacity: 0
-    }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+.avatar {
+  vertical-align: middle;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+.bg-default, .btn-default{
+	background-color: #f2f3f8;
+}
+.btn-error{
+	color: #ef5f5f;
+}
 </style>
 
 <script>
-
-    export default{
-    }
+export default {};
 </script>

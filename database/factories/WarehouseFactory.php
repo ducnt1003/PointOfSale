@@ -22,8 +22,8 @@ class WarehouseFactory extends Factory
     public function definition()
     {
         return [
-            'store_id' => $this->faker->numberBetween(1,5),
-            'product_id' => $this->faker->numberBetween(1,5),
+            'store_id' => $this->faker->numberBetween(1,2),
+            'product_id' => $this->faker->numberBetween(1,10),
             'quantity' => $this->faker->numberBetween(10,100)
         ];
     }
