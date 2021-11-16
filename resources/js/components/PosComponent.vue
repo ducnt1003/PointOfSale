@@ -62,24 +62,67 @@
           </span>
         </div>
         <div class="col-md-4">
-          <div>
-            <table >
-              <thead class="text-muted">
+          <div class="box">
+            <table calss="table">
+              <thead class="box">
                 <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Phone</th>
+                  <th scope="col" width="400">Customer</th>
+                  <th scope="col" class="text-center">New</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>
-                    <div class="form-group">
-                      <input name="name" class="form-control" />
-                    </div>
+                  <td class="text-center">
+                    <!-- <model-select
+                      :options="customers"
+                      v-model="customer"
+                    >
+                    </model-select> -->
+                    <model-select :options="options"
+                                v-model="item"
+                                placeholder="select item">
+         </model-select>
+                    <!-- <input
+                        type="text"
+                        class="form-control"
+                        size="30"
+                        v-model="selected"
+                      />
+
+                      <ul
+                        v-if="results.length > 0"
+                        data-dropdown-css-class="select2"
+                      >
+                        <li
+                          class="list-group-item"
+                          v-for="result in results"
+                          :key="result['id']"
+                        >
+                          {{ result.name }}
+                        </li>
+                      </ul> -->
+
+                    <!-- <select
+                      class=" "
+                      style="width: 100%"
+                      v-model="selected"
+                    >
+                      <option v-for="customer in customers" :key="customer['id']" :value="customer.id">
+                        {{ customer.name }}({{customer.phone}})
+                      </option>
+                    </select> -->
+                    <span>Selected: {{ selected["id"] }}</span>
                   </td>
-                  <td>
-                    <div class="form-group">
-                      <input name="phone" class="form-control" />
+                  <td class="text-right">
+                    <div
+                      class="m-btn-group m-btn-group--pill btn-group mr-2"
+                      role="group"
+                      aria-label="..."
+                    >
+                      <router-link :to="{ name: 'customer' }"
+                        ><button type="button" class="m-btn btn btn-default">
+                          <i class="fa fa-plus"></i></button
+                      ></router-link>
                     </div>
                   </td>
                 </tr>
@@ -166,7 +209,7 @@
           <div class="box">
             <dl class="dlist-align">
               <dt>Discount:</dt>
-              <dd class="text-right"><a href="#">0%</a></dd>
+              <dd class="text-right"><a href="#">%0</a></dd>
             </dl>
             <dl class="dlist-align">
               <dt>Total:</dt>
@@ -193,12 +236,23 @@
   </section>
 </template>
 <script>
+import { ModelSelect } from "vue-search-select";
+
 export default {
   data() {
     return {
+
       stocks: [],
       categories: [],
       carts: [],
+      results: [],
+      customers: [],
+      customer: '',
+      selected: {
+          id:'',
+          phone:'',
+          name:''
+      },
     };
   },
 
@@ -214,6 +268,11 @@ export default {
     uri = "http://127.0.0.1:8000/admin/orders/cart";
     this.axios.get(uri).then((response) => {
       this.carts = response.data;
+    });
+    uri = "http://127.0.0.1:8000/admin/customers/index";
+    this.axios.get(uri).then((response) => {
+      this.customers = response.data;
+      console.log(this.customers);
     });
   },
   computed: {
@@ -257,6 +316,17 @@ export default {
         this.carts = response.data;
       });
     },
+    reset () {
+        this.selected = {}
+      },
+      selectFromParentComponent1 () {
+        // select option from parent component
+        this.selected = this.customers[0]
+      },
+
+  },
+  components: {
+    ModelSelect
   },
 };
 </script>

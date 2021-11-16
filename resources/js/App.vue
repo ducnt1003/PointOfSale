@@ -29,7 +29,7 @@
               <div class="widget-header">
                 <a href="#" class="icontext">
                   <a
-                    href="#"
+                    href="/admin/dashboard"
                     class="btn btn-primary m-btn m-btn--icon m-btn--icon-only"
                   >
                     <i class="fa fa-home"></i>

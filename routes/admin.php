@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CartController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\TransferController;
@@ -99,7 +100,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/index',[FeedController::class,'index'])->name('index');
         Route::get('/create',[FeedController::class,'create'])->name('create');
         Route::post('/create',[FeedController::class,'store'])->name('store');
-        
+
     });
 
 
@@ -189,5 +190,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/upfile',[FeedController::class,'upfileView'])->name('upfileView');
         Route::post('/upFbcode',[FeedController::class,'upFbcode'])->name('upFbcode');
         Route::post('/upGgcode',[FeedController::class,'upGgcode'])->name('upGgcode');
+    });
+
+    Route::prefix('customers')->name('customers.')->group(function (){
+        Route::get('/index',[CustomerController::class,'index'])->name('index');
+        Route::get('/search',[CustomerController::class,'search'])->name('search');
+        Route::post('/store',[CustomerController::class,'store'])->name('store');
+
     });
 });
