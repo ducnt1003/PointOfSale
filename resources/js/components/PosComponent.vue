@@ -62,58 +62,25 @@
           </span>
         </div>
         <div class="col-md-4">
-          <div class="box">
-            <table calss="table">
-              <thead class="box">
+          <div class="card">
+            <table calss="table ">
+              <thead class="text-muted">
                 <tr>
-                  <th scope="col" width="400">Customer</th>
-                  <th scope="col" class="text-center">New</th>
+                  <th scope="col" >Customer</th>
+                  <th scope="col"  >New</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td class="text-center">
-                    <!-- <model-select
+                  <td >
+                    <model-select
                       :options="customers"
-                      v-model="customer"
-                    >
-                    </model-select> -->
-                    <model-select :options="options"
-                                v-model="item"
-                                placeholder="select item">
-         </model-select>
-                    <!-- <input
-                        type="text"
-                        class="form-control"
-                        size="30"
-                        v-model="selected"
-                      />
-
-                      <ul
-                        v-if="results.length > 0"
-                        data-dropdown-css-class="select2"
-                      >
-                        <li
-                          class="list-group-item"
-                          v-for="result in results"
-                          :key="result['id']"
-                        >
-                          {{ result.name }}
-                        </li>
-                      </ul> -->
-
-                    <!-- <select
-                      class=" "
-                      style="width: 100%"
                       v-model="selected"
+                      placeholder="select item"
                     >
-                      <option v-for="customer in customers" :key="customer['id']" :value="customer.id">
-                        {{ customer.name }}({{customer.phone}})
-                      </option>
-                    </select> -->
-                    <span>Selected: {{ selected["id"] }}</span>
+                    </model-select>
                   </td>
-                  <td class="text-right">
+                  <td >
                     <div
                       class="m-btn-group m-btn-group--pill btn-group mr-2"
                       role="group"
@@ -222,9 +189,9 @@
                 </a>
               </div>
               <div class="col-md-6">
-                <a href="#" class="btn btn-primary btn-lg btn-block"
+                <button @click.prevent="charge()" class="btn btn-primary btn-lg btn-block"
                   ><i class="fa fa-shopping-bag"></i> Charge
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -241,17 +208,15 @@ import { ModelSelect } from "vue-search-select";
 export default {
   data() {
     return {
-
       stocks: [],
       categories: [],
       carts: [],
       results: [],
       customers: [],
-      customer: '',
       selected: {
-          id:'',
-          phone:'',
-          name:''
+        id: "",
+        phone: "",
+        name: "",
       },
     };
   },
@@ -316,17 +281,13 @@ export default {
         this.carts = response.data;
       });
     },
-    reset () {
-        this.selected = {}
-      },
-      selectFromParentComponent1 () {
-        // select option from parent component
-        this.selected = this.customers[0]
-      },
+    charge(){
 
+        window.open("/admin/orders/print",'_blank');
+    }
   },
   components: {
-    ModelSelect
+    ModelSelect,
   },
 };
 </script>

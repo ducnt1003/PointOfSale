@@ -11,11 +11,19 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = DB::table('customers')
-        ->select('id','name','phone')
-            ->get();
+        $customers = Customer::get();
+        $select=[];
+        $i = 0;
+        foreach($customers as $customer){
+            $str = $customer['name']."(".$customer['phone'].")";
+            $select[$i]=[
+                "value" => $customer['id'],
+                "text" => $str,
+            ];
+            $i++;
+        }
 
-        return response()->json($customers);
+        return $select;
     }
 
     public function search(Request $request)

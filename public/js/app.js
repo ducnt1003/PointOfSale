@@ -2694,39 +2694,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2736,11 +2703,10 @@ __webpack_require__.r(__webpack_exports__);
       carts: [],
       results: [],
       customers: [],
-      customer: '',
       selected: {
-        id: '',
-        phone: '',
-        name: ''
+        id: "",
+        phone: "",
+        name: ""
       }
     };
   },
@@ -2816,12 +2782,8 @@ __webpack_require__.r(__webpack_exports__);
         _this5.carts = response.data;
       });
     },
-    reset: function reset() {
-      this.selected = {};
-    },
-    selectFromParentComponent1: function selectFromParentComponent1() {
-      // select option from parent component
-      this.selected = this.customers[0];
+    charge: function charge() {
+      window.open("/admin/orders/print", '_blank');
     }
   },
   components: {
@@ -40023,38 +39985,33 @@ var render = function () {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-md-4" }, [
-            _c("div", { staticClass: "box" }, [
-              _c("table", { attrs: { calss: "table" } }, [
+            _c("div", { staticClass: "card" }, [
+              _c("table", { attrs: { calss: "table " } }, [
                 _vm._m(1),
                 _vm._v(" "),
                 _c("tbody", [
                   _c("tr", [
                     _c(
                       "td",
-                      { staticClass: "text-center" },
                       [
                         _c("model-select", {
                           attrs: {
-                            options: _vm.options,
+                            options: _vm.customers,
                             placeholder: "select item",
                           },
                           model: {
-                            value: _vm.item,
+                            value: _vm.selected,
                             callback: function ($$v) {
-                              _vm.item = $$v
+                              _vm.selected = $$v
                             },
-                            expression: "item",
+                            expression: "selected",
                           },
                         }),
-                        _vm._v(" "),
-                        _c("span", [
-                          _vm._v("Selected: " + _vm._s(_vm.selected["id"])),
-                        ]),
                       ],
                       1
                     ),
                     _vm._v(" "),
-                    _c("td", { staticClass: "text-right" }, [
+                    _c("td", [
                       _c(
                         "div",
                         {
@@ -40210,7 +40167,28 @@ var render = function () {
                 ]),
               ]),
               _vm._v(" "),
-              _vm._m(5),
+              _c("div", { staticClass: "row" }, [
+                _vm._m(5),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-6" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-lg btn-block",
+                      on: {
+                        click: function ($event) {
+                          $event.preventDefault()
+                          return _vm.charge()
+                        },
+                      },
+                    },
+                    [
+                      _c("i", { staticClass: "fa fa-shopping-bag" }),
+                      _vm._v(" Charge\n              "),
+                    ]
+                  ),
+                ]),
+              ]),
             ]),
           ]),
         ]),
@@ -40236,15 +40214,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", { staticClass: "box" }, [
+    return _c("thead", { staticClass: "text-muted" }, [
       _c("tr", [
-        _c("th", { attrs: { scope: "col", width: "400" } }, [
-          _vm._v("Customer"),
-        ]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Customer")]),
         _vm._v(" "),
-        _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
-          _vm._v("New"),
-        ]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("New")]),
       ]),
     ])
   },
@@ -40299,34 +40273,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-6" }, [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-default btn-error btn-lg btn-block",
-            attrs: { href: "#" },
-          },
-          [
-            _c("i", { staticClass: "fa fa-times-circle" }),
-            _vm._v(" Cancel\n              "),
-          ]
-        ),
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-6" }, [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary btn-lg btn-block",
-            attrs: { href: "#" },
-          },
-          [
-            _c("i", { staticClass: "fa fa-shopping-bag" }),
-            _vm._v(" Charge\n              "),
-          ]
-        ),
-      ]),
+    return _c("div", { staticClass: "col-md-6" }, [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-default btn-error btn-lg btn-block",
+          attrs: { href: "#" },
+        },
+        [
+          _c("i", { staticClass: "fa fa-times-circle" }),
+          _vm._v(" Cancel\n              "),
+        ]
+      ),
     ])
   },
 ]
