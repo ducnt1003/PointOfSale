@@ -26,12 +26,10 @@ use App\Http\Controllers\RssController;
 |
 */
 
-Route::get('brands/{any}', function () {
-    return view('brand');
-  })->where('any', '.*');
-  Route::get('pos/{any}', function () {
+Route::get('orders/{any}', function () {
     return view('pos');
   })->where('any', '.*');
+
 
 Route::get('/fbfeed.xml/{id}', [FeedController::class, 'fbFeed'])->name('fbfeed');
 Route::get('/ggfeed.xml/{id}', [FeedController::class, 'ggFeed'])->name('ggFeed');

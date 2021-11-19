@@ -32,6 +32,7 @@ Route::get('admin/logout',
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
 
 
+
     Route::get('dashboard',[DashboardController::class, 'dashboard'])->name('dashboard');
 
     Route::post('chartmonth',[DashboardController::class, 'chart_month'])->name('chart_month');
@@ -121,6 +122,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('add-to-cart-pos/{id}', [OrderController::class, 'addToCartPos']);
         Route::get('minus-cart/{id}', [OrderController::class, 'minusCart']);
         Route::get('remove-cart/{id}', [OrderController::class, 'removeCart']);
+        Route::delete('cancel-cart', [OrderController::class, 'cancelCart']);
         Route::get('/select-cate/{id}', [OrderController::class, 'selectCate']);
         Route::get('/search',[OrderController::class,'search'])->name('search');
         Route::get('add-to-cart/{id}', [OrderController::class, 'addToCart'])->name('add-to-cart');

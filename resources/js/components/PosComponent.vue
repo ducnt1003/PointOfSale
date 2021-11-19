@@ -66,21 +66,21 @@
             <table calss="table ">
               <thead class="text-muted">
                 <tr>
-                  <th scope="col" >Customer</th>
-                  <th scope="col"  >New</th>
+                  <th scope="col">Customer</th>
+                  <th scope="col">New</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td >
+                  <td>
                     <model-select
                       :options="customers"
                       v-model="selected"
-                      placeholder="select item"
+                      placeholder="select customer"
                     >
                     </model-select>
                   </td>
-                  <td >
+                  <td>
                     <div
                       class="m-btn-group m-btn-group--pill btn-group mr-2"
                       role="group"
@@ -184,13 +184,19 @@
             </dl>
             <div class="row">
               <div class="col-md-6">
-                <a href="#" class="btn btn-default btn-error btn-lg btn-block"
-                  ><i class="fa fa-times-circle"></i> Cancel
-                </a>
+                <button
+                  @click.prevent="cancel()"
+                  class="btn btn-default btn-error btn-lg btn-block"
+                >
+                  <i class="fa fa-times-circle"></i> Cancel
+                </button>
               </div>
               <div class="col-md-6">
-                <button @click.prevent="charge()" class="btn btn-primary btn-lg btn-block"
-                  ><i class="fa fa-shopping-bag"></i> Charge
+                <button
+                  @click.prevent="charge()"
+                  class="btn btn-primary btn-lg btn-block"
+                >
+                  <i class="fa fa-shopping-bag"></i> Charge
                 </button>
               </div>
             </div>
@@ -237,7 +243,6 @@ export default {
     uri = "http://127.0.0.1:8000/admin/customers/index";
     this.axios.get(uri).then((response) => {
       this.customers = response.data;
-      console.log(this.customers);
     });
   },
   computed: {
@@ -281,10 +286,15 @@ export default {
         this.carts = response.data;
       });
     },
-    charge(){
+    charge() {
+      window.open("/admin/orders/print", "_blank");
 
-        window.open("/admin/orders/print",'_blank');
-    }
+    },
+    cancel() {
+      let uri = `http://127.0.0.1:8000/admin/orders/cancel-cart`;
+      this.axios.delete(uri).then((response) => {});
+      this.carts = [];
+    },
   },
   components: {
     ModelSelect,

@@ -248,4 +248,21 @@ class OrderController extends Controller
         session()->put('cart', $cart);
         return response()->json($cart);
     }
+
+    public function cancelCart()
+    {
+        session()->forget('cart');
+        return response()->json('Success cancel');
+    }
+
+    public function chargeCart($customerId)
+    {
+        $carts = session()->get('cart');
+        $order = new Order;
+        $order->customer_id = $customerId;
+        $order->save();
+        foreach($carts as $cart){
+
+        }
+    }
 }

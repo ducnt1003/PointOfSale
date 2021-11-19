@@ -45,6 +45,14 @@
                         </p>
                     </a>
                      </li>
+                     <li class="nav-item">
+                        <a href="/orders/pos" class="nav-link">
+                            <i class="far fa-circle " style="margin-left:4px">></i>
+                           <p style="margin-left:5px">
+                               POS
+                           </p>
+                       </a>
+                        </li>
                 <li class="nav-item">
                     <a href="{{route('admin.categories.index')}}" class="nav-link">
                         <i class="fab fa-product-hunt" style="margin-left:4px"></i>
