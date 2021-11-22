@@ -20,10 +20,10 @@
     <div class="row">
       <div class="col-12">
         <h2 class="page-header">
-          <i class="fas fa-globe"></i>RHUST, Inc.         
+          <i class="fas fa-globe"></i>RHUST, Inc.
           <small class="float-right" >Date: <p>
           <script> document.write(new Date().toLocaleDateString()); </script>
-          </p> 
+          </p>
           </small>
         </h2>
       </div>
@@ -36,11 +36,11 @@
       <div class="col-12 table-responsive">
         <table class="table table-striped ">
           <thead>
-          <tr>           
+          <tr>
             <th  >Product</th>
             <th  >Qty</th>
             <th  >Price</th>
-            <th  >Subtotal</th>
+            <th  >Total</th>
           </tr>
           </thead>
           <tbody>
@@ -48,7 +48,7 @@
           @if(session('cart'))
           @foreach(session('cart') as $id => $details)
           @php $total += $details['price'] * $details['quantity'] @endphp
-          <tr>            
+          <tr>
             <td>{{ $details['name'] }}</td>
             <td >{{ $details['quantity'] }}</td>
             <td>{{ $details['price'] }}</td>
@@ -76,11 +76,11 @@
       <div class="col-6">
         <div class="table-responsive">
           <table class="table">
-            
+
             <tr>
               <th>Discount (0%)</th>
               <td>$0</td>
-            </tr> 
+            </tr>
             <tr>
               <th>Total:</th>
               <td>${{$total}}</td>

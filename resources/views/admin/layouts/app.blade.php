@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     @include('admin.partials.head')
-    <link href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" /> 
-    <link href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" /> 
+    <link href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     @yield('css')
 </head>
 <body class="hold-transition sidebar-mini">
@@ -37,10 +38,10 @@
         </ul>
     </nav>
     <!-- /.navbar -->
-   
+
     <!-- Main Sidebar Container -->
     @include('admin.partials.sidebar')
-    
+
     <div class="content-wrapper">
 
         <!-- Main content -->
@@ -56,8 +57,10 @@
                         <div class="card card-primary mt-3">
                             <div class="card-header">
                                 <h3 class="card-title">{{$title}}</h3>
+                                @yield('create')
                             </div>
                             @yield('content')
+
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -73,6 +76,7 @@
 
 
 </div>
+
 <!-- ./wrapper -->
 @include('admin.partials.footer')
 </body>

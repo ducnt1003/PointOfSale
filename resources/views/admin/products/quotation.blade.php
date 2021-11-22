@@ -21,9 +21,9 @@
         @endforeach
         </tbody>
     </table>
-    
+
 @stop
-@section('js') 
+@section('js')
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.2/js/jquery.dataTables.min.js"></script>
 
@@ -39,10 +39,10 @@
     $(document).ready(function() {
         $('#example1').DataTable( {
             dom: 'Bfrtip',
-            // buttons: [
-            //     'copy', 
-            // ]                   
-            "info": false,
+            //  buttons: [
+            //    'copy',
+            // ]
+            //"info": false,
         } );
     } );
     </script>

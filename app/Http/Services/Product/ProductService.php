@@ -13,8 +13,8 @@ class ProductService
 {
     public function get(){
         return Product::with('category','createdBy')
-            ->orderBy('id')
-            ->paginate(9);
+            ->orderBy('id')->get();
+            // ->paginate(9);
     }
 
     public function store($request){

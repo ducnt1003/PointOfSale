@@ -103,4 +103,41 @@ class BrandController extends Controller
 
 
     }
+
+    public function storeBrand(Request $request)
+    {
+        $brand = new Brand([
+            'name' => $request->get('name'),
+          ]);
+
+          $brand->save();
+
+          return response()->json('successfully added');
+    }
+    public function indexBrand()
+    {
+      return Brand::orderBy('id','asc')->get();
+    }
+    public function editBrand($id)
+    {
+      $brand = Brand::find($id);
+      return response()->json($brand);
+    }
+    public function updateBrand($id, Request $request)
+    {
+      $brand = Brand::find($id);
+
+      $brand->update($request->all());
+      $brand->save();
+
+      return response()->json('successfully updated');
+    }
+    public function deleteBrand($id)
+    {
+      $brand = Brand::find($id);
+
+      $brand->delete();
+
+      return response()->json('successfully deleted');
+    }
 }
