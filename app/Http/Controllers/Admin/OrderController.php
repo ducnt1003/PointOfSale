@@ -255,14 +255,18 @@ class OrderController extends Controller
         return response()->json('Success cancel');
     }
 
-    public function chargeCart($customerId)
+    public function chargeCart()
     {
-        $carts = session()->get('cart');
-        $order = new Order;
-        $order->customer_id = $customerId;
-        $order->save();
-        foreach($carts as $cart){
+        // $carts = session()->get('cart');
+        // $order = new Order;
+        // $order->customer_id = $customerId;
+        // $order->save();
+        // foreach($carts as $cart){
 
-        }
+        // }
+        view('admin.orders.order-print');
+        session()->forget('cart');
+        
+        
     }
 }
