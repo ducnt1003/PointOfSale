@@ -2571,7 +2571,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     charge: function charge() {
+      var _this6 = this;
+
       window.open("/admin/orders/print", "_blank");
+      var uri = "http://127.0.0.1:8000/admin/orders/charge-cart/";
+      this.axios.get(uri).then(function (response) {
+        _this6.carts = [];
+      });
     },
     cancel: function cancel() {
       var uri = "http://127.0.0.1:8000/admin/orders/cancel-cart";

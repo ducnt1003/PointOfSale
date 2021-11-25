@@ -288,7 +288,10 @@ export default {
     },
     charge() {
       window.open("/admin/orders/print", "_blank");
-
+      let uri = `http://127.0.0.1:8000/admin/orders/charge-cart/`;
+      this.axios.get(uri).then((response) => {
+        this.carts = [];
+      });
     },
     cancel() {
       let uri = `http://127.0.0.1:8000/admin/orders/cancel-cart`;
