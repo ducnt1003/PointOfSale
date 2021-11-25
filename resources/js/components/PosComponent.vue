@@ -193,7 +193,7 @@
               </div>
               <div class="col-md-6">
                 <button
-                  @click.prevent="charge()"
+                  @click.prevent="charge(selected['value'])"
                   class="btn btn-primary btn-lg btn-block"
                 >
                   <i class="fa fa-shopping-bag"></i> Charge
@@ -220,9 +220,8 @@ export default {
       results: [],
       customers: [],
       selected: {
-        id: "",
-        phone: "",
-        name: "",
+        value:'',
+        text:'',
       },
     };
   },
@@ -286,12 +285,13 @@ export default {
         this.carts = response.data;
       });
     },
-    charge() {
+    charge(id) {
       window.open("/admin/orders/print", "_blank");
-      let uri = `http://127.0.0.1:8000/admin/orders/charge-cart/`;
+      let uri = `http://127.0.0.1:8000/admin/orders/charge-cart/${id}`;
       this.axios.get(uri).then((response) => {
         this.carts = [];
       });
+
     },
     cancel() {
       let uri = `http://127.0.0.1:8000/admin/orders/cancel-cart`;

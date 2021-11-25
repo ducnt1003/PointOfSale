@@ -2493,9 +2493,8 @@ __webpack_require__.r(__webpack_exports__);
       results: [],
       customers: [],
       selected: {
-        id: "",
-        phone: "",
-        name: ""
+        value: '',
+        text: ''
       }
     };
   },
@@ -2570,11 +2569,11 @@ __webpack_require__.r(__webpack_exports__);
         _this5.carts = response.data;
       });
     },
-    charge: function charge() {
+    charge: function charge(id) {
       var _this6 = this;
 
       window.open("/admin/orders/print", "_blank");
-      var uri = "http://127.0.0.1:8000/admin/orders/charge-cart/";
+      var uri = "http://127.0.0.1:8000/admin/orders/charge-cart/".concat(id);
       this.axios.get(uri).then(function (response) {
         _this6.carts = [];
       });
@@ -39360,7 +39359,7 @@ var render = function () {
                       on: {
                         click: function ($event) {
                           $event.preventDefault()
-                          return _vm.charge()
+                          return _vm.charge(_vm.selected["value"])
                         },
                       },
                     },

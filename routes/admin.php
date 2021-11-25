@@ -123,7 +123,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('minus-cart/{id}', [OrderController::class, 'minusCart']);
         Route::get('remove-cart/{id}', [OrderController::class, 'removeCart']);
         Route::delete('cancel-cart', [OrderController::class, 'cancelCart']);
-        Route::get('charge-cart', [OrderController::class, 'chargeCart']);
+        Route::get('charge-cart/{id}', [OrderController::class, 'chargeCart']);
         Route::get('/select-cate/{id}', [OrderController::class, 'selectCate']);
         Route::get('/search',[OrderController::class,'search'])->name('search');
         Route::get('add-to-cart/{id}', [OrderController::class, 'addToCart'])->name('add-to-cart');

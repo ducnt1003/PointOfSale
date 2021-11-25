@@ -255,19 +255,30 @@ class OrderController extends Controller
         return response()->json('Success cancel');
     }
 
-    public function chargeCart()
+    public function chargeCart($id)
     {
-
-        // $carts = session()->get('cart');
-        // $order = new Order;
-        // $order->customer_id = $customerId;
-        // $order->save();
-        // foreach($carts as $cart){
-
-        // }
-        view('admin.orders.order-print');
+        $carts = session()->get('cart');
+        $order = new Order;
+        $order->customer_id = $id;
+        $order->save();
+        $user = Auth::user();
+        $total = 0;
+        foreach($carts as $cart){
+            $warehouse = Warehouse::where('product_id', $cart['product_id'])
+                ->where('store_id', $user->store_id)->first();
+            $warehouse->quantity = $warehouse->quantity - $cart['quantity'];
+            $warehouse->save();
+            $orderDetail = new OrderDetail();
+            $orderDetail->warehouse_id = $warehouse->id;
+            $orderDetail->quantity =  $cart['quantity'];
+            $orderDetail->order_id = $order->id;
+            $orderDetail->save();
+            $total += $cart['quantity'] * $cart['price'];
+        }
+        $order->price = $total;
+        $order->save();
         session()->forget('cart');
-
+        return response()->json("Success charge");
 
     }
 }
