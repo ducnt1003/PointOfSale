@@ -257,12 +257,6 @@ class OrderController extends Controller
 
     public function chargeCart($customerId)
     {
-        $carts = session()->get('cart');
-        $order = new Order;
-        $order->customer_id = $customerId;
-        $order->save();
-        foreach($carts as $cart){
 
-        }
     }
 }
