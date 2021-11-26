@@ -24,6 +24,7 @@ class CustomerSeeder extends Seeder
             'password' => Hash::make('duc-password'),
             'created_at' => new \dateTime,
             'updated_at' => new \dateTime,
+            'group_id' => '1',
         ]);
         Customer::create(
             [
@@ -33,9 +34,10 @@ class CustomerSeeder extends Seeder
                 'password' => Hash::make('nam-password'),
                 'created_at' => new \dateTime,
                 'updated_at' => new \dateTime,
+                'group_id' => '1',
             ]
         );
-        
+
 
     }
 }

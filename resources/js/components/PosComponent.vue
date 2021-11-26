@@ -33,9 +33,6 @@
                 <figure class="card card-product">
                   <div class="img-wrap">
                     <img src="/assets/images/items/3.jpg" />
-                    <a class="btn-overlay" href="#"
-                      ><i class="fa fa-search-plus"></i> Quick view</a
-                    >
                   </div>
                   <figcaption class="info-wrap">
                     <a href="#" class="title">{{ stock["name"] }}</a>
@@ -86,10 +83,12 @@
                       role="group"
                       aria-label="..."
                     >
-                      <router-link :to="{ name: 'customer' }"
+                      <!-- <router-link :to="{ name: 'customer' }"
                         ><button type="button" class="m-btn btn btn-default">
                           <i class="fa fa-plus"></i></button
-                      ></router-link>
+                      ></router-link> -->
+
+                      <b-button class="m-btn btn btn-default" v-b-modal.modal-prevent-closing><i class="fa fa-plus"></i></b-button>
                     </div>
                   </td>
                 </tr>
@@ -205,11 +204,38 @@
         </div>
       </div>
     </div>
+    <b-modal
+      id="modal-prevent-closing"
+      ref="modal"
+      title="Submit Your Name"
+      @show="resetModal"
+      @hidden="resetModal"
+      @ok="handleOk"
+    >
+      <form ref="form" @submit.stop.prevent="handleSubmit">
+        <b-form-group
+          label="Name"
+          label-for="name-input"
+          invalid-feedback="Name is required"
+          :state="nameState"
+        >
+          <b-form-input
+            id="name-input"
+            v-model="name"
+            :state="nameState"
+            required
+          ></b-form-input>
+        </b-form-group>
+      </form>
+    </b-modal>
+
     <!-- container //  -->
   </section>
 </template>
+
 <script>
 import { ModelSelect } from "vue-search-select";
+import { BootstrapVue, ModalPlugin } from 'bootstrap-vue';
 
 export default {
   data() {
@@ -220,9 +246,12 @@ export default {
       results: [],
       customers: [],
       selected: {
-        value:'',
-        text:'',
+        value: "",
+        text: "",
       },
+      name: '',
+        nameState: null,
+        submittedNames: []
     };
   },
 
@@ -291,16 +320,42 @@ export default {
       this.axios.get(uri).then((response) => {
         this.carts = [];
       });
-
     },
     cancel() {
       let uri = `http://127.0.0.1:8000/admin/orders/cancel-cart`;
       this.axios.delete(uri).then((response) => {});
       this.carts = [];
     },
+    checkFormValidity() {
+        const valid = this.$refs.form.checkValidity()
+        this.nameState = valid
+        return valid
+      },
+      resetModal() {
+        this.name = ''
+        this.nameState = null
+      },
+      handleOk(bvModalEvt) {
+        // Prevent modal from closing
+        bvModalEvt.preventDefault()
+        // Trigger submit handler
+        this.handleSubmit()
+      },
+      handleSubmit() {
+        // Exit when the form isn't valid
+        if (!this.checkFormValidity()) {
+          return
+        }
+        // Push the name to submitted names
+        this.submittedNames.push(this.name)
+        // Hide the modal manually
+        this.$nextTick(() => {
+          this.$bvModal.hide('modal-prevent-closing')
+        })
+      }
   },
   components: {
-    ModelSelect,
+    ModelSelect,BootstrapVue,ModalPlugin
   },
 };
 </script>

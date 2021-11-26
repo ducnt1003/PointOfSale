@@ -25,6 +25,7 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('category_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();
+            $table->decimal('import_price')->nullable();
             $table->integer('active')->nullable();
             $table->timestamps();
             $table->softDeletes();

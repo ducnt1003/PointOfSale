@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Sale;
 use App\Models\Cart;
@@ -257,13 +258,16 @@ class OrderController extends Controller
 
     public function chargeCart($id)
     {
-        $carts = session()->get('cart');
-        $order = new Order;
-        $order->customer_id = $id;
-        $order->save();
         $user = Auth::user();
+        $carts = session()->get('cart');
+        $order = new Order();
+        $order->customer_id = $id;
+        $order->user_id = $user->id;
+        $order->save();
+
         $total = 0;
         foreach($carts as $cart){
+            $total += $cart['quantity'] * $cart['price'];
             $warehouse = Warehouse::where('product_id', $cart['product_id'])
                 ->where('store_id', $user->store_id)->first();
             $warehouse->quantity = $warehouse->quantity - $cart['quantity'];
@@ -273,10 +277,12 @@ class OrderController extends Controller
             $orderDetail->quantity =  $cart['quantity'];
             $orderDetail->order_id = $order->id;
             $orderDetail->save();
-            $total += $cart['quantity'] * $cart['price'];
+
         }
         $order->price = $total;
         $order->save();
+        $customerController = new CustomerController;
+        $customerController->addMoney($id,$total);
         session()->forget('cart');
         return response()->json("Success charge");
 

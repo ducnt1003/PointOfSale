@@ -21,6 +21,7 @@ class CreateCustomersTable extends Migration
             $table->string('google_id')->nullable();
             $table->string('address', 200)->nullable();
             $table->string('location', 5)->default('vi');
+            $table->unsignedBigInteger('group_id')->default('1');;
             $table->string('password')->nullable();
             $table->timestamps();
         });

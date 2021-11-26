@@ -289,9 +289,14 @@
                         </li>
                     </ul>
                 </li>
-
-
-
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <p style="margin-left: 10px">
+                            Khách hàng
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
