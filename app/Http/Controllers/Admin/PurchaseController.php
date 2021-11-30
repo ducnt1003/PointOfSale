@@ -105,12 +105,12 @@ class PurchaseController extends Controller
         $data =  $request->except('_token');
         $data = array_filter($data, 'strlen');
         $purchase = Purchase::create($data);
-        if ($purchase) {
-            return redirect(route('admin.purchases.index'))
-                ->with('success', __('Create purchase\'s success!'));
-        }
+
         return redirect(route('admin.purchases.index'))
-            ->with('error', __('Create purchase\'s error!'));
+            ->with('success', __('Create purchase\'s success!'));
+
+        // return redirect(route('admin.purchases.index'))
+        //     ->with('error', __('Create purchase\'s error!'));
     }
 
     public function update_purchase(PurchaseRequest $request, $id)
@@ -229,17 +229,17 @@ class PurchaseController extends Controller
         ]);
         $data =  $request->except('_token');
         $data = array_filter($data, 'strlen');
-        $purchase = DB::table('purchases')->where('purchase_id','=',$data['purchase_id'])->first();
-        if($purchase){
+        $purchase = DB::table('purchases')->where('purchase_id', '=', $data['purchase_id'])->first();
+        if ($purchase) {
             Purchases_payment::create($data);
             DB::table('purchases')
-            ->where('purchase_id','=',$data['purchase_id'])
-            ->update(['paid' => 1]);
+                ->where('purchase_id', '=', $data['purchase_id'])
+                ->update(['paid' => 1]);
             return redirect(route('admin.purchases.payments'))
                 ->with('success', __('Create payment\'s success!'));
         }
         return redirect(route('admin.purchases.payments'))
-                ->with('error', __('Create payment\'s fail because purchase_id is not exist!'));
+            ->with('error', __('Create payment\'s fail because purchase_id is not exist!'));
     }
 
     public function delete_product(Request $request)
@@ -359,14 +359,14 @@ class PurchaseController extends Controller
     public function delete_payment(Request $request)
     {
         $payment = Purchases_payment::find($request->payment_id);
-        $purchase_id = $payment -> purchase_id;
-        $purchase = DB::table('purchases')->where('purchase_id','=',$purchase_id)->first();
+        $purchase_id = $payment->purchase_id;
+        $purchase = DB::table('purchases')->where('purchase_id', '=', $purchase_id)->first();
         if ($payment) {
             $payment->delete();
-            if($purchase){
+            if ($purchase) {
                 DB::table('purchases')
-                ->where('purchase_id', '=',$purchase_id)
-                ->update(['paid' => 0]);
+                    ->where('purchase_id', '=', $purchase_id)
+                    ->update(['paid' => 0]);
             }
             return redirect(route('admin.purchases.payments'))
                 ->with('success', __('Delete Payment\'s success!'));
@@ -375,9 +375,10 @@ class PurchaseController extends Controller
             ->with('info', __('Payment not found!'));
     }
 
-    public function delete_purchase(Request $request){
+    public function delete_purchase(Request $request)
+    {
         $purchase = Purchase::find($request->id);
-        if($purchase){
+        if ($purchase) {
             DB::beginTransaction();
             try {
                 Purchases_product::where('purchase_id', $purchase->purchase_id)->delete();

@@ -283,7 +283,7 @@ class OrderController extends Controller
         $order->save();
         $customerController = new CustomerController;
         $customerController->addMoney($id,$total);
-        session()->forget('cart');
+        // session()->forget('cart');
         return response()->json("Success charge");
 
     }

@@ -58,8 +58,8 @@ class TransferController extends Controller
             return redirect(route('admin.transfers.list'))
                 ->with('success', __('Create transfer successfull!'));
         };
-        return redirect(route('admin.transfers.list'))
-            ->with('error', __('Create transfer\'s fail!'));
+        // return redirect(route('admin.transfers.list'))
+        //     ->with('error', __('Create transfer\'s fail!'));
     }
 
     public function edit_transfer($id)
@@ -222,22 +222,23 @@ class TransferController extends Controller
 
     public function orders_list()
     {
+        $store_id = Auth::user()->store_id;
         $transfers = DB::table('transfers')
             ->where([
-                ['store_take', Auth::user()->store_id],
+                ['store_take', $store_id],
                 ['status', 0]
             ])
             ->orderBy('id', 'DESC')->simplePaginate();
         $purchases = DB::table('purchases')
             ->where([
-                ['stock_id', Auth::user()->store_id],
+                ['stock_id', $store_id],
                 ['status', 0]
             ])
             ->orderBy('id', 'DESC')->simplePaginate();
         return view(
             'admin.transfers.orders_list',
             [
-                'title' => 'Danh sách đơn hàng cần nhận nhà kho ' . Auth::user()->store_id
+                'title' => 'Danh sách đơn hàng cần nhận nhà kho ' . $store_id
             ],
             compact('transfers', 'purchases')
         );

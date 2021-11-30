@@ -25,8 +25,8 @@ class CustomerController extends Controller
         $credentials = $request->except('_token');
         $user = DB::table('customers')->where('email',$request -> email) -> first();
         if (Auth::guard('web')->attempt($credentials)) {
-            $request->session()->regenerate();                  
-            return redirect()->intended(route('home'));          
+            $request->session()->regenerate();
+            return redirect()->intended(route('home'));
         }
         return back()->withErrors([
             'email' => 'Tài khoản hoặc mật khẩu không đúng. ',
@@ -58,7 +58,7 @@ class CustomerController extends Controller
         $customer->name = $request->name;
         $customer->email = $request->email;
         $customer->phone = $request->phone;
-        $customer->password = Hash::make($request->password);  
+        $customer->password = Hash::make($request->password);
         $customer->save();
             return redirect(route('login'))
             ->with('success', __('Register\'s success!'));
@@ -87,7 +87,7 @@ class CustomerController extends Controller
             }
 
             else{
-                $createUser = Customer::create([    
+                $createUser = Customer::create([
                     'name' => $googleUser->name,
                     'email' => $googleUser->email,
                     'google_id' => $googleUser->id,
@@ -103,35 +103,35 @@ class CustomerController extends Controller
         }
     }
 
-    public function facebookRedirect()
-    {
-        return Socialite::driver('facebook')->redirect();
-    }
+    // public function facebookRedirect()
+    // {
+    //     return Socialite::driver('facebook')->redirect();
+    // }
 
-    public function loginWithFacebook()
-    {
-        try {
-            $facebookUser = Socialite::driver('facebook')->user();
-            $customer = Customer::where('google_id', $facebookUser->id)->first();
-            if($customer){
-                Auth::login($customer);
-                return redirect(route('home'));
-            }
+    // public function loginWithFacebook()
+    // {
+    //     try {
+    //         $facebookUser = Socialite::driver('facebook')->user();
+    //         $customer = Customer::where('google_id', $facebookUser->id)->first();
+    //         if($customer){
+    //             Auth::login($customer);
+    //             return redirect(route('home'));
+    //         }
 
-            else{
-                $createUser = Customer::create([    
-                    'name' => $facebookUser->name,
-                    'email' => $facebookUser->email,
-                    'facebook_id' => $facebookUser->id,
-                    'password' => encrypt('test@123')
-                ]);
+    //         else{
+    //             $createUser = Customer::create([
+    //                 'name' => $facebookUser->name,
+    //                 'email' => $facebookUser->email,
+    //                 'facebook_id' => $facebookUser->id,
+    //                 'password' => encrypt('test@123')
+    //             ]);
 
-                Auth::login($createUser);
-                return redirect(route('home'));
-            }
+    //             Auth::login($createUser);
+    //             return redirect(route('home'));
+    //         }
 
-        } catch (Exception $exception) {
-            dd($exception->getMessage());
-        }
-    }
+    //     } catch (Exception $exception) {
+    //         dd($exception->getMessage());
+    //     }
+    // }
 }

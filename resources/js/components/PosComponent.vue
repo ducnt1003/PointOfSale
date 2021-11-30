@@ -83,12 +83,15 @@
                       role="group"
                       aria-label="..."
                     >
-                      <!-- <router-link :to="{ name: 'customer' }"
+                      <router-link :to="{ name: 'customer' }"
                         ><button type="button" class="m-btn btn btn-default">
                           <i class="fa fa-plus"></i></button
-                      ></router-link> -->
+                      ></router-link>
+                      <!-- <button type="button" class="btn" @click="showModal">
+                        <i class="fa fa-plus"></i>
+                      </button> -->
 
-                      <b-button class="m-btn btn btn-default" v-b-modal.modal-prevent-closing><i class="fa fa-plus"></i></b-button>
+                      <!-- <b-button class="m-btn btn btn-default" v-b-modal.modal-prevent-closing><i class="fa fa-plus"></i></b-button> -->
                     </div>
                   </td>
                 </tr>
@@ -204,30 +207,10 @@
         </div>
       </div>
     </div>
-    <b-modal
-      id="modal-prevent-closing"
-      ref="modal"
-      title="Submit Your Name"
-      @show="resetModal"
-      @hidden="resetModal"
-      @ok="handleOk"
-    >
-      <form ref="form" @submit.stop.prevent="handleSubmit">
-        <b-form-group
-          label="Name"
-          label-for="name-input"
-          invalid-feedback="Name is required"
-          :state="nameState"
-        >
-          <b-form-input
-            id="name-input"
-            v-model="name"
-            :state="nameState"
-            required
-          ></b-form-input>
-        </b-form-group>
-      </form>
-    </b-modal>
+    <Modal v-show="isModalVisible" @close="closeModal">
+      <h3 slot="header">Add new customer</h3>
+-
+    </Modal>
 
     <!-- container //  -->
   </section>
@@ -235,7 +218,7 @@
 
 <script>
 import { ModelSelect } from "vue-search-select";
-import { BootstrapVue, ModalPlugin } from 'bootstrap-vue';
+import Modal from "./Modal.vue";
 
 export default {
   data() {
@@ -249,9 +232,7 @@ export default {
         value: "",
         text: "",
       },
-      name: '',
-        nameState: null,
-        submittedNames: []
+      isModalVisible: false,
     };
   },
 
@@ -326,36 +307,16 @@ export default {
       this.axios.delete(uri).then((response) => {});
       this.carts = [];
     },
-    checkFormValidity() {
-        const valid = this.$refs.form.checkValidity()
-        this.nameState = valid
-        return valid
-      },
-      resetModal() {
-        this.name = ''
-        this.nameState = null
-      },
-      handleOk(bvModalEvt) {
-        // Prevent modal from closing
-        bvModalEvt.preventDefault()
-        // Trigger submit handler
-        this.handleSubmit()
-      },
-      handleSubmit() {
-        // Exit when the form isn't valid
-        if (!this.checkFormValidity()) {
-          return
-        }
-        // Push the name to submitted names
-        this.submittedNames.push(this.name)
-        // Hide the modal manually
-        this.$nextTick(() => {
-          this.$bvModal.hide('modal-prevent-closing')
-        })
-      }
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
   },
   components: {
-    ModelSelect,BootstrapVue,ModalPlugin
+    ModelSelect,
+    Modal,
   },
 };
 </script>

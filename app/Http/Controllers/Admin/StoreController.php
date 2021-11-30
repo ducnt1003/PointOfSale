@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\storeRequest;
+use App\Http\Requests\Admin\StoreRequest;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class StoreController extends Controller
     public function index()
     {
         $stores = Store::get();
-        return view('admin.stores.index',[
+        return view('admin.stores.index', [
             'title' => 'Danh sách cửa hàng',
             'stores' => $stores
         ]);
@@ -25,7 +25,8 @@ class StoreController extends Controller
         if ($store) {
             return view('admin.stores.edit', [
                 'title' => 'Chỉnh sửa cửa hàng',
-                'store' => $store]);
+                'store' => $store
+            ]);
         }
     }
 
@@ -45,7 +46,7 @@ class StoreController extends Controller
     public function create()
     {
         $store = new Store();
-        return view('admin.stores.create',[
+        return view('admin.stores.create', [
             'title' => 'Thêm store mới',
             'store' => $store
         ])->with('success', __('Thêm cửa hàng thành công!'));
@@ -56,12 +57,12 @@ class StoreController extends Controller
         $data = $request->except('_token');
         $data = array_filter($data, 'strlen');
         $store = Store::create($data);
-        if ($store) {
-            return redirect(route('admin.stores.index'))
-                ->with('success', __('Thêm thành công'));
-        }
+
         return redirect(route('admin.stores.index'))
-            ->with('error', __('Thêm không thành công!!!!'));;
+            ->with('success', __('Thêm thành công'));
+
+        // return redirect(route('admin.stores.index'))
+        //     ->with('error', __('Thêm không thành công!!!!'));;
     }
 
     public function destroy(Request $request)

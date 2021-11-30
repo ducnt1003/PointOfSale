@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\brandRequest;
+use App\Http\Requests\Admin\BrandRequest;
 use App\Models\Brand;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::paginate(10);
-        return view('admin.brands.index',[
+        return view('admin.brands.index', [
             'title' => 'Danh sách brand',
             'brands' => $brands
         ]);
@@ -25,7 +25,8 @@ class BrandController extends Controller
         if ($brand) {
             return view('admin.brands.edit', [
                 'title' => 'Chỉnh sửa brand',
-                'brand' => $brand]);
+                'brand' => $brand
+            ]);
         }
     }
 
@@ -47,7 +48,7 @@ class BrandController extends Controller
     public function create()
     {
         $brand = new Brand();
-        return view('admin.brands.create',[
+        return view('admin.brands.create', [
             'title' => 'Thêm brand mới',
             'brand' => $brand
         ])->with('success', __('Thêm brand thành công!'));
@@ -64,12 +65,8 @@ class BrandController extends Controller
         $brand = Brand::create($data);
 
 
-        if ($brand) {
-            return redirect(route('admin.brands.index'))
-                ->with('success', __('Thêm thành công'));
-        }
         return redirect(route('admin.brands.index'))
-            ->with('error', __('Thêm không thành công!!!!'));;
+            ->with('success', __('Thêm thành công'));
     }
 
     public function destroy(Request $request)
@@ -87,57 +84,56 @@ class BrandController extends Controller
 
     private function _upload($request)
     {
-        if ($request->hasFile('photo')){
+        if ($request->hasFile('photo')) {
             try {
                 $name = $request->file('photo')->getClientOriginalName();
-                $pathFull ='uploads/'.date("Y/m/d");
+                $pathFull = 'uploads/' . date("Y/m/d");
                 $request->file('file')->storeAs(
-                    'public/' . $pathFull, $name
+                    'public/' . $pathFull,
+                    $name
                 );
                 return '/storage/' . $pathFull . '/' . $name;
-            }catch (\Exception $error){
+            } catch (\Exception $error) {
                 return false;
             }
         }
         return false;
-
-
     }
 
     public function storeBrand(Request $request)
     {
         $brand = new Brand([
             'name' => $request->get('name'),
-          ]);
+        ]);
 
-          $brand->save();
+        $brand->save();
 
-          return response()->json('successfully added');
+        return response()->json('successfully added');
     }
     public function indexBrand()
     {
-      return Brand::orderBy('id','asc')->get();
+        return Brand::orderBy('id', 'asc')->get();
     }
     public function editBrand($id)
     {
-      $brand = Brand::find($id);
-      return response()->json($brand);
+        $brand = Brand::find($id);
+        return response()->json($brand);
     }
     public function updateBrand($id, Request $request)
     {
-      $brand = Brand::find($id);
+        $brand = Brand::find($id);
 
-      $brand->update($request->all());
-      $brand->save();
+        $brand->update($request->all());
+        $brand->save();
 
-      return response()->json('successfully updated');
+        return response()->json('successfully updated');
     }
     public function deleteBrand($id)
     {
-      $brand = Brand::find($id);
+        $brand = Brand::find($id);
 
-      $brand->delete();
+        $brand->delete();
 
-      return response()->json('successfully deleted');
+        return response()->json('successfully deleted');
     }
 }

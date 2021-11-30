@@ -42,7 +42,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  v-model="customer.addres"
+                  v-model="customer.address"
                 />
               </div>
             </div>
@@ -61,12 +61,18 @@
 export default {
   data() {
     return {
-      customer: {},
+      customer: {
+        name: "",
+        phone: "",
+        email: "",
+        address: "",
+      },
     };
   },
   methods: {
     addCustomer() {
-      let uri = "http://127.0.0.1:8000/admin/customers/store";
+      let uri = "http://127.0.0.1:8000/admin/customers/create";
+      console.log(this.customer);
       this.axios.post(uri, this.customer).then((response) => {
         this.$router.push({ name: "pos" });
       });

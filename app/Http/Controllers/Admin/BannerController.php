@@ -13,7 +13,7 @@ class BannerController extends Controller
     public function index()
     {
         $banners = Banner::paginate(10);
-        return view('admin.banners.index',[
+        return view('admin.banners.index', [
             'title' => 'Danh sách Banner',
             'banners' => $banners
         ]);
@@ -25,7 +25,8 @@ class BannerController extends Controller
         if ($banner) {
             return view('admin.banners.edit', [
                 'title' => 'Chỉnh sửa banner',
-                'banner' => $banner]);
+                'banner' => $banner
+            ]);
         }
     }
 
@@ -47,7 +48,7 @@ class BannerController extends Controller
     public function create()
     {
         $banner = new Banner();
-        return view('admin.banners.create',[
+        return view('admin.banners.create', [
             'title' => 'Thêm Banner mới',
             'banner' => $banner
         ])->with('success', __('Thêm Banner thành công!'));
@@ -64,12 +65,9 @@ class BannerController extends Controller
         $banner = Banner::create($data);
 
 
-        if ($banner) {
-            return redirect(route('admin.banners.index'))
-                ->with('success', __('Thêm thành công'));
-        }
+
         return redirect(route('admin.banners.index'))
-            ->with('error', __('Thêm không thành công!!!!'));;
+            ->with('success', __('Thêm thành công'));
     }
 
     public function destroy(Request $request)
@@ -87,20 +85,19 @@ class BannerController extends Controller
 
     private function _upload($request)
     {
-        if ($request->hasFile('photo')){
+        if ($request->hasFile('photo')) {
             try {
                 $name = $request->file('photo')->getClientOriginalName();
-                $pathFull ='uploads/'.date("Y/m/d");
+                $pathFull = 'uploads/' . date("Y/m/d");
                 $request->file('file')->storeAs(
-                    'public/' . $pathFull, $name
+                    'public/' . $pathFull,
+                    $name
                 );
                 return '/storage/' . $pathFull . '/' . $name;
-            }catch (\Exception $error){
+            } catch (\Exception $error) {
                 return false;
             }
         }
         return false;
-
-
     }
 }
