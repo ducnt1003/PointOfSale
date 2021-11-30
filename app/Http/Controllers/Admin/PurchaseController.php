@@ -77,10 +77,12 @@ class PurchaseController extends Controller
     public function edit_product($purchase_id, $product_id)
     {
         $product = DB::table('purchases_products')
-            ->where([
+            ->where(
+                [
                 ['purchase_id', '=', $purchase_id],
                 ['product_id', '=', $product_id]
-            ])->first();
+                ]
+            )->first();
         return view(
             'admin.purchases.edit_product',
             ['title' => 'Sửa thông tin sản phẩm trong đơn hàng'],
@@ -130,9 +132,11 @@ class PurchaseController extends Controller
 
     public function update_payment(Request $request, $id)
     {
-        $request->validate([
+        $request->validate(
+            [
             'code' => 'required',
-        ]);
+            ]
+        );
         $payment = Purchases_payment::find($id);
         if ($payment) {
             if ($request->input('name_code') == 1) {
@@ -152,15 +156,19 @@ class PurchaseController extends Controller
 
     public function update_product($purchase_id, $product_id, Request $request)
     {
-        $request->validate([
+        $request->validate(
+            [
             'quantity' => 'required|int|min:0',
             'money' => 'required|int|min:0',
-        ]);
+            ]
+        );
         $old_product = DB::table('purchases_products')
-            ->where([
+            ->where(
+                [
                 ['purchase_id', '=', $purchase_id],
                 ['product_id', '=', $product_id]
-            ])->first();
+                ]
+            )->first();
         $id = $old_product->id;
         $old_money = $old_product->money;
         $product = Purchases_product::find($id);
@@ -185,28 +193,34 @@ class PurchaseController extends Controller
 
     public function add_product(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make(
+            $request->all(), [
             'product_id' => 'required',
             'quantity' => 'required|int|min:0',
             'money' => 'required|numeric|min:0',
-        ]);
+            ]
+        );
         $purchase_id = $request->get('purchase_id');
         $product_id = $request->get('product_id');
         $money = $request->get('money');
         $quantity = $request->get('quantity');
         if (!$validator->fails()) {
             $value = DB::table('purchases_products')
-                ->where([
+                ->where(
+                    [
                     ['purchase_id', '=', $purchase_id],
                     ['product_id', '=', $product_id]
-                ])->get();
+                    ]
+                )->get();
             if ($value->count() == 0) {
-                DB::table('purchases_products')->insert([
+                DB::table('purchases_products')->insert(
+                    [
                     'purchase_id' => $purchase_id,
                     'product_id' => $product_id,
                     'quantity' => $quantity,
                     'money' => $money
-                ]);
+                    ]
+                );
                 //them gia tri cua don hang
                 $old_purchase = DB::table('purchases')->where('purchase_id', '=', $purchase_id)->first();
                 $id = $old_purchase->id;
@@ -217,16 +231,20 @@ class PurchaseController extends Controller
                 $row = "<tr><td>" . $purchase_id . "</td><td>" . $product_id . "</td><td>"
                     . $quantity . "</td><td>" . $money . "</td><td><button id='edit' type='button' class='btn btn-success'><i class='fas fa-edit'></i></button>" . "&nbsp" . "<button type='button' class='delete btn btn-danger' data=" . $product_id . "><i class='fas fa-trash'></i></button>";
                 echo $row;
-            } else echo 'exist';
-        } else echo 'error';
+            } else { echo 'exist';
+            }
+        } else { echo 'error';
+        }
     }
 
     public function add_payment(Request $request)
     {
-        $request->validate([
+        $request->validate(
+            [
             'code' => 'required',
             'purchase_id' => "required|unique:purchases_payments,purchase_id,{$request->purchase_id}"
-        ]);
+            ]
+        );
         $data =  $request->except('_token');
         $data = array_filter($data, 'strlen');
         $purchase = DB::table('purchases')->where('purchase_id', '=', $data['purchase_id'])->first();
@@ -258,12 +276,14 @@ class PurchaseController extends Controller
 
 
             echo $request->input('id');
-        } else echo "error";
+        } else { echo "error";
+        }
     }
 
     public function uploadFile(Request $request)
     {
-        if ($request->file('file') == null) return redirect(route('admin.transfers.list'))->with('error', __('You need add file .csv!'));
+        if ($request->file('file') == null) { return redirect(route('admin.transfers.list'))->with('error', __('You need add file .csv!'));
+        }
         if ($request->input('submit') != null) {
             $file = $request->file('file');
 
@@ -286,7 +306,7 @@ class PurchaseController extends Controller
                 $importData_arr = array();
                 $i = 0;
 
-                while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                while (($filedata = fgetcsv($file, 1000, ",")) !== false) {
                     $num = count($filedata);
                     for ($c = 0; $c < $num; $c++) {
                         $importData_arr[$i][] = $filedata[$c];
@@ -306,12 +326,14 @@ class PurchaseController extends Controller
                         $check_data = false;
                         break;
                     }
-                    $validator = Validator::make($importData_arr[$c], [
+                    $validator = Validator::make(
+                        $importData_arr[$c], [
                         '0' => 'required',
                         '1' => 'required',
                         '2' => 'required|int|between:0,1000000',
                         '3' => 'required|numeric|between:0,999999999.999',
-                    ]);
+                        ]
+                    );
                     if ($validator->fails()) {
                         $check_data = false;
                     }

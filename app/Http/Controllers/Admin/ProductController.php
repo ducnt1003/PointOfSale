@@ -24,10 +24,12 @@ class ProductController extends Controller
 
     public function index()
     {
-        return view('admin.products.index', [
+        return view(
+            'admin.products.index', [
             'title'=>'Danh sách sản phẩm',
             'products'=>$this->productService->get(),
-        ]);
+            ]
+        );
     }
     public function create()
     {
@@ -36,15 +38,17 @@ class ProductController extends Controller
 
         $product_code = rand();
         $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-        $barcode = $generator->getBarcode($product_code,$generator::TYPE_CODE_128);
-        return view('admin.products.create',[
+        $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128);
+        return view(
+            'admin.products.create', [
             'title'=>'Thêm sản phẩm mới',
             'categories'=>$categories,
             'product_code'=>$product_code,
             'barcode'=>$barcode,
             'users' => Auth::user(),
             'brands'=>$brands,
-        ]);
+            ]
+        );
     }
 
     public function store(ProductRequest $request)
@@ -59,50 +63,62 @@ class ProductController extends Controller
         $categories = Category::orderBy('id')->get();
         $product = $this->productService->getById($id);
         $users = User::orderBy('id')->get();
-        return view('admin.products.edit',[
+        return view(
+            'admin.products.edit', [
             'title'=>'Chỉnh sửa sản phẩm: ' . $product->name,
             'categories'=>$categories,
             'product'=>$product,
             'brands'=>$brands,
             'users' => Auth::user(),
-        ]);
+            ]
+        );
     }
 
 
-   public function update(ProductRequest $request, $id)
-   {
-       $product = Product::find($id);
-       $this->productService->update($request,$product);
-       return redirect(route('admin.products.index'));
-   }
+    public function update(ProductRequest $request, $id)
+    {
+        $product = Product::find($id);
+        $this->productService->update($request, $product);
+        return redirect(route('admin.products.index'));
+    }
 
 
-    public function destroy(Request $request){
+    public function destroy(Request $request)
+    {
         $result = $this->productService->destroy($request);
-        if ($result){
-            return response()->json([
+        if ($result) {
+            return response()->json(
+                [
                 'error'=>false,
                 'message'=>'Xóa thành công danh mục'
-            ]);
+                ]
+            );
         }
-        return response()->json([
+        return response()->json(
+            [
             'error'=>true
-        ]);
+            ]
+        );
     }
 
-    public function getBarcode($id){
+    public function getBarcode($id)
+    {
         $product = Product::find($id);
-        return view('admin.products.barcode',[
+        return view(
+            'admin.products.barcode', [
             'product'=>$product,
-        ]);
+            ]
+        );
     }
 
 
     public function quotation()
     {
-        return view('admin.products.quotation', [
+        return view(
+            'admin.products.quotation', [
             'title'=>'Giá sản phẩm',
             'products'=>$this->productService->get(),
-        ]);
+            ]
+        );
     }
 }

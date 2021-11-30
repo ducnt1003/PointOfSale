@@ -13,35 +13,44 @@ class FeedController extends Controller
 {
     public function index()
     {
-        return view('admin.feeds.index', [
+        return view(
+            'admin.feeds.index', [
             'title' => 'Feeds Product',
-        ]);
+            ]
+        );
     }
 
-    public function create(){
+    public function create()
+    {
         $fbcategories = DB::table('fb_feeds')->get();
         $ggcategories = DB::table('gg_feeds')->get();
         $categories = DB::table('categories')->get();
         $feedscategories = DB::table('categories')
-        ->leftjoin('fb_feeds','fb_feeds.fb_cate_id','=','categories.fb_cate_id')
-        ->leftjoin('gg_feeds','gg_feeds.gg_cate_id','=','categories.gg_cate_id')
-        ->whereNotNull('categories.fb_cate_id')->orwhereNotNULl('categories.gg_cate_id')
-        ->get();
+            ->leftjoin('fb_feeds', 'fb_feeds.fb_cate_id', '=', 'categories.fb_cate_id')
+            ->leftjoin('gg_feeds', 'gg_feeds.gg_cate_id', '=', 'categories.gg_cate_id')
+            ->whereNotNull('categories.fb_cate_id')->orwhereNotNULl('categories.gg_cate_id')
+            ->get();
 
-        return view('admin.feeds.create',[
+        return view(
+            'admin.feeds.create', [
             'title'=>'Feeds Product',
             'fbcategories'=>$fbcategories,
             'ggcategories'=>$ggcategories,
             'categories'=>$categories,
             'feedscategories'=> $feedscategories,
-        ]);
+            ]
+        );
     }
 
-    public function store(Request $request){
-        if(!$request->category_id) return redirect()->back()->with('error','Chua chon category_id');
-        $category = Category::where('id',$request -> category_id)->first();
-        if($request->fb_cate_id) $category->fb_cate_id = $request -> fb_cate_id;
-        if($request->gg_cate_id) $category->gg_cate_id = $request -> gg_cate_id;
+    public function store(Request $request)
+    {
+        if(!$request->category_id) { return redirect()->back()->with('error', 'Chua chon category_id');
+        }
+        $category = Category::where('id', $request -> category_id)->first();
+        if($request->fb_cate_id) { $category->fb_cate_id = $request -> fb_cate_id;
+        }
+        if($request->gg_cate_id) { $category->gg_cate_id = $request -> gg_cate_id;
+        }
             $category -> save();
         return redirect(route('admin.feeds.create'));
     }
@@ -58,7 +67,8 @@ class FeedController extends Controller
 
     public function upFbcode(Request $request)
     {
-        if ($request->file('fileFb') == null) return redirect(route('admin.feeds.upfileView'))->with('error', __('You need add file .csv!'));
+        if ($request->file('fileFb') == null) { return redirect(route('admin.feeds.upfileView'))->with('error', __('You need add file .csv!'));
+        }
 
         if ($request->input('submit') != null) {
             $file = $request->file('fileFb');
@@ -82,7 +92,7 @@ class FeedController extends Controller
                 $importData_arr = array();
                 $i = 0;
 
-                while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                while (($filedata = fgetcsv($file, 1000, ",")) !== false) {
                     $num = count($filedata);
                     for ($c = 0; $c < $num; $c++) {
                         $importData_arr[$i][] = $filedata[$c];
@@ -94,10 +104,12 @@ class FeedController extends Controller
                 //validate data in file csv
                 $check_data = true;
                 for ($c = 1; $c < $num; $c++) {
-                    $validator = Validator::make($importData_arr[$c], [
+                    $validator = Validator::make(
+                        $importData_arr[$c], [
                         '0' => 'required|int|min:1',
                         '1' => 'required'
-                    ]);
+                        ]
+                    );
                     if ($validator->fails()) {
                         $check_data = false;
                     }
@@ -133,7 +145,8 @@ class FeedController extends Controller
     }
     public function upGgcode(Request $request)
     {
-        if ($request->file('fileGg') == null) return redirect(route('admin.feeds.upfileView'))->with('error', __('You need add file .csv!'));
+        if ($request->file('fileGg') == null) { return redirect(route('admin.feeds.upfileView'))->with('error', __('You need add file .csv!'));
+        }
         if ($request->input('submit') != null) {
             $file = $request->file('fileGg');
 
@@ -156,7 +169,7 @@ class FeedController extends Controller
                 $importData_arr = array();
                 $i = 0;
 
-                while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                while (($filedata = fgetcsv($file, 1000, ",")) !== false) {
                     $num = count($filedata);
                     for ($c = 0; $c < $num; $c++) {
                         $importData_arr[$i][] = $filedata[$c];
@@ -168,10 +181,12 @@ class FeedController extends Controller
                 //validate data in file csv
                 $check_data = true;
                 for ($c = 1; $c < $num; $c++) {
-                    $validator = Validator::make($importData_arr[$c], [
+                    $validator = Validator::make(
+                        $importData_arr[$c], [
                         '0' => 'required',
                         '1' => 'required'
-                    ]);
+                        ]
+                    );
                     if ($validator->fails()) {
                         $check_data = false;
                     }

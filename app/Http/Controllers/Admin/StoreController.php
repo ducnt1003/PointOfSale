@@ -13,20 +13,24 @@ class StoreController extends Controller
     public function index()
     {
         $stores = Store::get();
-        return view('admin.stores.index', [
+        return view(
+            'admin.stores.index', [
             'title' => 'Danh sách cửa hàng',
             'stores' => $stores
-        ]);
+            ]
+        );
     }
 
     public function edit($id)
     {
         $store = Store::find($id);
         if ($store) {
-            return view('admin.stores.edit', [
+            return view(
+                'admin.stores.edit', [
                 'title' => 'Chỉnh sửa cửa hàng',
                 'store' => $store
-            ]);
+                ]
+            );
         }
     }
 
@@ -46,10 +50,12 @@ class StoreController extends Controller
     public function create()
     {
         $store = new Store();
-        return view('admin.stores.create', [
+        return view(
+            'admin.stores.create', [
             'title' => 'Thêm store mới',
             'store' => $store
-        ])->with('success', __('Thêm cửa hàng thành công!'));
+            ]
+        )->with('success', __('Thêm cửa hàng thành công!'));
     }
 
     public function store(StoreRequest $request)

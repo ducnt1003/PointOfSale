@@ -23,14 +23,16 @@ class DashboardController extends Controller
         return view(
             'admin.dashboard',
             ['title' => 'Doanh thu 12 tháng qua'],
-            compact('sales', 'select_years','select_months','current_month','year')
+            compact('sales', 'select_years', 'select_months', 'current_month', 'year')
         );
     }
 
-    public function chart_month(Request $request){
-        if($request->get('month')){
+    public function chart_month(Request $request)
+    {
+        if($request->get('month'))
+        {
             $val = $request->get('month');
-            $val1 = explode("/",$val);
+            $val1 = explode("/", $val);
             $month = $val1[0];
             $year = $val1[1];
         } else {
@@ -39,19 +41,22 @@ class DashboardController extends Controller
         };
 
         $products_m = DB::table('sales')->select(DB::raw('product_id,sold_quantity'))
-        ->where([
-            ['month', '=', $month],
-            ['year', '=', $year]
-        ])
-        ->orderBy('sold_quantity', 'DESC')
-        ->take(5)->get();
+            ->where(
+                [
+                ['month', '=', $month],
+                ['year', '=', $year]
+                ]
+            )
+            ->orderBy('sold_quantity', 'DESC')
+            ->take(5)->get();
         $label_chart = [];
         $data_chart =[];
-        foreach($products_m as $product){
+        foreach($products_m as $product)
+        {
             $a1 = $product->product_id;
             $a2 = $product->sold_quantity;
-            array_push($label_chart,$a1);
-            array_push($data_chart,$a2);
+            array_push($label_chart, $a1);
+            array_push($data_chart, $a2);
         }
         $label_chart = implode(",", $label_chart);
         $data_chart = implode(",", $data_chart);
@@ -79,8 +84,10 @@ class DashboardController extends Controller
             echo $bar_graph;
     }
 
-    public function chart_year(Request $request){
-        if($request->get('year')){
+    public function chart_year(Request $request)
+    {
+        if($request->get('year'))
+        {
             $year = $request->get('year');;
         } else {
             $year = date('Y');
@@ -95,8 +102,8 @@ class DashboardController extends Controller
         foreach($products_y as $product){
             $a1 = $product->product_id;
             $a2 = $product->total_quantity;
-            array_push($label_chart,$a1);
-            array_push($data_chart,$a2);
+            array_push($label_chart, $a1);
+            array_push($data_chart, $a2);
         }
         $label_chart = implode(",", $label_chart);
         $data_chart = implode(",", $data_chart);
@@ -130,9 +137,10 @@ class DashboardController extends Controller
             ->orderByRaw('year DESC, month DESC')
             ->get();
         $months = [];
-        foreach($select_months as $month){
+        foreach($select_months as $month)
+        {
             $a = $month->month . '/' . $month->year;
-            array_push($months,$a);
+            array_push($months, $a);
         }
         return $months;
     }
@@ -141,12 +149,13 @@ class DashboardController extends Controller
     {
         $select_years = DB::table('sales')->select('year')
             ->groupBy('year')
-            ->orderBy('year','DESC')
+            ->orderBy('year', 'DESC')
             ->get();
         $years = [];
-        foreach($select_years as $year){
+        foreach($select_years as $year)
+        {
             $a = $year->year;
-            array_push($years,$a);
+            array_push($years, $a);
         }
         return $years;
     }

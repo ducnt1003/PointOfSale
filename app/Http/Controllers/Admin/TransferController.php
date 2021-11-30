@@ -28,7 +28,8 @@ class TransferController extends Controller
         );
     }
 
-    public function complete_transfers(){
+    public function complete_transfers()
+    {
         $transfers = DB::table('transfers')->where('status', '=', 1)
             ->orderBy('id', 'DESC')->simplePaginate();
         $stores = DB::table('stores')->get();
@@ -43,11 +44,13 @@ class TransferController extends Controller
 
     public function add_transfer(Request $request)
     {
-        $request->validate([
+        $request->validate(
+            [
             'title' => "required|max:120|unique:transfers,title,{{$request->title}}",
             'store_send' => "required|int|min:1",
             'store_take' => "required|int|min:1",
-        ]);
+            ]
+        );
         $data =  $request->except('_token');
         $data = array_filter($data, 'strlen');
         if ($data['store_send'] == $data['store_take']) {
@@ -78,13 +81,16 @@ class TransferController extends Controller
 
     public function update_transfer(Request $request, $id)
     {
-        $request->validate([
+        $request->validate(
+            [
             'title' => "required|max:120|unique:transfers,title,$id",
             'store_send' => "required|int|min:1",
             'store_take' => "required|int|min:1",
-        ]);
-        if ($request->store_send == $request->store_take)
-            return redirect()->back()->with('error', __('Store_take must not like Store_send!'));;
+            ]
+        );
+        if ($request->store_send == $request->store_take) {
+            return redirect()->back()->with('error', __('Store_take must not like Store_send!'));
+        };
         $transfer = Transfer::find($id);
         if ($transfer) {
             $transfer->description = $request->input('description');
@@ -113,26 +119,32 @@ class TransferController extends Controller
 
     public function add_product(Request $request)
     {
-        $request->validate([
+        $request->validate(
+            [
             'transfer_id' => "required|int|min:1",
             'product_id' => "required|int|min:1",
             'quantity' => "required|int|min:1",
-        ]);
+            ]
+        );
         $data =  $request->except('_token');
         $data = array_filter($data, 'strlen');
         if ($this->check_product($data)) {
             $transfer = Transfer::find($data['transfer_id']);
             $product_store = DB::table('warehouses')
-                ->where([
+                ->where(
+                    [
                     ['store_id', '=', $transfer->store_send],
                     ['product_id', '=', $data['product_id']]
-                ])->first();
+                    ]
+                )->first();
             $new_quantity = $product_store->quantity - $data['quantity'];
             DB::table('warehouses')
-                ->where([
+                ->where(
+                    [
                     ['store_id', '=', $transfer->store_send],
                     ['product_id', '=', $data['product_id']]
-                ])->update(['quantity' => $new_quantity]);
+                    ]
+                )->update(['quantity' => $new_quantity]);
             Transfer_product::create($data);
             return redirect(route('admin.transfers.detail', $data['transfer_id']))
                 ->with('success', __('Thêm sản phẩm thành công!'));
@@ -142,18 +154,24 @@ class TransferController extends Controller
     }
     public function check_product($data)
     {
-        $product_transfer = DB::table('transfer_products')->where([
+        $product_transfer = DB::table('transfer_products')->where(
+            [
             ['transfer_id', $data['transfer_id']],
             ['product_id', $data['product_id']],
-        ])->first();
-        if ($product_transfer) return false;
+            ]
+        )->first();
+        if ($product_transfer) { return false;
+        }
         $transfer = Transfer::find($data['transfer_id']);
         $product = DB::table('warehouses')
-            ->where([
+            ->where(
+                [
                 ['store_id', '=', $transfer->store_send],
                 ['product_id', '=', $data['product_id']]
-            ])->first();
-        if ($product and ($product->quantity >= $data['quantity'])) return true;
+                ]
+            )->first();
+        if ($product and ($product->quantity >= $data['quantity'])) { return true;
+        }
         return false;
     }
 
@@ -164,16 +182,20 @@ class TransferController extends Controller
         if ($product) {
             DB::beginTransaction();
             try {
-                $product_store = DB::table('warehouses')->where([
+                $product_store = DB::table('warehouses')->where(
+                    [
                     ['store_id', '=', $transfer->store_send],
                     ['product_id', '=', $product->product_id]
-                ])->first();
+                    ]
+                )->first();
                 $new_quantity = $product_store->quantity + $product->quantity;
                 DB::table('warehouses')
-                    ->where([
+                    ->where(
+                        [
                         ['store_id', '=', $transfer->store_send],
                         ['product_id', '=', $product->product_id]
-                    ])->update(['quantity' => $new_quantity]);
+                        ]
+                    )->update(['quantity' => $new_quantity]);
                 $product->delete();
             } catch (\Throwable $e) {
                 DB::rollBack();
@@ -195,16 +217,20 @@ class TransferController extends Controller
             try {
                 $products_transfer = DB::table('transfer_products')->where('transfer_id', '=', $request->id)->get();
                 foreach ($products_transfer as $product_transfer) {
-                    $product_store = DB::table('warehouses')->where([
+                    $product_store = DB::table('warehouses')->where(
+                        [
                         ['store_id', '=', $transfer->store_send],
                         ['product_id', '=', $product_transfer->product_id]
-                    ])->first();
+                        ]
+                    )->first();
                     $new_quantity = $product_store->quantity + $product_transfer->quantity;
                     DB::table('warehouses')
-                        ->where([
+                        ->where(
+                            [
                             ['store_id', '=', $transfer->store_send],
                             ['product_id', '=', $product_transfer->product_id]
-                        ])->update(['quantity' => $new_quantity]);
+                            ]
+                        )->update(['quantity' => $new_quantity]);
                 }
                 DB::table('transfer_products')->where('transfer_id', '=', $request->id)->delete();
                 $transfer->delete();
@@ -224,16 +250,20 @@ class TransferController extends Controller
     {
         $store_id = Auth::user()->store_id;
         $transfers = DB::table('transfers')
-            ->where([
+            ->where(
+                [
                 ['store_take', $store_id],
                 ['status', 0]
-            ])
+                ]
+            )
             ->orderBy('id', 'DESC')->simplePaginate();
         $purchases = DB::table('purchases')
-            ->where([
+            ->where(
+                [
                 ['stock_id', $store_id],
                 ['status', 0]
-            ])
+                ]
+            )
             ->orderBy('id', 'DESC')->simplePaginate();
         return view(
             'admin.transfers.orders_list',
@@ -255,23 +285,29 @@ class TransferController extends Controller
                 try {
                     $products_transfer = DB::table('transfer_products')->where('transfer_id', $trans_id)->get();
                     foreach ($products_transfer as $product_transfer) {
-                        $product_store = DB::table('warehouses')->where([
+                        $product_store = DB::table('warehouses')->where(
+                            [
                             ['store_id', '=', $transfer->store_take],
                             ['product_id', '=', $product_transfer->product_id]
-                        ])->first();
+                            ]
+                        )->first();
                         if ($product_store) {
                             $new_quantity = $product_store->quantity + $product_transfer->quantity;
                             DB::table('warehouses')
-                                ->where([
+                                ->where(
+                                    [
                                     ['store_id', '=', $transfer->store_take],
                                     ['product_id', '=', $product_transfer->product_id]
-                                ])->update(['quantity' => $new_quantity]);
+                                    ]
+                                )->update(['quantity' => $new_quantity]);
                         } else {
-                            DB::table('warehouses')->insert([
+                            DB::table('warehouses')->insert(
+                                [
                                 'store_id' => $transfer->store_take,
                                 'product_id' => $product_transfer->product_id,
                                 'quantity' => $product_transfer->quantity
-                            ]);
+                                ]
+                            );
                         }
                     }
                     DB::table('transfers')
@@ -294,23 +330,29 @@ class TransferController extends Controller
                 try {
                     $products_purchase = DB::table('purchases_products')->where('purchase_id', $purchase->purchase_id)->get();
                     foreach ($products_purchase as $product_purchase) {
-                        $product_store = DB::table('warehouses')->where([
+                        $product_store = DB::table('warehouses')->where(
+                            [
                             ['store_id', '=', $purchase->stock_id],
                             ['product_id', '=', $product_purchase->product_id]
-                        ])->first();
+                            ]
+                        )->first();
                         if ($product_store) {
                             $new_quantity = $product_store->quantity + $product_purchase->quantity;
                             DB::table('warehouses')
-                                ->where([
+                                ->where(
+                                    [
                                     ['store_id', '=', $purchase->stock_id],
                                     ['product_id', '=', $product_purchase->product_id]
-                                ])->update(['quantity' => $new_quantity]);
+                                    ]
+                                )->update(['quantity' => $new_quantity]);
                         } else {
-                            DB::table('warehouses')->insert([
+                            DB::table('warehouses')->insert(
+                                [
                                 'store_id' => $purchase->stock_id,
                                 'product_id' => $product_purchase->product_id,
                                 'quantity' => $product_purchase->quantity
-                            ]);
+                                ]
+                            );
                         }
                     }
                     DB::table('purchases')
@@ -331,7 +373,8 @@ class TransferController extends Controller
 
     public function uploadFile(Request $request)
     {
-        if ($request->file('file') == null) return redirect(route('admin.transfers.list'))->with('error', __('You need add file .csv!'));
+        if ($request->file('file') == null) { return redirect(route('admin.transfers.list'))->with('error', __('You need add file .csv!'));
+        }
         if ($request->input('submit') != null) {
             $file = $request->file('file');
 
@@ -353,7 +396,7 @@ class TransferController extends Controller
                 $importData_arr = array();
                 $i = 0;
 
-                while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                while (($filedata = fgetcsv($file, 1000, ",")) !== false) {
                     $num = count($filedata);
                     for ($c = 0; $c < $num; $c++) {
                         $importData_arr[$i][] = $filedata[$c];
@@ -373,11 +416,13 @@ class TransferController extends Controller
                         $check_data = false;
                         break;
                     }
-                    $validator = Validator::make($importData_arr[$c], [
+                    $validator = Validator::make(
+                        $importData_arr[$c], [
                         '0' => 'required|int|min:1',
                         '1' => 'required|int|min:1',
                         '2' => 'required|int|between:1,1000000',
-                    ]);
+                        ]
+                    );
                     if ($validator->fails()) {
                         $check_data = false;
                     }
@@ -407,7 +452,8 @@ class TransferController extends Controller
         }
     }
 
-    public function detail_transfer_order($transfer_id){
+    public function detail_transfer_order($transfer_id)
+    {
         $products = DB::table('transfer_products')
             ->where('transfer_id', '=', $transfer_id)
             ->orderBy('id', 'DESC')
@@ -420,7 +466,8 @@ class TransferController extends Controller
         );
     }
 
-    public function detail_purchase_order($purchase_id){
+    public function detail_purchase_order($purchase_id)
+    {
         $products = DB::table('purchases_products')
             ->where('purchase_id', '=', $purchase_id)
             ->orderBy('id', 'DESC')

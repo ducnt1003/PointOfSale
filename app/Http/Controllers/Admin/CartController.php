@@ -15,33 +15,44 @@ class CartController extends Controller
         $this->cart = $cart;
     }
 
-    public function index(){
-        return view('admin.carts.list',[
+    public function index()
+    {
+        return view(
+            'admin.carts.list', [
             'title'=>'Danh sách đơn hàng',
             'carts'=>$this->cart->getCartList()
-        ]);
+            ]
+        );
     }
 
-    public function detail($id){
+    public function detail($id)
+    {
         $customer = Customer::find($id);
 
-        return view('admin.carts.detail',[
+        return view(
+            'admin.carts.detail', [
             'title'=>'Chi tiết đơn hàng: '.$customer->name,
             'customer' => $customer,
             'carts' => $customer->carts()->with('product')->get(),
-        ]);
+            ]
+        );
     }
 
-    public function delete(Request $request){
+    public function delete(Request $request)
+    {
         $result = $this->cart->destroy($request);
-        if ($result){
-            return response()->json([
+        if ($result) {
+            return response()->json(
+                [
                 'error'=>false,
                 'message'=>'Xóa thành công danh mục'
-            ]);
+                ]
+            );
         }
-        return response()->json([
+        return response()->json(
+            [
             'error'=>true
-        ]);
+            ]
+        );
     }
 }

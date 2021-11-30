@@ -67,7 +67,7 @@
 
         <div class="modal-footer">
           <slot name="footer">
-            <button class="modal-default-button" @click="close">Exit</button>
+            <button class="modal-default-button btn-error" @click="close">Exit</button>
           </slot>
         </div>
       </div>

@@ -20,22 +20,26 @@ class ExtraController extends Controller
         //        $products = Product::with('categories','createdBy')->orderBy('id','desc')->paginate();
         $users = User::orderBy('id', 'asc')->get();
         $roles = Role::orderBy('id', 'asc')->get();
-        return view('admin.extras.manage-user', [
+        return view(
+            'admin.extras.manage-user', [
             'title' => 'Danh sách nhân viên',
             'users' => $users,
             'roles' => $roles,
-        ]);
+            ]
+        );
     }
     public function createUser()
     {
         //        $products = Product::with('categories','createdBy')->orderBy('id','desc')->paginate();
         $stores = Store::orderBy('id', 'asc')->get();
         $roles = Role::orderBy('id', 'asc')->get();
-        return view('admin.extras.create-user', [
+        return view(
+            'admin.extras.create-user', [
             'title' => 'Tạo nhân viên',
             'stores' => $stores,
             'roles' => $roles,
-        ]);
+            ]
+        );
     }
 
     public function storeUser(UserRequest $request)
@@ -48,8 +52,7 @@ class ExtraController extends Controller
         $user->phone = $request->phone;
         $user->store_id = $request->store_id;
         $path = $this->_upload($request);
-        if ($path)
-        {
+        if ($path) {
             $user->photo = $path;
         }
 
@@ -67,12 +70,14 @@ class ExtraController extends Controller
         $user = User::where('id', $id)->first();
         $roles = Role::orderBy('id', 'asc')->get();
         $stores = Store::orderBy('id', 'asc')->get();
-        return view('admin.extras.edit-user', [
+        return view(
+            'admin.extras.edit-user', [
             'title' => 'Chỉnh sửa thông tin người dùng',
             'user' => $user,
             'roles' => $roles,
             'stores' => $stores,
-        ]);
+            ]
+        );
     }
 
     public function updateUser(Request $Request, $id)

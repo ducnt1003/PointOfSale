@@ -83,13 +83,13 @@
                       role="group"
                       aria-label="..."
                     >
-                      <router-link :to="{ name: 'customer' }"
+                      <!-- <router-link :to="{ name: 'customer' }"
                         ><button type="button" class="m-btn btn btn-default">
                           <i class="fa fa-plus"></i></button
-                      ></router-link>
-                      <!-- <button type="button" class="btn" @click="showModal">
+                      ></router-link> -->
+                      <button type="button" class="btn" @click="showModal">
                         <i class="fa fa-plus"></i>
-                      </button> -->
+                      </button>
 
                       <!-- <b-button class="m-btn btn btn-default" v-b-modal.modal-prevent-closing><i class="fa fa-plus"></i></b-button> -->
                     </div>

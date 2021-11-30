@@ -10,26 +10,48 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
+    /**
+     * index
+     *
+     * @return void
+     */
     public function index()
     {
         $brands = Brand::paginate(10);
-        return view('admin.brands.index', [
+        return view(
+            'admin.brands.index', [
             'title' => 'Danh sách brand',
             'brands' => $brands
-        ]);
+            ]
+        );
     }
 
+    /**
+     * edit
+     *
+     * @param  mixed $id
+     * @return void
+     */
     public function edit($id)
     {
         $brand = Brand::find($id);
         if ($brand) {
-            return view('admin.brands.edit', [
+            return view(
+                'admin.brands.edit', [
                 'title' => 'Chỉnh sửa brand',
                 'brand' => $brand
-            ]);
+                ]
+            );
         }
     }
 
+    /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return void
+     */
     public function update(BrandRequest $request, $id)
     {
         $brand = Brand::find($id);
@@ -45,15 +67,28 @@ class BrandController extends Controller
             ->with('success', __('sửa brand thành công!'));
     }
 
+    /**
+     * create
+     *
+     * @return void
+     */
     public function create()
     {
         $brand = new Brand();
-        return view('admin.brands.create', [
+        return view(
+            'admin.brands.create', [
             'title' => 'Thêm brand mới',
             'brand' => $brand
-        ])->with('success', __('Thêm brand thành công!'));
+            ]
+        )->with('success', __('Thêm brand thành công!'));
     }
 
+    /**
+     * store
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function store(BrandRequest $request)
     {
         $data = $request->except('_token');
@@ -69,6 +104,12 @@ class BrandController extends Controller
             ->with('success', __('Thêm thành công'));
     }
 
+    /**
+     * destroy
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function destroy(Request $request)
     {
         $brand = Brand::find($request->input('brand_id'));
@@ -82,6 +123,12 @@ class BrandController extends Controller
             ->with('error', __('xóa không thành công!'));
     }
 
+    /**
+     * _upload
+     *
+     * @param  mixed $request
+     * @return void
+     */
     private function _upload($request)
     {
         if ($request->hasFile('photo')) {
@@ -100,25 +147,51 @@ class BrandController extends Controller
         return false;
     }
 
+    /**
+     * storeBrand
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function storeBrand(Request $request)
     {
-        $brand = new Brand([
+        $brand = new Brand(
+            [
             'name' => $request->get('name'),
-        ]);
+            ]
+        );
 
         $brand->save();
 
         return response()->json('successfully added');
     }
+    /**
+     * indexBrand
+     *
+     * @return void
+     */
     public function indexBrand()
     {
         return Brand::orderBy('id', 'asc')->get();
     }
+    /**
+     * editBrand
+     *
+     * @param  mixed $id
+     * @return void
+     */
     public function editBrand($id)
     {
         $brand = Brand::find($id);
         return response()->json($brand);
     }
+    /**
+     * updateBrand
+     *
+     * @param  mixed $id
+     * @param  mixed $request
+     * @return void
+     */
     public function updateBrand($id, Request $request)
     {
         $brand = Brand::find($id);
@@ -128,6 +201,12 @@ class BrandController extends Controller
 
         return response()->json('successfully updated');
     }
+    /**
+     * deleteBrand
+     *
+     * @param  mixed $id
+     * @return void
+     */
     public function deleteBrand($id)
     {
         $brand = Brand::find($id);

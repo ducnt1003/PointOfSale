@@ -39552,7 +39552,7 @@ var render = function () {
                 _c(
                   "button",
                   {
-                    staticClass: "modal-default-button",
+                    staticClass: "modal-default-button btn-error",
                     on: { click: _vm.close },
                   },
                   [_vm._v("Exit")]
@@ -39754,21 +39754,15 @@ var render = function () {
                         },
                         [
                           _c(
-                            "router-link",
-                            { attrs: { to: { name: "customer" } } },
-                            [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "m-btn btn btn-default",
-                                  attrs: { type: "button" },
-                                },
-                                [_c("i", { staticClass: "fa fa-plus" })]
-                              ),
-                            ]
+                            "button",
+                            {
+                              staticClass: "btn",
+                              attrs: { type: "button" },
+                              on: { click: _vm.showModal },
+                            },
+                            [_c("i", { staticClass: "fa fa-plus" })]
                           ),
-                        ],
-                        1
+                        ]
                       ),
                     ]),
                   ]),
