@@ -23,6 +23,7 @@ class CreateCustomersTable extends Migration
             $table->string('location', 5)->default('vi');
             $table->unsignedBigInteger('group_id')->default('1');;
             $table->string('password')->nullable();
+            $table->decimal('total_money')->nullable();
             $table->timestamps();
         });
     }

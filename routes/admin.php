@@ -30,6 +30,9 @@ Route::get('admin/logout',
     ->name('admin.logout');
 
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
+    Route::get('/vue/{any}', function () {
+        return view('admin.admin');
+      })->where('any', '.*');
 
 
 
@@ -198,7 +201,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::prefix('customers')->name('customers.')->group(function (){
         Route::get('/index',[CustomerController::class,'index'])->name('index');
         Route::get('/search',[CustomerController::class,'search'])->name('search');
-        Route::post('/store',[CustomerController::class,'store'])->name('store');
+        Route::post('/store',[CustomerController::class,'create'])->name('store');
 
     });
 });

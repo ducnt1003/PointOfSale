@@ -30,10 +30,13 @@ class CustomerController extends Controller
     public function create(Request $request)
     {
         $customer = Customer::create($request->all());
-        if ($customer) {
-            return response()->json('successfully added');
-        } else { return response()->json('fail');
-        }
+        $str = $customer['name'] . "(" . $customer['phone'] . ")";
+        $newCustomer = [
+            "value" => $customer['id'],
+            "text" => $str,
+        ];
+
+        return $newCustomer;
     }
 
     public function addMoney($id, $money)

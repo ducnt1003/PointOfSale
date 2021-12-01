@@ -3,10 +3,18 @@
 <!-- Bootstrap 4 -->
 <script src="/template/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="/template/dist/js/adminlte.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<!-- jQuery Knob Chart -->
+<script src="/template/plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="/template/plugins/moment/moment.min.js"></script>
+<script src="/template/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="/template/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="/template/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
 <!-- SweetAlert2 -->
 <script src="/template/plugins/sweetalert2/sweetalert2.min.js"></script>
 <!-- Toastr -->
