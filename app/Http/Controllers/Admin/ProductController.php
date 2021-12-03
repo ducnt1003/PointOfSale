@@ -121,4 +121,8 @@ class ProductController extends Controller
             ]
         );
     }
+
+    public function listProd(){
+        return Product::all();
+    }
 }

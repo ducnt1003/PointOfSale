@@ -77,4 +77,14 @@ class CategoryController extends Controller
             ]
         );
     }
+
+    public function listCate(){
+        return Category::all();
+    }
+
+    public function addCate(Request $request){
+        $request->except('_token');
+        $category = Category::create($request->all());
+        return $category;
+    }
 }

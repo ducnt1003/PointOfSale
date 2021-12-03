@@ -38,7 +38,6 @@
 </script>
 
 
-<script src="/template/admin/main.js"></script>
 @yield('js')
 @yield('modal')
 

@@ -48,6 +48,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/edit/{id}',[CategoryController::class,'edit'])->name('edit');
         Route::post('/edit/{id}',[CategoryController::class,'update'])->name('edit.update');
         Route::delete('/delete', [CategoryController::class, 'destroy'])->name('delete');
+        Route::get('/list',[CategoryController::class,'listCate']);
+        Route::post('/add-cate',[CategoryController::class,'addCate']);
     });
 
     Route::prefix('products')->name('products.')->group(function (){
@@ -60,6 +62,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('barcodes/{id}',[ProductController::class,'getBarcode']);
         Route::get('/export',[ProductController::class,'export'])->name('export');
         Route::get('/quotation',[ProductController::class,'quotation'])->name('quotation');
+        Route::get('/list',[ProductController::class,'listProd']);
     });
     Route::prefix('banners')->name('banners.')->group(function (){
         Route::get('/create',[BannerController::class,'create'])->name('create');
