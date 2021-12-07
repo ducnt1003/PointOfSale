@@ -65,6 +65,14 @@
         <script src="/template/dist/js/adminlte.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="/template/dist/js/demo.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.11.2/js/jquery.dataTables.min.js"></script>
+        <script src="{{ asset('template/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+        <script src="{{ asset('template/plugins/jszip/jszip.min.js') }}"></script>
+        <script src="{{ asset('template/plugins/pdfmake/pdfmake.min.js') }}"></script>
+        <script src="{{ asset('template/plugins/pdfmake/vfs_fonts.js') }}"></script>
+        <script src="{{ asset('template/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+        <script src="{{ asset('template/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+        <script src="{{ asset('template/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
         <script src="/template/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
 

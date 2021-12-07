@@ -56,7 +56,7 @@
           <td>
             <a
               class="btn btn-primary btn-sm"
-              href="/admin/products/barcodes/$product['id']"
+              href="/admin/products/barcodes/${product['id']}"
             >
               <i class="fas fa-barcode"></i>
             </a>
@@ -80,9 +80,20 @@
     </Modal>
   </div>
 </template>
-
+<script type="text/javascript">
+$(document).ready(function () {
+  $("#example").DataTable({
+    dom: "Bfrtip",
+    // buttons: [
+    //     'copy',
+    // ]
+    info: false,
+  });
+});
+</script>
 <script>
 import Modal from "../components/Modal.vue";
+
 export default {
   data() {
     return {

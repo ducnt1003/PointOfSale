@@ -82,9 +82,38 @@ class CategoryController extends Controller
         return Category::all();
     }
 
-    public function addCate(Request $request){
-        $request->except('_token');
-        $category = Category::create($request->all());
+    public function addCate(CategoryRequest $request)
+    {
+        $category = $this->categoryService->store($request);
         return $category;
+    }
+
+    // public function addCate(Request $request){
+    //     $category = new Category();
+    //     return $request;
+    //     // $category->name = $request->name;
+    //     // $category->description = $request->description;
+    //     // $category->parent_id = $request->parent_id;
+    //     // $category->tax = $request->tax;
+    //     // $category->unit = $request->unit;
+
+    //     // $category->save();
+    //     // return $category;
+    //     //return response()->json('successfully added');
+    // }
+
+    public function editCate(CategoryRequest $categoryRequest,$id)
+    {
+        $category = $this->categoryService->getById($id);
+        $this->categoryService->update($categoryRequest, $category);
+        return response()->json('successfully edited');
+    }
+
+    public function deleteCate($id)
+    {
+        $category = Category::find($id);
+        $category->delete();
+        return response()->json('successfully deleted');
+
     }
 }

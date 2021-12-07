@@ -2358,13 +2358,106 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       category: [],
+      categoryEdit: [],
       categories: [],
-      isModalVisible: false
+      isModalVisible: false,
+      isEditModalVisible: false,
+      isDeleteModalVisible: false
     };
   },
   created: function created() {
@@ -2382,19 +2475,70 @@ __webpack_require__.r(__webpack_exports__);
     closeModal: function closeModal() {
       this.isModalVisible = false;
     },
+    showEditModal: function showEditModal(id) {
+      var item = this.categories.find(function (item) {
+        return item.id == id;
+      });
+      this.categoryEdit = item;
+      this.isEditModalVisible = true;
+    },
+    closeEditModal: function closeEditModal() {
+      this.isEditModalVisible = false;
+    },
+    showDeleteModal: function showDeleteModal(id) {
+      var item = this.categories.find(function (item) {
+        return item.id == id;
+      });
+      this.categoryEdit = item;
+      this.isDeleteModalVisible = true;
+    },
+    closeDeleteModal: function closeDeleteModal() {
+      this.isDeleteModalVisible = false;
+    },
     onChange: function onChange(e) {
       this.category["photo"] = e.target.files[0];
     },
     addCategory: function addCategory() {
+      console.log(this.category);
+
+      try {
+        var uri = "http://127.0.0.1:8000/admin/categories/add-cate";
+        this.axios.post(uri, this.category).then(function (response) {
+          console.log(response.data); //this.categories.push(this.category);
+        });
+      } catch (error) {
+        console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
+      }
+    },
+    editCategory: function editCategory(id) {
+      console.log(this.categoryEdit);
+
+      try {
+        var uri = "http://127.0.0.1:8000/admin/categories/edit-cate/".concat(id);
+        this.axios.put(uri, this.categoryEdit).then(function (response) {
+          console.log(response.data); //this.categories.push(this.category);
+        });
+      } catch (error) {
+        console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
+      }
+    },
+    deleteCate: function deleteCate(id) {
       var _this2 = this;
 
-      console.log(this.category);
-      var uri = "http://127.0.0.1:8000/admin/categories/add-cate";
-      this.axios.post(uri, this.category).then(function (response) {
-        _this2.category = response.data;
+      console.log(this.categoryEdit);
 
-        _this2.categories.push(_this2.category);
-      });
+      try {
+        var uri = "http://127.0.0.1:8000/admin/categories/delete-cate/".concat(id);
+        this.axios["delete"](uri).then(function (response) {
+          console.log(response.data); //this.categories.push(this.category);
+
+          _this2.categories.splice(_this2.categories.indexOf(id), 1);
+
+          _this2.isDeleteModalVisible = false;
+        });
+      } catch (error) {
+        console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
+      }
     }
   },
   components: {
@@ -2416,6 +2560,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _components_Modal_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Modal.vue */ "./resources/js/components/Modal.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -39259,7 +39413,33 @@ var render = function () {
                   }),
                 ]),
                 _vm._v(" "),
-                _vm._m(1, true),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-sm",
+                      on: {
+                        click: function ($event) {
+                          return _vm.showEditModal(category["id"])
+                        },
+                      },
+                    },
+                    [_c("i", { staticClass: "fas fa-edit" })]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "btn btn-danger btn-sm",
+                      on: {
+                        click: function ($event) {
+                          return _vm.showDeleteModal(category["id"])
+                        },
+                      },
+                    },
+                    [_c("i", { staticClass: "fas fa-trash" })]
+                  ),
+                ]),
               ])
             }),
             0
@@ -39504,18 +39684,332 @@ var render = function () {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "card-footer" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "submit" },
-                    },
-                    [_vm._v("Tạo Danh Mục")]
-                  ),
+                  _c("button", { staticClass: "btn btn-primary" }, [
+                    _vm._v("Tạo Danh Mục"),
+                  ]),
                 ]),
               ]
             ),
           ]),
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "Modal",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.isEditModalVisible,
+              expression: "isEditModalVisible",
+            },
+          ],
+          on: { close: _vm.closeEditModal },
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "card-header",
+              attrs: { slot: "header" },
+              slot: "header",
+            },
+            [_c("h3", { staticClass: "card-title" }, [_vm._v("Edit Category")])]
+          ),
+          _vm._v(" "),
+          _c("div", { attrs: { slot: "body" }, slot: "body" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function ($event) {
+                    $event.preventDefault()
+                    return _vm.editCategory(_vm.categoryEdit.id)
+                  },
+                },
+              },
+              [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", [_vm._v("Tên Danh Mục")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.categoryEdit.name,
+                          expression: "categoryEdit.name",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", placeholder: "Nhập tên danh mục" },
+                      domProps: { value: _vm.categoryEdit.name },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.categoryEdit,
+                            "name",
+                            $event.target.value
+                          )
+                        },
+                      },
+                    }),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", [_vm._v("Danh Mục Cha")]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.categoryEdit.parent_id,
+                            expression: "categoryEdit.parent_id",
+                          },
+                        ],
+                        staticClass: "form-control",
+                        on: {
+                          change: function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.categoryEdit,
+                              "parent_id",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          },
+                        },
+                      },
+                      [
+                        _c("option", { attrs: { value: "0" } }, [
+                          _vm._v("Danh mục cha"),
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.categories, function (parCate) {
+                          return _c(
+                            "option",
+                            {
+                              key: parCate["id"],
+                              domProps: { value: parCate["id"] },
+                            },
+                            [
+                              _vm._v(
+                                "\n                " +
+                                  _vm._s(parCate["name"]) +
+                                  "\n              "
+                              ),
+                            ]
+                          )
+                        }),
+                      ],
+                      2
+                    ),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", [_vm._v("Mô tả danh mục")]),
+                    _vm._v(" "),
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.categoryEdit.description,
+                          expression: "categoryEdit.description",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      domProps: { value: _vm.categoryEdit.description },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.categoryEdit,
+                            "description",
+                            $event.target.value
+                          )
+                        },
+                      },
+                    }),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Thuế")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.categoryEdit.tax,
+                              expression: "categoryEdit.tax",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "number" },
+                          domProps: { value: _vm.categoryEdit.tax },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.categoryEdit,
+                                "tax",
+                                $event.target.value
+                              )
+                            },
+                          },
+                        }),
+                      ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Đơn vị")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.categoryEdit.unit,
+                              expression: "categoryEdit.unit",
+                            },
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text" },
+                          domProps: { value: _vm.categoryEdit.unit },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.categoryEdit,
+                                "unit",
+                                $event.target.value
+                              )
+                            },
+                          },
+                        }),
+                      ]),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "upload" } }, [_vm._v("Ảnh")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: { type: "file", id: "upload" },
+                      on: { change: _vm.onChange },
+                    }),
+                    _vm._v(" "),
+                    _c("div", { attrs: { id: "image_show" } }),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: { type: "hidden", id: "photo", name: "photo" },
+                    }),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-footer" }, [
+                  _c("button", { staticClass: "btn btn-primary" }, [
+                    _vm._v("Sửa Danh Mục"),
+                  ]),
+                ]),
+              ]
+            ),
+          ]),
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "Modal",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.isDeleteModalVisible,
+              expression: "isDeleteModalVisible",
+            },
+          ],
+          on: { close: _vm.closeDeleteModal },
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "card-header",
+              attrs: { slot: "header" },
+              slot: "header",
+            },
+            [
+              _c("h3", { staticClass: "card-title" }, [
+                _vm._v("Delete Category"),
+              ]),
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "card-body", attrs: { slot: "body" }, slot: "body" },
+            [_vm._v("Bạn có muốn xóa Category này?")]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "card-footer",
+              attrs: { slot: "footer" },
+              slot: "footer",
+            },
+            [
+              _c(
+                "button",
+                {
+                  staticClass: "modal-default-button btn-warning",
+                  on: {
+                    click: function ($event) {
+                      return _vm.deleteCate(_vm.categoryEdit.id)
+                    },
+                  },
+                },
+                [_vm._v("Delete")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "modal-default-button btn-error",
+                  on: { click: _vm.closeDeleteModal },
+                },
+                [_vm._v("Exit")]
+              ),
+            ]
+          ),
         ]
       ),
     ],
@@ -39542,20 +40036,6 @@ var staticRenderFns = [
         _c("td", [_vm._v("Photo")]),
         _vm._v(" "),
         _c("td", [_vm._v(" ")]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("a", { staticClass: "btn btn-primary btn-sm", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "fas fa-edit" }),
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "btn btn-danger btn-sm", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "fas fa-trash" }),
       ]),
     ])
   },
@@ -39740,7 +40220,7 @@ var staticRenderFns = [
         "a",
         {
           staticClass: "btn btn-primary btn-sm",
-          attrs: { href: "/admin/products/barcodes/$product['id']" },
+          attrs: { href: "/admin/products/barcodes/${product['id']}" },
         },
         [_c("i", { staticClass: "fas fa-barcode" })]
       ),

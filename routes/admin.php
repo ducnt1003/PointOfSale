@@ -50,6 +50,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::delete('/delete', [CategoryController::class, 'destroy'])->name('delete');
         Route::get('/list',[CategoryController::class,'listCate']);
         Route::post('/add-cate',[CategoryController::class,'addCate']);
+        Route::put('/edit-cate/{id}',[CategoryController::class,'editCate']);
+        Route::delete('/delete-cate/{id}', [CategoryController::class, 'deleteCate']);
+
     });
 
     Route::prefix('products')->name('products.')->group(function (){

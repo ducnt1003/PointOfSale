@@ -32,6 +32,7 @@ Route::get('orders/{any}', function () {
   })->where('any', '.*');
 
 
+
 Route::get('/fbfeed.xml/{id}', [FeedController::class, 'fbFeed'])->name('fbfeed');
 Route::get('/ggfeed.xml/{id}', [FeedController::class, 'ggFeed'])->name('ggFeed');
 
