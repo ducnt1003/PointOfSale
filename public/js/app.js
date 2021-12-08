@@ -39573,7 +39573,7 @@ var render = function () {
           _vm._v(" "),
           _c("div", { staticClass: "col-md-4" }, [
             _c("div", { staticClass: "card" }, [
-              _c("table", { attrs: { calss: "table " } }, [
+              _c("table", { staticClass: "table " }, [
                 _vm._m(1),
                 _vm._v(" "),
                 _c("tbody", [

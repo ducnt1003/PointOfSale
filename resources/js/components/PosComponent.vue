@@ -60,7 +60,7 @@
         </div>
         <div class="col-md-4">
           <div class="card">
-            <table calss="table ">
+            <table class="table ">
               <thead class="text-muted">
                 <tr>
                   <th scope="col">Customer</th>

@@ -13,6 +13,7 @@ import Admin from './Admin.vue';
 import ExampleComponent from './components/ExampleComponent.vue';
 import CategoryComponent from './admin_components/CategoryComponent.vue';
 import ProductComponent from './admin_components/ProductComponent.vue';
+import PurchaseComponent from './admin_components/PurchaseComponent.vue';
 Vue.use(VueAxios, axios);
 
 const routes = [
@@ -30,6 +31,11 @@ const routes = [
         name: 'products',
         path: '/admin/vue/products',
         component: ProductComponent,
+    },
+    {
+        name: 'purchases',
+        path: '/admin/vue/purchases',
+        component: PurchaseComponent,
     }
 ];
 
