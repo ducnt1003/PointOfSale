@@ -101,7 +101,7 @@
               <th>#</th>
               <th>Name</th>
               <th>Import Price</th>
-              <th >Quantity</th>
+              <th>Quantity</th>
               <th>Total Price</th>
             </tr>
           </thead>
@@ -112,18 +112,22 @@
             >
               <td>{{ product["id"] }}</td>
               <td>{{ product["name"] }}</td>
-              <td>{{ product["import_price"] }}</td>
+              <td>${{ product["import_price"] }}</td>
               <td>
-                  <input
-                    type="number"
-                    :value="product['quantity']"
-                    @click="changeTotal(product['id'])"
-                  />
+                <input
+                  type="number"
+                  :value="product['quantity']"
+                  v-on:input="changeTotal(product['id'],$event)"
+                />
               </td>
-              <td>{{ product["total_money"] }}</td>
+              <td>${{ product["total_money"] }}</td>
             </tr>
           </tbody>
         </table>
+        <div class="row">
+          <label class="col-md-2 offset-md-8 ">Item: {{totalItem}}</label>
+          <label class="col-md-2">Total: ${{total}}</label>
+        </div>
       </div>
     </div>
     <div class="card mt-3 card-info">
@@ -230,23 +234,41 @@ export default {
       selectedStore: {},
     };
   },
+  computed: {
+    totalItem(){
+      let totalItem = 0;
+      this.selectedProducts.forEach(item => {
+        totalItem += item.quantity;
+      });
+      return totalItem;
+    },
+    total(){
+      let total = 0;
+      this.selectedProducts.forEach(item => {
+        total += (item.quantity*item.import_price);
+      });
+      return total;
+    },
+  },
   watch: {
     selectedProduct(newVal, oldVal) {
-      if (this.selectedProducts.findIndex(x=> x.id == newVal.id) >= 0 ){
-        let index = this.selectedProducts.findIndex((x => x.id == newVal.id));
+      if (this.selectedProducts.findIndex((x) => x.id == newVal.id) >= 0) {
+        let index = this.selectedProducts.findIndex((x) => x.id == newVal.id);
         this.selectedProducts[index].quantity++;
-        this.selectedProducts[index].total_money = this.selectedProducts[index].import_price * this.selectedProducts[index].quantity;
-      }else {
+        this.selectedProducts[index].total_money =
+          this.selectedProducts[index].import_price *
+          this.selectedProducts[index].quantity;
+      } else {
         let selected = {
-        id: newVal["id"],
-        name: newVal["name"],
-        import_price: newVal["import_price"],
-        quantity: 1,
-        total_money: newVal["import_price"],
-      };
-      this.selectedProducts.push(selected);
+          id: newVal["id"],
+          name: newVal["name"],
+          import_price: newVal["import_price"],
+          quantity: 1,
+          total_money: newVal["import_price"],
+        };
+        this.selectedProducts.push(selected);
       }
-
+      
       console.log(this.selectedProducts);
     },
   },
@@ -264,12 +286,18 @@ export default {
       this.products = response.data;
     });
   },
-  method: {
-      changeTotal(id){
-        let index = this.selectedProducts.findIndex((x => x.id == id));
-        this.selectedProducts[index].quantity++;
-        this.selectedProducts[index].total_money = this.selectedProducts[index].import_price * this.selectedProducts[index].quantity;
-      }
+  methods: {
+    resetSelectedProduct(){
+      this.selectedProduct={};
+    },
+    changeTotal(id,event) {
+      let index = this.selectedProducts.findIndex((x) => x.id == id);
+      var quantity = event.target.value
+      this.selectedProducts[index].quantity = quantity;
+      this.selectedProducts[index].total_money =
+        this.selectedProducts[index].import_price *
+        this.selectedProducts[index].quantity;
+    },
   },
   components: {
     ModelSelect,

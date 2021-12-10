@@ -82,30 +82,35 @@ class CategoryController extends Controller
         return Category::all();
     }
 
-    public function addCate(CategoryRequest $request)
-    {
-        $category = $this->categoryService->store($request);
-        return $category;
-    }
-
-    // public function addCate(Request $request){
-    //     $category = new Category();
-    //     return $request;
-    //     // $category->name = $request->name;
-    //     // $category->description = $request->description;
-    //     // $category->parent_id = $request->parent_id;
-    //     // $category->tax = $request->tax;
-    //     // $category->unit = $request->unit;
-
-    //     // $category->save();
-    //     // return $category;
-    //     //return response()->json('successfully added');
+    // public function addCate(CategoryRequest $request)
+    // {
+    //     $category = $this->categoryService->store($request);
+    //     return $category;
     // }
 
-    public function editCate(CategoryRequest $categoryRequest,$id)
+    public function addCate(Request $request){
+        $category = new Category();
+        //return $request;
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->parent_id = $request->parent_id;
+        $category->tax = $request->tax;
+        $category->unit = $request->unit;
+
+        $category->save();
+        return $category;
+        //return response()->json('successfully added');
+    }
+
+    public function editCate(Request $request,$id)
     {
-        $category = $this->categoryService->getById($id);
-        $this->categoryService->update($categoryRequest, $category);
+        $category = Category::find($id);
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->parent_id = $request->parent_id;
+        $category->tax = $request->tax;
+        $category->unit = $request->unit;
+        $category->save();
         return response()->json('successfully edited');
     }
 

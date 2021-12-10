@@ -219,8 +219,8 @@ import Modal from "../components/Modal.vue";
 export default {
   data() {
     return {
-      category: [],
-      categoryEdit: [],
+      category: {},
+      categoryEdit: {},
       categories: [],
       isModalVisible: false,
       isEditModalVisible: false,
@@ -264,8 +264,9 @@ export default {
       try {
         let uri = "http://127.0.0.1:8000/admin/categories/add-cate";
         this.axios.post(uri, this.category).then((response) => {
-          console.log(response.data);
-          //this.categories.push(this.category);
+          let newCate = response.data;
+          this.categories.push(newCate);
+          this.closeModal();
         });
       } catch (error) {
         console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
@@ -277,6 +278,9 @@ export default {
         let uri = `http://127.0.0.1:8000/admin/categories/edit-cate/${id}`;
         this.axios.put(uri, this.categoryEdit).then((response) => {
           console.log(response.data);
+          let index = this.categories.findIndex((x) => x.id == id);
+          this.categories[index]=this.categoryEdit;
+          this.closeEditModal();
           //this.categories.push(this.category);
         });
       } catch (error) {

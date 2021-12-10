@@ -2477,8 +2477,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      category: [],
-      categoryEdit: [],
+      category: {},
+      categoryEdit: {},
       categories: [],
       isModalVisible: false,
       isEditModalVisible: false,
@@ -2524,31 +2524,48 @@ __webpack_require__.r(__webpack_exports__);
       this.category["photo"] = e.target.files[0];
     },
     addCategory: function addCategory() {
+      var _this2 = this;
+
       console.log(this.category);
 
       try {
         var uri = "http://127.0.0.1:8000/admin/categories/add-cate";
         this.axios.post(uri, this.category).then(function (response) {
-          console.log(response.data); //this.categories.push(this.category);
+          var newCate = response.data;
+
+          _this2.categories.push(newCate);
+
+          _this2.closeModal();
         });
       } catch (error) {
         console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
       }
     },
     editCategory: function editCategory(id) {
+      var _this3 = this;
+
       console.log(this.categoryEdit);
 
       try {
         var uri = "http://127.0.0.1:8000/admin/categories/edit-cate/".concat(id);
         this.axios.put(uri, this.categoryEdit).then(function (response) {
-          console.log(response.data); //this.categories.push(this.category);
+          console.log(response.data);
+
+          var index = _this3.categories.findIndex(function (x) {
+            return x.id == id;
+          });
+
+          _this3.categories[index] = _this3.categoryEdit;
+
+          _this3.closeEditModal(); //this.categories.push(this.category);
+
         });
       } catch (error) {
         console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
       }
     },
     deleteCate: function deleteCate(id) {
-      var _this2 = this;
+      var _this4 = this;
 
       console.log(this.categoryEdit);
 
@@ -2557,9 +2574,9 @@ __webpack_require__.r(__webpack_exports__);
         this.axios["delete"](uri).then(function (response) {
           console.log(response.data); //this.categories.push(this.category);
 
-          _this2.categories.splice(_this2.categories.indexOf(id), 1);
+          _this4.categories.splice(_this4.categories.indexOf(id), 1);
 
-          _this2.isDeleteModalVisible = false;
+          _this4.isDeleteModalVisible = false;
         });
       } catch (error) {
         console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
@@ -2943,6 +2960,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2955,6 +2976,22 @@ __webpack_require__.r(__webpack_exports__);
       stores: [],
       selectedStore: {}
     };
+  },
+  computed: {
+    totalItem: function totalItem() {
+      var totalItem = 0;
+      this.selectedProducts.forEach(function (item) {
+        totalItem += item.quantity;
+      });
+      return totalItem;
+    },
+    total: function total() {
+      var total = 0;
+      this.selectedProducts.forEach(function (item) {
+        total += item.quantity * item.import_price;
+      });
+      return total;
+    }
   },
   watch: {
     selectedProduct: function selectedProduct(newVal, oldVal) {
@@ -2996,12 +3033,16 @@ __webpack_require__.r(__webpack_exports__);
       _this.products = response.data;
     });
   },
-  method: {
-    changeTotal: function changeTotal(id) {
+  methods: {
+    resetSelectedProduct: function resetSelectedProduct() {
+      this.selectedProduct = {};
+    },
+    changeTotal: function changeTotal(id, event) {
       var index = this.selectedProducts.findIndex(function (x) {
         return x.id == id;
       });
-      this.selectedProducts[index].quantity++;
+      var quantity = event.target.value;
+      this.selectedProducts[index].quantity = quantity;
       this.selectedProducts[index].total_money = this.selectedProducts[index].import_price * this.selectedProducts[index].quantity;
     }
   },
@@ -7612,7 +7653,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.fade-enter-active,\n.fade-leave-active {\n  transition: opacity 0.5s;\n}\n.fade-enter,\n.fade-leave-active {\n  opacity: 0;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.fade-enter-active,\r\n.fade-leave-active {\r\n  transition: opacity 0.5s;\n}\n.fade-enter,\r\n.fade-leave-active {\r\n  opacity: 0;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -7636,7 +7677,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-mask {\n  position: fixed;\n  z-index: 9998;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  display: table;\n  transition: opacity 0.3s ease;\n}\n.modal-wrapper {\n  display: table-cell;\n  vertical-align: middle;\n}\n.modal-container {\n  width: 700px;\n  margin: 0px auto;\n  padding: 20px 30px;\n  background-color: #fff;\n  border-radius: 2px;\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);\n  transition: all 0.3s ease;\n  font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3 {\n  margin-top: 0;\n  color: #0f3688;\n}\n.modal-body {\n  margin: 20px 0;\n}\n.modal-default-button {\n  float: right;\n}\n\n/*\n * The following styles are auto-applied to elements with\n * transition=\"modal\" when their visibility is toggled\n * by Vue.js.\n *\n * You can easily play with the modal transition by editing\n * these styles.\n */\n.modal-enter {\n  opacity: 0;\n}\n.modal-leave-active {\n  opacity: 0;\n}\n.modal-enter .modal-container,\n.modal-leave-active .modal-container {\n  transform: scale(1.1);\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-mask {\r\n  position: fixed;\r\n  z-index: 9998;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  background-color: rgba(0, 0, 0, 0.5);\r\n  display: table;\r\n  transition: opacity 0.3s ease;\n}\n.modal-wrapper {\r\n  display: table-cell;\r\n  vertical-align: middle;\n}\n.modal-container {\r\n  width: 700px;\r\n  margin: 0px auto;\r\n  padding: 20px 30px;\r\n  background-color: #fff;\r\n  border-radius: 2px;\r\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);\r\n  transition: all 0.3s ease;\r\n  font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3 {\r\n  margin-top: 0;\r\n  color: #0f3688;\n}\n.modal-body {\r\n  margin: 20px 0;\n}\n.modal-default-button {\r\n  float: right;\n}\r\n\r\n/*\r\n * The following styles are auto-applied to elements with\r\n * transition=\"modal\" when their visibility is toggled\r\n * by Vue.js.\r\n *\r\n * You can easily play with the modal transition by editing\r\n * these styles.\r\n */\n.modal-enter {\r\n  opacity: 0;\n}\n.modal-leave-active {\r\n  opacity: 0;\n}\n.modal-enter .modal-container,\r\n.modal-leave-active .modal-container {\r\n  transform: scale(1.1);\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -40887,25 +40928,35 @@ var render = function () {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(product["name"]))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(product["import_price"]))]),
+                _c("td", [_vm._v("$" + _vm._s(product["import_price"]))]),
                 _vm._v(" "),
                 _c("td", [
                   _c("input", {
                     attrs: { type: "number" },
                     domProps: { value: product["quantity"] },
                     on: {
-                      click: function ($event) {
-                        return _vm.changeTotal(product["id"])
+                      input: function ($event) {
+                        return _vm.changeTotal(product["id"], $event)
                       },
                     },
                   }),
                 ]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(product["total_money"]))]),
+                _c("td", [_vm._v("$" + _vm._s(product["total_money"]))]),
               ])
             }),
             0
           ),
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("label", { staticClass: "col-md-2 offset-md-8 " }, [
+            _vm._v("Item: " + _vm._s(_vm.totalItem)),
+          ]),
+          _vm._v(" "),
+          _c("label", { staticClass: "col-md-2" }, [
+            _vm._v("Total: $" + _vm._s(_vm.total)),
+          ]),
         ]),
       ]),
     ]),
@@ -61584,7 +61635,7 @@ Vue.compile = compileToFunctions;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
+module.exports = JSON.parse('{"_args":[["axios@0.21.4","E:\\\\BKHN\\\\Ki_7\\\\WebPrograming\\\\Project\\\\Pos"]],"_from":"axios@0.21.4","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.21.4","name":"axios","escapedName":"axios","rawSpec":"0.21.4","saveSpec":null,"fetchSpec":"0.21.4"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_spec":"0.21.4","_where":"E:\\\\BKHN\\\\Ki_7\\\\WebPrograming\\\\Project\\\\Pos","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
 
 /***/ })
 
