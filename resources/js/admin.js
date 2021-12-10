@@ -8,6 +8,7 @@ Vue.use(VueRouter);
 
 import VueAxios from 'vue-axios';
 import axios from 'axios';
+import 'vue-search-select/dist/VueSearchSelect.css';
 
 import Admin from './Admin.vue';
 import ExampleComponent from './components/ExampleComponent.vue';

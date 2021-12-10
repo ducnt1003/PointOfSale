@@ -6,17 +6,21 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col-sm">
+          <div class="col-sm form-group">
             <label for="menu">Nhà cung cấp</label>
             <table class="col-md-12">
               <tr>
-                <td>
-                  <input
-                    type="text"
-                    name="purchase_id"
-                    class="form-control"
-                    placeholder="Nhập mã đơn hàng"
-                  />
+                <td class="col-md-11">
+                  <!-- <model-select :options="suppliers" v-model="selectedSupplier">
+                    </model-select> -->
+                  <model-list-select
+                    :list="suppliers"
+                    v-model="selectedSupplier"
+                    option-value="id"
+                    option-text="name"
+                    placeholder="select supplier"
+                  >
+                  </model-list-select>
                 </td>
                 <td class="pull-right">
                   <button type="button" class="btn">
@@ -30,12 +34,14 @@
           <div class="col-sm">
             <div class="form-group">
               <label for="menu">Cửa hàng nhập</label>
-              <input
-                type="text"
-                name="title"
-                class="form-control"
-                placeholder="Nhập tên đơn hàng"
-              />
+              <model-list-select
+                :list="stores"
+                v-model="selectedStore"
+                option-value="id"
+                option-text="name"
+                placeholder="select store"
+              >
+              </model-list-select>
             </div>
           </div>
           <div class="col-sm">
@@ -45,7 +51,7 @@
                 type="text"
                 name="place_order"
                 class="form-control"
-                placeholder="Nơi đặt hàng"
+                placeholder="Người nhập"
               />
             </div>
           </div>
@@ -59,31 +65,35 @@
                 type="text"
                 name="stock_id"
                 class="form-control"
-                placeholder="Nhập kho nhận hàng"
+                placeholder="Ngày"
               />
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="card  mt-3">
+    <div class="card mt-3 card-info">
       <div class="card-header">
         <h3 class="card-title">Chi tiết</h3>
       </div>
-      <div class="card">
-        <div class="row">
-          <div class="md-8">
-            <div class="form-control">
-              <model-select :options="products" v-model="selected">
-              </model-select>
-            </div>
-          </div>
 
-          <button type="button" class="btn">
-            <i class="fa fa-plus"></i>
-          </button>
+      <div class="row">
+        <div class="offset-md-2 col-md-8">
+          <model-list-select
+            :list="products"
+            v-model="selectedProduct"
+            option-value="id"
+            option-text="name"
+            placeholder="select product"
+          >
+          </model-list-select>
         </div>
+        <button type="button" class="btn">
+          <i class="fa fa-plus"></i>
+          New product
+        </button>
       </div>
+      <label for="menu">Danh sách sản phẩm</label>
       <div>
         <table class="table text-center">
           <thead>
@@ -91,15 +101,32 @@
               <th>#</th>
               <th>Name</th>
               <th>Import Price</th>
-              <th>Quantity</th>
+              <th >Quantity</th>
               <th>Total Price</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            <tr
+              v-for="product in selectedProducts"
+              :key="product['product_id']"
+            >
+              <td>{{ product["id"] }}</td>
+              <td>{{ product["name"] }}</td>
+              <td>{{ product["import_price"] }}</td>
+              <td>
+                  <input
+                    type="number"
+                    :value="product['quantity']"
+                    @click="changeTotal(product['id'])"
+                  />
+              </td>
+              <td>{{ product["total_money"] }}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
-    <div class="card  mt-3">
+    <div class="card mt-3 card-info">
       <div class="card-header">
         <h3 class="card-title">Giảm giá</h3>
       </div>
@@ -116,7 +143,6 @@
               />
             </div>
           </div>
-
           <div class="col-md-4">
             <div class="form-group">
               <label for="menu">Lượng giảm</label>
@@ -135,7 +161,7 @@
         </div>
       </div>
     </div>
-    <div class="card  mt-3">
+    <div class="card mt-3 card-info">
       <div class="card-header">
         <h3 class="card-title">Thanh toán</h3>
       </div>
@@ -190,26 +216,64 @@
 </template>
 
 <script>
-import { ModelSelect } from "vue-search-select";
+import { ModelSelect, ModelListSelect } from "vue-search-select";
 
 export default {
   data() {
     return {
-      selected: {
-        value: "",
-        text: "",
-      },
-      products: [
-        { value: "1", text: "aa" + " - " + "1" },
-        { value: "2", text: "ab" + " - " + "2" },
-        { value: "3", text: "bc" + " - " + "3" },
-        { value: "4", text: "cd" + " - " + "4" },
-        { value: "5", text: "de" + " - " + "5" },
-      ],
+      selectedProduct: {},
+      selectedProducts: [],
+      products: [],
+      suppliers: [],
+      selectedSupplier: {},
+      stores: [],
+      selectedStore: {},
     };
+  },
+  watch: {
+    selectedProduct(newVal, oldVal) {
+      if (this.selectedProducts.findIndex(x=> x.id == newVal.id) >= 0 ){
+        let index = this.selectedProducts.findIndex((x => x.id == newVal.id));
+        this.selectedProducts[index].quantity++;
+        this.selectedProducts[index].total_money = this.selectedProducts[index].import_price * this.selectedProducts[index].quantity;
+      }else {
+        let selected = {
+        id: newVal["id"],
+        name: newVal["name"],
+        import_price: newVal["import_price"],
+        quantity: 1,
+        total_money: newVal["import_price"],
+      };
+      this.selectedProducts.push(selected);
+      }
+
+      console.log(this.selectedProducts);
+    },
+  },
+  created() {
+    let uri = "http://127.0.0.1:8000/admin/suppliers/list";
+    this.axios.get(uri).then((response) => {
+      this.suppliers = response.data;
+    });
+    uri = "http://127.0.0.1:8000/admin/stores/list";
+    this.axios.get(uri).then((response) => {
+      this.stores = response.data;
+    });
+    uri = "http://127.0.0.1:8000/admin/products/list";
+    this.axios.get(uri).then((response) => {
+      this.products = response.data;
+    });
+  },
+  method: {
+      changeTotal(id){
+        let index = this.selectedProducts.findIndex((x => x.id == id));
+        this.selectedProducts[index].quantity++;
+        this.selectedProducts[index].total_money = this.selectedProducts[index].import_price * this.selectedProducts[index].quantity;
+      }
   },
   components: {
     ModelSelect,
+    ModelListSelect,
   },
 };
 </script>

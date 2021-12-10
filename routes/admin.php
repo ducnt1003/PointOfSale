@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\CartController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\WarehouseController;
 
@@ -84,6 +85,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::delete('/delete', [BrandController::class, 'destroy'])->name('delete');
     });
     Route::prefix('stores')->name('stores.')->group(function (){
+        Route::get('/list',[StoreController::class,'getList']);
         Route::get('/create',[StoreController::class,'create'])->name('create');
         Route::post('/create',[StoreController::class,'store'])->name('store');
         Route::get('',[StoreController::class,'index'])->name('index');
@@ -208,6 +210,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/index',[CustomerController::class,'index'])->name('index');
         Route::get('/search',[CustomerController::class,'search'])->name('search');
         Route::post('/store',[CustomerController::class,'create'])->name('store');
+    });
+
+    Route::prefix('suppliers')->name('suppliers.')->group(function (){
+        Route::get('/list',[SupplierController::class,'getList']);
 
     });
 });

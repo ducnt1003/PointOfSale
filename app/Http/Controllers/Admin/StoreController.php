@@ -83,4 +83,9 @@ class StoreController extends Controller
         return redirect(route('admin.stores.index'))
             ->with('error', __('xóa không thành công!'));
     }
+
+    public function getList()
+    {
+        return Store::all();
+    }
 }
