@@ -49,9 +49,9 @@
               <label for="menu">Người nhập</label>
               <input
                 type="text"
-                name="place_order"
+                v-model="user['username']"
                 class="form-control"
-                placeholder="Người nhập"
+                disabled
               />
             </div>
           </div>
@@ -61,14 +61,13 @@
           <div class="col-md-4 offset-md-8">
             <div class="form-group">
               <label for="menu">Ngày nhập</label>
-              <input
-                type="text"
-                name="stock_id"
-                class="form-control"
-                placeholder="Ngày"
-              />
+              <input type="date" class="form-control" placeholder="Ngày" />
             </div>
           </div>
+        </div>
+        <div class="col-md-12">
+          <label for="menu">Nội dung</label>
+          <textarea class="form-control" v-model="purchase.title"></textarea>
         </div>
       </div>
     </div>
@@ -117,7 +116,7 @@
                 <input
                   type="number"
                   :value="product['quantity']"
-                  v-on:input="changeTotal(product['id'],$event)"
+                  v-on:input="changeTotal(product['id'], $event)"
                 />
               </td>
               <td>${{ product["total_money"] }}</td>
@@ -125,9 +124,12 @@
           </tbody>
         </table>
         <div class="row">
-          <label class="col-md-2 offset-md-8 ">Item: {{totalItem}}</label>
-          <label class="col-md-2">Total: ${{total}}</label>
+          <label class="col-md-2 offset-md-8">Item: {{ totalItem }}</label>
+          <label class="col-md-2">Total: ${{ total }}</label>
         </div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary pull-right" @click.prevent="save()">Lưu</button>
       </div>
     </div>
     <div class="card mt-3 card-info">
@@ -225,6 +227,7 @@ import { ModelSelect, ModelListSelect } from "vue-search-select";
 export default {
   data() {
     return {
+      purchase: {},
       selectedProduct: {},
       selectedProducts: [],
       products: [],
@@ -232,20 +235,21 @@ export default {
       selectedSupplier: {},
       stores: [],
       selectedStore: {},
+      user: {},
     };
   },
   computed: {
-    totalItem(){
+    totalItem() {
       let totalItem = 0;
-      this.selectedProducts.forEach(item => {
-        totalItem += item.quantity;
+      this.selectedProducts.forEach((item) => {
+        totalItem += parseInt(item.quantity);
       });
       return totalItem;
     },
-    total(){
+    total() {
       let total = 0;
-      this.selectedProducts.forEach(item => {
-        total += (item.quantity*item.import_price);
+      this.selectedProducts.forEach((item) => {
+        total += item.quantity * item.import_price;
       });
       return total;
     },
@@ -268,7 +272,7 @@ export default {
         };
         this.selectedProducts.push(selected);
       }
-      
+
       console.log(this.selectedProducts);
     },
   },
@@ -285,19 +289,50 @@ export default {
     this.axios.get(uri).then((response) => {
       this.products = response.data;
     });
+    uri = "http://127.0.0.1:8000/admin/users/get-user-login";
+    this.axios.get(uri).then((response) => {
+      this.user = response.data;
+    });
   },
   methods: {
-    resetSelectedProduct(){
-      this.selectedProduct={};
+    resetSelectedProduct() {
+      this.selectedProduct = {};
     },
-    changeTotal(id,event) {
+    changeTotal(id, event) {
       let index = this.selectedProducts.findIndex((x) => x.id == id);
-      var quantity = event.target.value
-      this.selectedProducts[index].quantity = quantity;
-      this.selectedProducts[index].total_money =
-        this.selectedProducts[index].import_price *
-        this.selectedProducts[index].quantity;
+      var quantity = event.target.value;
+      if (quantity >= 0) {
+        this.selectedProducts[index].quantity = quantity;
+        this.selectedProducts[index].total_money =
+          this.selectedProducts[index].import_price *
+          this.selectedProducts[index].quantity;
+      } else {
+        this.selectedProducts.splice(index, 1);
+      }
     },
+    save(){
+        this.purchase.stock_id = this.selectedStore.id;
+        this.purchase.place_order = this.selectedSupplier.name;
+        console.log(this.purchase);
+        try {
+        let uri = "http://127.0.0.1:8000/admin/purchases/new-purchase";
+        this.axios.post(uri, this.purchase).then((response) => {
+            this.purchase = response.data;
+            this.addProduct(this.purchase.id);
+
+        });
+
+      } catch (error) {
+        console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
+      }
+    },
+    addProduct(id){
+        let uri = `http://127.0.0.1:8000/admin/purchases/add-product/${id}`;
+        this.axios.post(uri, this.selectedProducts).then((response) => {
+            console.log(response.data);
+            this.$router.push({name: 'purchases.list'});
+        });
+    }
   },
   components: {
     ModelSelect,
@@ -305,4 +340,5 @@ export default {
   },
 };
 </script>
+
 

@@ -106,6 +106,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::post('/edit',[UserController::class,'update'])->name('edit.update');
         Route::get('/changepassword', [UserController::class,'index'])->name('index');
         Route::post('/changepassword',[UserController::class,'changePassword'])->name('changepassword');
+        Route::get('/get-user-login',[UserController::class,'getUserLogin']);
     });
 
     Route::prefix('feeds')->name('feeds.')->group(function (){
@@ -177,6 +178,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/payments/{purchase_id}',[PurchaseController::class,'edit_payment'])->name('edit_payment');
         Route::post('/payments/{id}',[PurchaseController::class,'update_payment'])->name('update_payment');
         Route::delete('/payments/delete', [PurchaseController::class, 'delete_payment'])->name('delete_payment');
+
+        Route::post('/new-purchase',[PurchaseController::class,'createPurchase']);
+        Route::post('/add-product/{id}',[PurchaseController::class,'addProduct']);
+        Route::get('/list',[PurchaseController::class,'getList']);
 
     });
 

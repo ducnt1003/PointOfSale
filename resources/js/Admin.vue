@@ -106,28 +106,31 @@
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/admin/vue/purchases" class="nav-link">
-                <i class="fas fa-money-check-alt" style="margin-left: 4px"></i>
-                <p style="margin-left: 5px">
-                  Đơn nhập hàng
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </router-link>
+              <a href="" class="nav-link">
+                  <i class="fas fa-money-check-alt" style="margin-left: 4px"></i>
+              <p style="margin-left: 5px">
+                Đơn nhập hàng
+                <i class="right fas fa-angle-left"></i>
+              </p>
+              </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a
-                    href=""
+                  <router-link
+                    to="/admin/vue/purchases/create"
                     class="nav-link"
                   >
                     <i class="far fa-circle nav-icon"></i>
                     <p>Tạo đơn hàng</p>
-                  </a>
+                  </router-link>
                 </li>
                 <li class="nav-item">
-                  <a href="" class="nav-link">
+                  <router-link
+                    to="/admin/vue/purchases/list"
+                    class="nav-link"
+                  >
                     <i class="far fa-circle nav-icon"></i>
                     <p>Danh sách đơn hàng</p>
-                  </a>
+                  </router-link>
                 </li>
               </ul>
             </li>

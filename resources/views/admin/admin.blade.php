@@ -40,6 +40,9 @@
 
 
         <meta name="csrf-token" value="{{ csrf_token() }}" />
+        @if (Auth::check())
+        <meta name="user_id" content="{{ Auth::user() }}" />
+        @endif
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div id="admin">

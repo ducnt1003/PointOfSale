@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use phpDocumentor\Reflection\Types\Null_;
 
 class PurchaseController extends Controller
 {
@@ -416,5 +417,44 @@ class PurchaseController extends Controller
             return redirect(route('admin.purchases.index'))
                 ->with('success', __('Delete purchase\'s success!'));
         }
+    }
+
+    public function createPurchase(Request $request){
+        $purchase = new Purchase();
+        $purchase->stock_id = $request->stock_id;
+        $purchase->place_order = $request->place_order;
+        $purchase->title = $request->title;
+        $purchase->purchase_id = 1234;
+        $purchase->save();
+        return $purchase;
+    }
+
+    public function addProduct(Request $request, $id)
+    {
+        //return $request;
+        $i = 0;
+        $total_money = 0;
+        while ($request[$i])
+        {
+            $purchase_product = new Purchases_product();
+            $purchase_product->purchase_id = $id;
+            $purchase_product->product_id = $request[$i]["id"];
+            $purchase_product->quantity = $request[$i]["quantity"];
+            $purchase_product->money = $request[$i]["total_money"];
+            $purchase_product->save();
+            $total_money += $request[$i]["total_money"];
+            $i++;
+        }
+        //return $total_money;
+        $purchase = Purchase::find($id);
+        $purchase->money = $total_money;
+        $purchase->save();
+
+        return response()->json("Success ");
+    }
+
+    public function getList()
+    {
+        return Purchase::all();
     }
 }

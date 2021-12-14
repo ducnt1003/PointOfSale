@@ -60,4 +60,9 @@ class UserController extends Controller
         $user->save();
         return redirect('login')->with('success', 'Mật khẩu đã bị thay đổi. Vui lòng đăng nhập lại!');
     }
+
+    public function getUserLogin()
+    {
+        return Auth::user();
+    }
 }
