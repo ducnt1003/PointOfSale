@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use phpDocumentor\Reflection\Types\Null_;
 
 class PurchaseController extends Controller
 {
@@ -77,10 +78,12 @@ class PurchaseController extends Controller
     public function edit_product($purchase_id, $product_id)
     {
         $product = DB::table('purchases_products')
-            ->where([
+            ->where(
+                [
                 ['purchase_id', '=', $purchase_id],
                 ['product_id', '=', $product_id]
-            ])->first();
+                ]
+            )->first();
         return view(
             'admin.purchases.edit_product',
             ['title' => 'Sửa thông tin sản phẩm trong đơn hàng'],
@@ -105,12 +108,12 @@ class PurchaseController extends Controller
         $data =  $request->except('_token');
         $data = array_filter($data, 'strlen');
         $purchase = Purchase::create($data);
-        if ($purchase) {
-            return redirect(route('admin.purchases.index'))
-                ->with('success', __('Create purchase\'s success!'));
-        }
+
         return redirect(route('admin.purchases.index'))
-            ->with('error', __('Create purchase\'s error!'));
+            ->with('success', __('Create purchase\'s success!'));
+
+        // return redirect(route('admin.purchases.index'))
+        //     ->with('error', __('Create purchase\'s error!'));
     }
 
     public function update_purchase(PurchaseRequest $request, $id)
@@ -130,9 +133,11 @@ class PurchaseController extends Controller
 
     public function update_payment(Request $request, $id)
     {
-        $request->validate([
+        $request->validate(
+            [
             'code' => 'required',
-        ]);
+            ]
+        );
         $payment = Purchases_payment::find($id);
         if ($payment) {
             if ($request->input('name_code') == 1) {
@@ -152,15 +157,19 @@ class PurchaseController extends Controller
 
     public function update_product($purchase_id, $product_id, Request $request)
     {
-        $request->validate([
+        $request->validate(
+            [
             'quantity' => 'required|int|min:0',
             'money' => 'required|int|min:0',
-        ]);
+            ]
+        );
         $old_product = DB::table('purchases_products')
-            ->where([
+            ->where(
+                [
                 ['purchase_id', '=', $purchase_id],
                 ['product_id', '=', $product_id]
-            ])->first();
+                ]
+            )->first();
         $id = $old_product->id;
         $old_money = $old_product->money;
         $product = Purchases_product::find($id);
@@ -185,28 +194,34 @@ class PurchaseController extends Controller
 
     public function add_product(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make(
+            $request->all(), [
             'product_id' => 'required',
             'quantity' => 'required|int|min:0',
             'money' => 'required|numeric|min:0',
-        ]);
+            ]
+        );
         $purchase_id = $request->get('purchase_id');
         $product_id = $request->get('product_id');
         $money = $request->get('money');
         $quantity = $request->get('quantity');
         if (!$validator->fails()) {
             $value = DB::table('purchases_products')
-                ->where([
+                ->where(
+                    [
                     ['purchase_id', '=', $purchase_id],
                     ['product_id', '=', $product_id]
-                ])->get();
+                    ]
+                )->get();
             if ($value->count() == 0) {
-                DB::table('purchases_products')->insert([
+                DB::table('purchases_products')->insert(
+                    [
                     'purchase_id' => $purchase_id,
                     'product_id' => $product_id,
                     'quantity' => $quantity,
                     'money' => $money
-                ]);
+                    ]
+                );
                 //them gia tri cua don hang
                 $old_purchase = DB::table('purchases')->where('purchase_id', '=', $purchase_id)->first();
                 $id = $old_purchase->id;
@@ -217,29 +232,33 @@ class PurchaseController extends Controller
                 $row = "<tr><td>" . $purchase_id . "</td><td>" . $product_id . "</td><td>"
                     . $quantity . "</td><td>" . $money . "</td><td><button id='edit' type='button' class='btn btn-success'><i class='fas fa-edit'></i></button>" . "&nbsp" . "<button type='button' class='delete btn btn-danger' data=" . $product_id . "><i class='fas fa-trash'></i></button>";
                 echo $row;
-            } else echo 'exist';
-        } else echo 'error';
+            } else { echo 'exist';
+            }
+        } else { echo 'error';
+        }
     }
 
     public function add_payment(Request $request)
     {
-        $request->validate([
+        $request->validate(
+            [
             'code' => 'required',
             'purchase_id' => "required|unique:purchases_payments,purchase_id,{$request->purchase_id}"
-        ]);
+            ]
+        );
         $data =  $request->except('_token');
         $data = array_filter($data, 'strlen');
-        $purchase = DB::table('purchases')->where('purchase_id','=',$data['purchase_id'])->first();
-        if($purchase){
+        $purchase = DB::table('purchases')->where('purchase_id', '=', $data['purchase_id'])->first();
+        if ($purchase) {
             Purchases_payment::create($data);
             DB::table('purchases')
-            ->where('purchase_id','=',$data['purchase_id'])
-            ->update(['paid' => 1]);
+                ->where('purchase_id', '=', $data['purchase_id'])
+                ->update(['paid' => 1]);
             return redirect(route('admin.purchases.payments'))
                 ->with('success', __('Create payment\'s success!'));
         }
         return redirect(route('admin.purchases.payments'))
-                ->with('error', __('Create payment\'s fail because purchase_id is not exist!'));
+            ->with('error', __('Create payment\'s fail because purchase_id is not exist!'));
     }
 
     public function delete_product(Request $request)
@@ -258,12 +277,14 @@ class PurchaseController extends Controller
 
 
             echo $request->input('id');
-        } else echo "error";
+        } else { echo "error";
+        }
     }
 
     public function uploadFile(Request $request)
     {
-        if ($request->file('file') == null) return redirect(route('admin.transfers.list'))->with('error', __('You need add file .csv!'));
+        if ($request->file('file') == null) { return redirect(route('admin.transfers.list'))->with('error', __('You need add file .csv!'));
+        }
         if ($request->input('submit') != null) {
             $file = $request->file('file');
 
@@ -286,7 +307,7 @@ class PurchaseController extends Controller
                 $importData_arr = array();
                 $i = 0;
 
-                while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
+                while (($filedata = fgetcsv($file, 1000, ",")) !== false) {
                     $num = count($filedata);
                     for ($c = 0; $c < $num; $c++) {
                         $importData_arr[$i][] = $filedata[$c];
@@ -306,12 +327,14 @@ class PurchaseController extends Controller
                         $check_data = false;
                         break;
                     }
-                    $validator = Validator::make($importData_arr[$c], [
+                    $validator = Validator::make(
+                        $importData_arr[$c], [
                         '0' => 'required',
                         '1' => 'required',
                         '2' => 'required|int|between:0,1000000',
                         '3' => 'required|numeric|between:0,999999999.999',
-                    ]);
+                        ]
+                    );
                     if ($validator->fails()) {
                         $check_data = false;
                     }
@@ -359,14 +382,14 @@ class PurchaseController extends Controller
     public function delete_payment(Request $request)
     {
         $payment = Purchases_payment::find($request->payment_id);
-        $purchase_id = $payment -> purchase_id;
-        $purchase = DB::table('purchases')->where('purchase_id','=',$purchase_id)->first();
+        $purchase_id = $payment->purchase_id;
+        $purchase = DB::table('purchases')->where('purchase_id', '=', $purchase_id)->first();
         if ($payment) {
             $payment->delete();
-            if($purchase){
+            if ($purchase) {
                 DB::table('purchases')
-                ->where('purchase_id', '=',$purchase_id)
-                ->update(['paid' => 0]);
+                    ->where('purchase_id', '=', $purchase_id)
+                    ->update(['paid' => 0]);
             }
             return redirect(route('admin.purchases.payments'))
                 ->with('success', __('Delete Payment\'s success!'));
@@ -375,9 +398,10 @@ class PurchaseController extends Controller
             ->with('info', __('Payment not found!'));
     }
 
-    public function delete_purchase(Request $request){
+    public function delete_purchase(Request $request)
+    {
         $purchase = Purchase::find($request->id);
-        if($purchase){
+        if ($purchase) {
             DB::beginTransaction();
             try {
                 Purchases_product::where('purchase_id', $purchase->purchase_id)->delete();
@@ -393,5 +417,44 @@ class PurchaseController extends Controller
             return redirect(route('admin.purchases.index'))
                 ->with('success', __('Delete purchase\'s success!'));
         }
+    }
+
+    public function createPurchase(Request $request){
+        $purchase = new Purchase();
+        $purchase->stock_id = $request->stock_id;
+        $purchase->place_order = $request->place_order;
+        $purchase->title = $request->title;
+        $purchase->purchase_id = 1234;
+        $purchase->save();
+        return $purchase;
+    }
+
+    public function addProduct(Request $request, $id)
+    {
+        //return $request;
+        $i = 0;
+        $total_money = 0;
+        while ($request[$i])
+        {
+            $purchase_product = new Purchases_product();
+            $purchase_product->purchase_id = $id;
+            $purchase_product->product_id = $request[$i]["id"];
+            $purchase_product->quantity = $request[$i]["quantity"];
+            $purchase_product->money = $request[$i]["total_money"];
+            $purchase_product->save();
+            $total_money += $request[$i]["total_money"];
+            $i++;
+        }
+        //return $total_money;
+        $purchase = Purchase::find($id);
+        $purchase->money = $total_money;
+        $purchase->save();
+
+        return response()->json("Success ");
+    }
+
+    public function getList()
+    {
+        return Purchase::all();
     }
 }

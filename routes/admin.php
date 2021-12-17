@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\CartController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\WarehouseController;
 
@@ -30,6 +31,9 @@ Route::get('admin/logout',
     ->name('admin.logout');
 
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
+    Route::get('/vue/{any}', function () {
+        return view('admin.admin');
+      })->where('any', '.*');
 
 
 
@@ -45,6 +49,11 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/edit/{id}',[CategoryController::class,'edit'])->name('edit');
         Route::post('/edit/{id}',[CategoryController::class,'update'])->name('edit.update');
         Route::delete('/delete', [CategoryController::class, 'destroy'])->name('delete');
+        Route::get('/list',[CategoryController::class,'listCate']);
+        Route::post('/add-cate',[CategoryController::class,'addCate']);
+        Route::put('/edit-cate/{id}',[CategoryController::class,'editCate']);
+        Route::delete('/delete-cate/{id}', [CategoryController::class, 'deleteCate']);
+
     });
 
     Route::prefix('products')->name('products.')->group(function (){
@@ -57,6 +66,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('barcodes/{id}',[ProductController::class,'getBarcode']);
         Route::get('/export',[ProductController::class,'export'])->name('export');
         Route::get('/quotation',[ProductController::class,'quotation'])->name('quotation');
+        Route::get('/list',[ProductController::class,'listProd']);
     });
     Route::prefix('banners')->name('banners.')->group(function (){
         Route::get('/create',[BannerController::class,'create'])->name('create');
@@ -75,6 +85,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::delete('/delete', [BrandController::class, 'destroy'])->name('delete');
     });
     Route::prefix('stores')->name('stores.')->group(function (){
+        Route::get('/list',[StoreController::class,'getList']);
         Route::get('/create',[StoreController::class,'create'])->name('create');
         Route::post('/create',[StoreController::class,'store'])->name('store');
         Route::get('',[StoreController::class,'index'])->name('index');
@@ -95,6 +106,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::post('/edit',[UserController::class,'update'])->name('edit.update');
         Route::get('/changepassword', [UserController::class,'index'])->name('index');
         Route::post('/changepassword',[UserController::class,'changePassword'])->name('changepassword');
+        Route::get('/get-user-login',[UserController::class,'getUserLogin']);
     });
 
     Route::prefix('feeds')->name('feeds.')->group(function (){
@@ -123,7 +135,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('minus-cart/{id}', [OrderController::class, 'minusCart']);
         Route::get('remove-cart/{id}', [OrderController::class, 'removeCart']);
         Route::delete('cancel-cart', [OrderController::class, 'cancelCart']);
-        Route::get('charge-cart', [OrderController::class, 'chargeCart']);
+        Route::get('charge-cart/{id}', [OrderController::class, 'chargeCart']);
         Route::get('/select-cate/{id}', [OrderController::class, 'selectCate']);
         Route::get('/search',[OrderController::class,'search'])->name('search');
         Route::get('add-to-cart/{id}', [OrderController::class, 'addToCart'])->name('add-to-cart');
@@ -167,6 +179,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::post('/payments/{id}',[PurchaseController::class,'update_payment'])->name('update_payment');
         Route::delete('/payments/delete', [PurchaseController::class, 'delete_payment'])->name('delete_payment');
 
+        Route::post('/new-purchase',[PurchaseController::class,'createPurchase']);
+        Route::post('/add-product/{id}',[PurchaseController::class,'addProduct']);
+        Route::get('/list',[PurchaseController::class,'getList']);
+
     });
 
     Route::prefix('transfers')->name('transfers.')->group(function (){
@@ -198,7 +214,11 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::prefix('customers')->name('customers.')->group(function (){
         Route::get('/index',[CustomerController::class,'index'])->name('index');
         Route::get('/search',[CustomerController::class,'search'])->name('search');
-        Route::post('/store',[CustomerController::class,'store'])->name('store');
+        Route::post('/store',[CustomerController::class,'create'])->name('store');
+    });
+
+    Route::prefix('suppliers')->name('suppliers.')->group(function (){
+        Route::get('/list',[SupplierController::class,'getList']);
 
     });
 });

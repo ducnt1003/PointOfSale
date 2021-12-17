@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Sale;
 use App\Models\Cart;
@@ -28,9 +29,11 @@ class OrderController extends Controller
             ->join('products', 'products.id', '=', 'warehouses.product_id')
             ->where('store_id', $store->id)
             ->get();
-        return view('admin.orders.pos', [
+        return view(
+            'admin.orders.pos', [
             'stocks' => $stocks,
-        ]);
+            ]
+        );
     }
 
     public function addToCart($id)
@@ -89,10 +92,12 @@ class OrderController extends Controller
     }
     public function save(Request $request)
     {
-        $this->validate($request, [
+        $this->validate(
+            $request, [
             'name' => 'required',
             'phone' => 'required'
-        ]);
+            ]
+        );
         $customer = Customer::where('phone', $request->phone)->first();
 
         if (!$customer) {
@@ -228,7 +233,7 @@ class OrderController extends Controller
         }
         $cart[$count]['quantity']--;
         if ($cart[$count]['quantity'] == 0) {
-            array_splice($cart,$count,1);
+            array_splice($cart, $count, 1);
         }
         session()->put('cart', $cart);
         return response()->json($cart);
@@ -244,7 +249,7 @@ class OrderController extends Controller
             }
             $count++;
         }
-        array_splice($cart,$count,1);
+        array_splice($cart, $count, 1);
         session()->put('cart', $cart);
         return response()->json($cart);
     }
@@ -255,18 +260,35 @@ class OrderController extends Controller
         return response()->json('Success cancel');
     }
 
-    public function chargeCart()
+    public function chargeCart($id)
     {
-        // $carts = session()->get('cart');
-        // $order = new Order;
-        // $order->customer_id = $customerId;
-        // $order->save();
-        // foreach($carts as $cart){
+        $user = Auth::user();
+        $carts = session()->get('cart');
+        $order = new Order();
+        $order->customer_id = $id;
+        $order->user_id = $user->id;
+        $order->save();
 
-        // }
-        view('admin.orders.order-print');
-        session()->forget('cart');
-        
-        
+        $total = 0;
+        foreach($carts as $cart){
+            $total += $cart['quantity'] * $cart['price'];
+            $warehouse = Warehouse::where('product_id', $cart['product_id'])
+                ->where('store_id', $user->store_id)->first();
+            $warehouse->quantity = $warehouse->quantity - $cart['quantity'];
+            $warehouse->save();
+            $orderDetail = new OrderDetail();
+            $orderDetail->warehouse_id = $warehouse->id;
+            $orderDetail->quantity =  $cart['quantity'];
+            $orderDetail->order_id = $order->id;
+            $orderDetail->save();
+
+        }
+        $order->price = $total;
+        $order->save();
+        $customerController = new CustomerController;
+        $customerController->addMoney($id, $total);
+        // session()->forget('cart');
+        return response()->json("Success charge");
+
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\FeedController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\RssController;
 Route::get('orders/{any}', function () {
     return view('pos');
   })->where('any', '.*');
+
 
 
 Route::get('/fbfeed.xml/{id}', [FeedController::class, 'fbFeed'])->name('fbfeed');
@@ -63,3 +65,8 @@ Route::get('/register',[CustomerController::class,'register'])->name('register')
 Route::post('/register',[CustomerController::class,'store'])->name('register.store');
 Route::get('/forgetpassword',[CustomerController::class,'forgetpassword'])->name('forgetpassword');
 Route::get('/rss',[RssController::class,'index'])->name('rss');
+Route::post('/customers/create',[AdminCustomerController::class,'create']);
+Route::prefix('customers')->name('customers.')->group(function (){
+    Route::get('/index',[AdminCustomerController::class,'index'])->name('index');
+    ;
+});

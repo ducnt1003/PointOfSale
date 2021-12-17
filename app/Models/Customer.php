@@ -16,12 +16,9 @@ class Customer extends Authenticatable
         'email',
         'password',
         'phone',
-
         'google_id',
-        'facebook_id',
-
         'address',
-
+        'total_money'
     ];
 
     /**
@@ -31,11 +28,15 @@ class Customer extends Authenticatable
      */
     protected $hidden = [
         'password',
-        
+
     ];
 
      public function carts(){
         return $this->hasMany(Cart::class,'customer_id','id');
+    }
+
+    public function customer_groups(){
+        return $this->belongsTo(CustomerGroup::class,'group_id','id');
     }
 
 }

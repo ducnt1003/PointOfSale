@@ -20,14 +20,14 @@ class CategoryService
     public function store($request){
         try {
             $request->except('_token');
-            Category::create($request->all());
+            $category = Category::create($request->all());
             Session::flash('success','Thêm danh mục mới thành công');
         }catch (\Exception $err){
             Session::flash('error','Thêm danh mục mới lỗi');
             \Log::info($err->getMessage());
             return false;
         }
-        return true;
+        return $category;
     }
 
     public function getAll(){

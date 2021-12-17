@@ -6,8 +6,6 @@
     <a type="button" class="btn btn-info btn-sm" style="float:right;" href="{{route('admin.products.create')}}" >Create new Product</a>
 @stop
 @section('content')
-
-
     <table id="example" class="display nowrap" cellspacing="0" width="100%">
         <thead>
         <tr>

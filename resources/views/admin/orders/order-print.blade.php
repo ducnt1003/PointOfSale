@@ -56,6 +56,7 @@
           </tr>
           @endforeach
           @endif
+          @php session()->forget('cart') @endphp
           </tbody>
         </table>
       </div>

@@ -20,7 +20,7 @@ class UserController extends Controller
         $user = Auth::user();
         return view('admin.users.edit',[
             'title'=>'Chỉnh sửa thông tin người dùng',
-            'user'=>$user,          
+            'user'=>$user,
         ]);
     }
 
@@ -38,7 +38,7 @@ class UserController extends Controller
         }catch (\Exception $err){
             Session::flash('error','Có lỗi vui lòng thử lại');
             \Log::info($err->getMessage());
-        }     
+        }
         return redirect(route('admin.users.edit'));
     }
 
@@ -47,7 +47,7 @@ class UserController extends Controller
         $request->validate([
           'current_password' => 'required|current_password',
           'password' => 'required|string|min:6|confirmed',
-          'password_confirmation' => 'required',    
+          'password_confirmation' => 'required',
         ]);
 
         $user = Auth::user();
@@ -58,6 +58,11 @@ class UserController extends Controller
 
         $user->password = Hash::make($request->password);
         $user->save();
-        return redirect('login')->with('success', 'Mật khẩu đã bị thay đổi. Vui lòng đăng nhập lại!'); 
+        return redirect('login')->with('success', 'Mật khẩu đã bị thay đổi. Vui lòng đăng nhập lại!');
+    }
+
+    public function getUserLogin()
+    {
+        return Auth::user();
     }
 }

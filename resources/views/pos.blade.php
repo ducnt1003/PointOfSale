@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Laravel</title>
+
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
     <link href="{{ mix('css/app.css') }}" type="text/css" rel="stylesheet" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
@@ -68,6 +69,8 @@
 <script src="/template/plugins/dropzone/min/dropzone.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/template/dist/js/adminlte.min.js"></script>
+
+
 <!-- AdminLTE for demo purposes -->
 <script>
 	$(function() {

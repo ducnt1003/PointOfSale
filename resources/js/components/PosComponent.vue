@@ -33,9 +33,6 @@
                 <figure class="card card-product">
                   <div class="img-wrap">
                     <img src="/assets/images/items/3.jpg" />
-                    <a class="btn-overlay" href="#"
-                      ><i class="fa fa-search-plus"></i> Quick view</a
-                    >
                   </div>
                   <figcaption class="info-wrap">
                     <a href="#" class="title">{{ stock["name"] }}</a>
@@ -63,7 +60,7 @@
         </div>
         <div class="col-md-4">
           <div class="card">
-            <table calss="table ">
+            <table class="table ">
               <thead class="text-muted">
                 <tr>
                   <th scope="col">Customer</th>
@@ -86,10 +83,15 @@
                       role="group"
                       aria-label="..."
                     >
-                      <router-link :to="{ name: 'customer' }"
+                      <!-- <router-link :to="{ name: 'customer' }"
                         ><button type="button" class="m-btn btn btn-default">
                           <i class="fa fa-plus"></i></button
-                      ></router-link>
+                      ></router-link> -->
+                      <button type="button" class="btn" @click="showModal">
+                        <i class="fa fa-plus"></i>
+                      </button>
+
+                      <!-- <b-button class="m-btn btn btn-default" v-b-modal.modal-prevent-closing><i class="fa fa-plus"></i></b-button> -->
                     </div>
                   </td>
                 </tr>
@@ -193,7 +195,7 @@
               </div>
               <div class="col-md-6">
                 <button
-                  @click.prevent="charge()"
+                  @click.prevent="charge(selected['value'])"
                   class="btn btn-primary btn-lg btn-block"
                 >
                   <i class="fa fa-shopping-bag"></i> Charge
@@ -205,11 +207,74 @@
         </div>
       </div>
     </div>
+    <Modal v-show="isModalVisible" @close="closeModal">
+      <h3 slot="header">Add new customer</h3>
+      <div slot="body">
+        <div class="container-fluid">
+          <form @submit.prevent="addCustomer">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Tên khách hàng</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="customer.name"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="customer.phone"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="customer.email"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="customer.address"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer">
+                <button class="btn btn-primary">Save</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      -
+    </Modal>
+
     <!-- container //  -->
   </section>
 </template>
+
 <script>
 import { ModelSelect } from "vue-search-select";
+import Modal from "./Modal.vue";
 
 export default {
   data() {
@@ -219,11 +284,12 @@ export default {
       carts: [],
       results: [],
       customers: [],
+      customer: {},
       selected: {
-        id: "",
-        phone: "",
-        name: "",
+        value: "",
+        text: "",
       },
+      isModalVisible: false,
     };
   },
 
@@ -286,9 +352,9 @@ export default {
         this.carts = response.data;
       });
     },
-    charge() {
+    charge(id) {
       window.open("/admin/orders/print", "_blank");
-      let uri = `http://127.0.0.1:8000/admin/orders/charge-cart/`;
+      let uri = `http://127.0.0.1:8000/admin/orders/charge-cart/${id}`;
       this.axios.get(uri).then((response) => {
         this.carts = [];
       });
@@ -298,9 +364,27 @@ export default {
       this.axios.delete(uri).then((response) => {});
       this.carts = [];
     },
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+    addCustomer() {
+      console.log(this.customer);
+      let uri = "http://127.0.0.1:8000/admin/customers/store";
+      this.axios.post(uri, this.customer).then((response) => {
+        let newCustomer = response.data;
+        console.log(this.customers);
+        this.customers.push(newCustomer);
+      });
+
+      this.closeModal();
+    },
   },
   components: {
     ModelSelect,
+    Modal,
   },
 };
 </script>
