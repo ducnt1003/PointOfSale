@@ -457,4 +457,12 @@ class PurchaseController extends Controller
     {
         return Purchase::all();
     }
+
+    public function purchasePayment(Request $request){
+        $purchase = Purchase::find($request->id);
+        $purchase->paid = 1;
+        $purchase->title = $request->title;
+        $purchase->save();
+        return $purchase;
+    }
 }

@@ -182,6 +182,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::post('/new-purchase',[PurchaseController::class,'createPurchase']);
         Route::post('/add-product/{id}',[PurchaseController::class,'addProduct']);
         Route::get('/list',[PurchaseController::class,'getList']);
+        Route::put('/purchase-payment',[PurchaseController::class,'purchasePayment']);
 
     });
 

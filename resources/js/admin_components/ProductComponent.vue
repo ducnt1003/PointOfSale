@@ -28,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in products" :key="product['id']">
+        <tr v-for="product in products_paginate" :key="product['id']">
           <td>{{ product["id"] }}</td>
           <td>{{ product["name"] }}</td>
           <td>{{ product["category_id"] }}</td>
@@ -72,6 +72,8 @@
         </tr>
       </tbody>
     </table>
+    <Paginate :posts="products" @setPages="setPages()">
+    </Paginate>
     <Modal v-show="isModalVisible" @close="closeModal">
       <div class="card-header" slot="header">
         <h3 class="card-title">Create new Product</h3>
@@ -80,25 +82,17 @@
     </Modal>
   </div>
 </template>
-<script type="text/javascript">
-$(document).ready(function () {
-  $("#example").DataTable({
-    dom: "Bfrtip",
-    // buttons: [
-    //     'copy',
-    // ]
-    info: false,
-  });
-});
-</script>
+
 <script>
 import Modal from "../components/Modal.vue";
+import Paginate from "./PaginateComponent.vue"
 
 export default {
   data() {
     return {
-      product: [],
+      product: {},
       products: [],
+      products_paginate: [],
       isModalVisible: false,
     };
   },
@@ -118,9 +112,14 @@ export default {
     onChange(e) {
       this.category["photo"] = e.target.files[0];
     },
+    setPages(e){
+        console.log(1);
+        this.products_paginate= e;
+    }
   },
   components: {
     Modal,
+    Paginate,
   },
 };
 </script>

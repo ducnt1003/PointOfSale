@@ -83,26 +83,20 @@
               <td>
                 <button
                   v-if="purchase['paid'] == 0"
-                  class="btn btn-danger "
+                  class="btn btn-danger"
+                  @click.prevent="showModal(purchase)"
                 >
                   Chưa thanh toán
                 </button>
-                <span
-                  v-if="purchase['paid'] != 0"
-                  class="btn btn-success "
+                <span v-if="purchase['paid'] != 0" class="btn btn-success"
                   >Đã thanh toán</span
                 >
               </td>
               <td>
-                <button
-                  v-if="purchase['status'] == 0"
-                  class="btn btn-danger"
-                >
+                <button v-if="purchase['status'] == 0" class="btn btn-danger">
                   Chưa nhập
                 </button>
-                <span
-                  v-if="purchase['status'] != 0"
-                  class="btn btn-success"
+                <span v-if="purchase['status'] != 0" class="btn btn-success"
                   >Đã nhập</span
                 >
               </td>
@@ -111,17 +105,26 @@
         </table>
       </div>
     </div>
+    <PurchasePayment
+      v-show="isModalPurchase"
+      @close="closeModal()"
+      :purchase="purchase"
+    >
+    </PurchasePayment>
   </div>
 </template>
 
 <script>
 import { ModelSelect, ModelListSelect } from "vue-search-select";
 import moment from "moment";
+import PurchasePayment from "./PurchasePayment.vue";
 
 export default {
   data() {
     return {
+      isModalPurchase: false,
       purchases: [],
+      purchase: {},
       cpPurchases: [],
       suppliers: [],
       selectedSupplier: { id: 0, name: "Tất cả" },
@@ -144,6 +147,10 @@ export default {
   },
   computed: {},
   watch: {
+    purchase(newVal,oldVal) {
+        let index = this.purchases.findIndex((x) => x.id == newVal.id);
+        this.purchases[index].paid="1";
+    },
     selectedSupplier(newVal, oldVal) {
       this.filterPurchase(
         newVal,
@@ -196,6 +203,13 @@ export default {
     });
   },
   methods: {
+    showModal(purchase) {
+      this.isModalPurchase = true;
+      this.purchase = purchase;
+    },
+    closeModal() {
+      this.isModalPurchase = false;
+    },
     resetSelectedProduct() {
       this.selectedProduct = {};
     },
@@ -234,6 +248,7 @@ export default {
     ModelSelect,
     ModelListSelect,
     moment,
+    PurchasePayment,
   },
 };
 </script>

@@ -138,6 +138,7 @@
                 class="form-control"
                 placeholder="Nhập tên danh mục"
                 v-model="categoryEdit.name"
+                disabled
               />
             </div>
             <div class="form-group">
