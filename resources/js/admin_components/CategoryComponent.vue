@@ -40,7 +40,10 @@
             >
               <i class="fas fa-edit"></i>
             </button>
-            <a class="btn btn-danger btn-sm" @click="showDeleteModal(category['id'])">
+            <a
+              class="btn btn-danger btn-sm"
+              @click="showDeleteModal(category['id'])"
+            >
               <i class="fas fa-trash"></i>
             </a>
           </td>
@@ -52,7 +55,7 @@
         <h3 class="card-title">Create new Category</h3>
       </div>
       <div slot="body">
-        <form @submit.prevent="addCategory">
+        <form @submit.prevent="addCategory" enctype="multipart/form-data">
           <div class="card-body">
             <div class="form-group">
               <label>Tên Danh Mục</label>
@@ -107,12 +110,7 @@
             </div>
             <div class="form-group">
               <label for="upload">Ảnh</label>
-              <input
-                type="file"
-                class="form-control"
-                id="upload"
-                v-on:change="onChange"
-              />
+              <input type="file" class="form-control" v-on:change="onChange" />
               <div id="image_show"></div>
               <input type="hidden" id="photo" name="photo" />
             </div>
@@ -129,7 +127,7 @@
         <h3 class="card-title">Edit Category</h3>
       </div>
       <div slot="body">
-        <form @submit.prevent="editCategory(categoryEdit.id)">
+        <form @submit.prevent="editCategory(categoryEdit.id)" enctype="multipart/form-data">
           <div class="card-body">
             <div class="form-group">
               <label>Tên Danh Mục</label>
@@ -138,7 +136,6 @@
                 class="form-control"
                 placeholder="Nhập tên danh mục"
                 v-model="categoryEdit.name"
-                disabled
               />
             </div>
             <div class="form-group">
@@ -189,10 +186,11 @@
                 type="file"
                 class="form-control"
                 id="upload"
-                v-on:change="onChange"
+                v-on:change="onChangeEdit"
               />
-              <div id="image_show"></div>
-              <input type="hidden" id="photo" name="photo" />
+              <div id="image_show">
+                <img :src="categoryEdit['photo']" width="100px" />
+              </div>
             </div>
           </div>
 
@@ -208,8 +206,18 @@
       </div>
       <div class="card-body" slot="body">Bạn có muốn xóa Category này?</div>
       <div class="card-footer" slot="footer">
-          <button class="modal-default-button btn-warning" @click="deleteCate(categoryEdit.id)">Delete</button>
-          <button class="modal-default-button btn-error" @click="closeDeleteModal">Exit</button>
+        <button
+          class="modal-default-button btn-warning"
+          @click="deleteCate(categoryEdit.id)"
+        >
+          Delete
+        </button>
+        <button
+          class="modal-default-button btn-error"
+          @click="closeDeleteModal"
+        >
+          Exit
+        </button>
       </div>
     </Modal>
   </div>
@@ -245,6 +253,7 @@ export default {
       var item = this.categories.find((item) => item.id == id);
       this.categoryEdit = item;
       this.isEditModalVisible = true;
+      console.log(this.categoryEdit);
     },
     closeEditModal() {
       this.isEditModalVisible = false;
@@ -260,13 +269,26 @@ export default {
     onChange(e) {
       this.category["photo"] = e.target.files[0];
     },
+    onChangeEdit(e) {
+      this.categoryEdit["photo"] = e.target.files[0];
+      console.log(this.categoryEdit["photo"]);
+    },
     addCategory() {
-      console.log(this.category);
+      const data = new FormData();
+      data.append("name", this.category["name"]);
+      data.append("parent_id", this.category["parent_id"]);
+      data.append("description", this.category["description"]);
+      data.append("tax", this.category["tax"]);
+      data.append("unit", this.category["unit"]);
+      data.append("photo", this.category["photo"]);
+      console.log(data);
       try {
         let uri = "http://127.0.0.1:8000/admin/categories/add-cate";
-        this.axios.post(uri, this.category).then((response) => {
+        this.axios.post(uri, data).then((response) => {
           let newCate = response.data;
+          console.log(response.data);
           this.categories.push(newCate);
+          this.category = {};
           this.closeModal();
         });
       } catch (error) {
@@ -275,12 +297,20 @@ export default {
     },
     editCategory(id) {
       console.log(this.categoryEdit);
+      const dataEdit = new FormData();
+      dataEdit.append("name", this.categoryEdit["name"]);
+      dataEdit.append("parent_id", this.categoryEdit["parent_id"]);
+      dataEdit.append("description", this.categoryEdit["description"]);
+      dataEdit.append("tax", this.categoryEdit["tax"]);
+      dataEdit.append("unit", this.categoryEdit["unit"]);
+      dataEdit.append("photo", this.categoryEdit["photo"]);
+      console.log(dataEdit);
       try {
         let uri = `http://127.0.0.1:8000/admin/categories/edit-cate/${id}`;
-        this.axios.put(uri, this.categoryEdit).then((response) => {
+        this.axios.post(uri, dataEdit).then((response) => {
           console.log(response.data);
           let index = this.categories.findIndex((x) => x.id == id);
-          this.categories[index]=this.categoryEdit;
+          this.categories[index] = response.data;
           this.closeEditModal();
           //this.categories.push(this.category);
         });
@@ -295,9 +325,9 @@ export default {
         this.axios.delete(uri).then((response) => {
           console.log(response.data);
           //this.categories.push(this.category);
-          this.categories.splice(this.categories.indexOf(id), 1);
+          let index = this.categories.findIndex((x) => x.id == id);
+          this.categories.splice(this.categories.indexOf(index), 1);
           this.isDeleteModalVisible = false;
-
         });
       } catch (error) {
         console.error(error.response.data); // NOTE - use "error.response.data` (not "error")

@@ -39,7 +39,7 @@
 <script>
 export default {
   name: "Paginate",
-  props: ["posts"],
+  props: ["posts","this.displayPosts"],
   data() {
     return {
       page: 1,
@@ -63,8 +63,6 @@ export default {
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
       }
-      this.$emit('setPages',this.posts);
-      console.log(this.posts);
     },
     paginate(posts) {
       let page = this.page;
@@ -73,6 +71,7 @@ export default {
       let to = page * perPage;
       return posts.slice(from, to);
     },
+    
   },
 };
 </script>

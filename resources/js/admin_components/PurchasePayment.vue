@@ -13,7 +13,6 @@
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Nhập mã đơn hàng"
                   :value="purchase.money"
                   disabled
                 />
@@ -23,11 +22,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label for="menu">Ngày trả</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Nhập tên đơn hàng"
-                />
+                <input type="date" class="form-control" placeholder="Ngày" />
               </div>
             </div>
             <div class="col-md-4">
@@ -36,7 +31,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Nhập tên đơn hàng"
+                  placeholder="Phương thức"
                 />
               </div>
             </div>

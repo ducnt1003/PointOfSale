@@ -72,7 +72,7 @@
         </tr>
       </tbody>
     </table>
-    <Paginate :posts="products" @setPages="setPages()">
+    <Paginate :posts="products" @displayPrs="displayPosts()">
     </Paginate>
     <Modal v-show="isModalVisible" @close="closeModal">
       <div class="card-header" slot="header">
@@ -100,9 +100,16 @@ export default {
     let uri = "http://127.0.0.1:8000/admin/products/list";
     this.axios.get(uri).then((response) => {
       this.products = response.data;
+      console.log();
     });
   },
+  computed:{
+    
+  },
   methods: {
+    displayPrs(){
+      
+    },
     showModal() {
       this.isModalVisible = true;
     },
@@ -113,7 +120,7 @@ export default {
       this.category["photo"] = e.target.files[0];
     },
     setPages(e){
-        console.log(1);
+        console.log(e);
         this.products_paginate= e;
     }
   },
