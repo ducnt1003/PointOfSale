@@ -19,9 +19,10 @@ class CategoryController extends Controller
     public function create()
     {
         return view(
-            'admin.categories.create', [
-            'title'=>'Thêm danh mục mới',
-            'categories'=> $this->categoryService->getParent(),
+            'admin.categories.create',
+            [
+                'title' => 'Thêm danh mục mới',
+                'categories' => $this->categoryService->getParent(),
             ]
         );
     }
@@ -34,9 +35,10 @@ class CategoryController extends Controller
     public function index()
     {
         return view(
-            'admin.categories.index', [
-            'title'=>'Danh sách danh mục mới',
-            'categories'=>$this->categoryService->getAll(),
+            'admin.categories.index',
+            [
+                'title' => 'Danh sách danh mục mới',
+                'categories' => $this->categoryService->getAll(),
             ]
         );
     }
@@ -45,15 +47,16 @@ class CategoryController extends Controller
     {
         $category = $this->categoryService->getById($id);
         return view(
-            'admin.categories.edit', [
-            'title'=>'Chỉnh sửa danh mục: '.$category->name,
-            'category'=>$category,
-            'categories_parent'=>$this->categoryService->getParent(),
+            'admin.categories.edit',
+            [
+                'title' => 'Chỉnh sửa danh mục: ' . $category->name,
+                'category' => $category,
+                'categories_parent' => $this->categoryService->getParent(),
             ]
         );
     }
 
-    public function update(CategoryRequest $categoryRequest,$id)
+    public function update(CategoryRequest $categoryRequest, $id)
     {
         $category = $this->categoryService->getById($id);
         $this->categoryService->update($categoryRequest, $category);
@@ -66,19 +69,20 @@ class CategoryController extends Controller
         if ($result) {
             return response()->json(
                 [
-                'error'=>false,
-                'message'=>'Xóa thành công danh mục'
+                    'error' => false,
+                    'message' => 'Xóa thành công danh mục'
                 ]
             );
         }
         return response()->json(
             [
-            'error'=>true
+                'error' => true
             ]
         );
     }
 
-    public function listCate(){
+    public function listCate()
+    {
         return Category::all();
     }
 
@@ -88,7 +92,8 @@ class CategoryController extends Controller
     //     return $category;
     // }
 
-    public function addCate(Request $request){
+    public function addCate(Request $request)
+    {
         $category = new Category();
         //return $request;
         $category->name = $request->name;
@@ -96,13 +101,16 @@ class CategoryController extends Controller
         $category->parent_id = $request->parent_id;
         $category->tax = $request->tax;
         $category->unit = $request->unit;
-
+        $path = $this->_upload($request);
+        if ($path) {
+            $category->photo = $path;
+        }
         $category->save();
         return $category;
         //return response()->json('successfully added');
     }
 
-    public function editCate(Request $request,$id)
+    public function editCate(Request $request, $id)
     {
         $category = Category::find($id);
         $category->name = $request->name;
@@ -110,8 +118,12 @@ class CategoryController extends Controller
         $category->parent_id = $request->parent_id;
         $category->tax = $request->tax;
         $category->unit = $request->unit;
+        $path = $this->_upload($request);
+        if ($path) {
+            $category->photo = $path;
+        }
         $category->save();
-        return response()->json('successfully edited');
+        return $category;
     }
 
     public function deleteCate($id)
@@ -119,6 +131,24 @@ class CategoryController extends Controller
         $category = Category::find($id);
         $category->delete();
         return response()->json('successfully deleted');
+    }
 
+    private function _upload($request)
+    {
+        if ($request->file()) {
+            try {
+                $name = $request->file('photo')->getClientOriginalName();
+                $pathFull = 'uploads/' . date("Y/m/d");
+                $request->file('photo')->storeAs(
+                    'public/' . $pathFull,
+                    $name
+                );
+                return '/storage/' . $pathFull . '/' . $name;
+            } catch (\Exception $error) {
+                return false;
+            }
+            
+        }
+        return false;
     }
 }

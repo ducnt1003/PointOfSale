@@ -132,7 +132,7 @@
         <button class="btn btn-primary pull-right" @click.prevent="save()">Lưu</button>
       </div>
     </div>
-    <div class="card mt-3 card-info">
+    <!-- <div class="card mt-3 card-info">
       <div class="card-header">
         <h3 class="card-title">Giảm giá</h3>
       </div>
@@ -217,7 +217,7 @@
           <button class="btn btn-primary pull-right">Lưu</button>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

@@ -5,13 +5,10 @@
         <div class="modal-header">
           <slot name="header"> default header </slot>
         </div>
-
         <div class="modal-body">
           <slot name="body">
-
           </slot>
         </div>
-
         <div class="modal-footer">
           <slot name="footer">
             <button class="modal-default-button btn-error" @click="close">Exit</button>
@@ -42,7 +39,7 @@
 .modal-container {
   width: 700px;
   margin: 0px auto;
-  padding: 20px 30px;
+  padding: 0px 30px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
@@ -56,7 +53,7 @@
 }
 
 .modal-body {
-  margin: 20px 0;
+  margin: 0 0;
 }
 
 .modal-default-button {

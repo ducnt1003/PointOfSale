@@ -281,13 +281,12 @@ class OrderController extends Controller
             $orderDetail->quantity =  $cart['quantity'];
             $orderDetail->order_id = $order->id;
             $orderDetail->save();
-
         }
         $order->price = $total;
         $order->save();
         $customerController = new CustomerController;
         $customerController->addMoney($id, $total);
-        // session()->forget('cart');
+        session()->forget('cart');
         return response()->json("Success charge");
 
     }

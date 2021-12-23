@@ -12,19 +12,12 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::get();
-        $select = [];
-        $i = 0;
-        foreach ($customers as $customer) {
-            $str = $customer['name'] . "(" . $customer['phone'] . ")";
-            $select[$i] = [
-                "value" => $customer['id'],
-                "text" => $str,
-            ];
-            $i++;
-        }
-
-        return $select;
+        $customers = Customer::select([
+			'id AS value',
+			DB::raw("CONCAT(name, '(',phone, ')') AS text")
+			])
+		->get();
+		return $customers;
     }
 
     public function create(Request $request)
