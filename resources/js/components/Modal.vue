@@ -5,11 +5,11 @@
         <div class="modal-header">
           <slot name="header"> default header </slot>
         </div>
-
         <div class="modal-body">
           <slot name="body">
 
           </slot>
+
         </div>
 
         <div class="modal-footer">
@@ -56,7 +56,7 @@
 }
 
 .modal-body {
-  margin: 20px 0;
+  margin: 5px 0;
 }
 
 .modal-default-button {

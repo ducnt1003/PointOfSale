@@ -50,7 +50,7 @@ class OrderController extends Controller
                 "name" => $product->name,
                 "quantity" => 1,
                 "price" => $product->price,
-                "image" => $product->image
+                "photo" => $product->photo
             ];
         }
 

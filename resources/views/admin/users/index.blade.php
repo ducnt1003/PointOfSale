@@ -1,4 +1,12 @@
 @extends('admin.layouts.app')
+@section('alert')
+    @include('admin.alert')
+@stop
+@section('create')
+    @can('user_create')
+    <a type="button" class="btn btn-info btn-sm" style="float:right;" href="{{route('admin.users.create')}}" >Create new User</a>
+    @endcan
+@stop
 @section('content')
 
     <!-- Main content -->
@@ -29,21 +37,21 @@
                                         @endforeach
                                     </td>
                                     <td>
-{{--                                        @can('user_index')--}}
+                                        @can('user_index')
                                             <button type="button" value="{{$user->id}}" class="show btn btn-info" >
                                                 <i class="fas fa-eye"></i>
                                             </button>
-{{--                                        @endcan--}}
-{{--                                        @can('user_edit')--}}
+                                        @endcan
+                                        @can('user_edit')
                                             <a class="btn btn-primary" href="/admin/users/edit/{{$user->id}}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-{{--                                        @endcan--}}
-{{--                                        @can('user_delete')--}}
+                                        @endcan
+                                        @can('user_delete')
                                             <button type="button" class="delete btn btn-danger" data="{{ $user->id }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-{{--                                        @endcan--}}
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
@@ -58,57 +66,57 @@
     </section>
     <!-- /.content -->
 @stop
-{{--@section('modal')--}}
-{{--    <!-- Modal delete -->--}}
-{{--    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">--}}
-{{--        <div class="modal-dialog">--}}
-{{--            <div class="modal-content">--}}
-{{--                <form action="{{route('admin.currentusers.delete')}}" method="post">--}}
-{{--                    @csrf--}}
-{{--                    @method('DELETE')--}}
-{{--                    <input type="hidden" name="user_id" id="user_id" value="0">--}}
-{{--                    <div class="modal-header">--}}
-{{--                        <h5 class="modal-title" id="deleteModalLabel">Delete User!</h5>--}}
-{{--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--}}
-{{--                    </div>--}}
-{{--                    <div class="modal-body">--}}
-{{--                        Are you want to delete this user?--}}
-{{--                    </div>--}}
-{{--                    <div class="modal-footer">--}}
-{{--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>--}}
-{{--                        <button type="submit" class="btn btn-danger">Delete</button>--}}
-{{--                    </div>--}}
-{{--                </form>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-{{--    <!-- Modal show -->--}}
-{{--    <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">--}}
-{{--        <div class="modal-dialog">--}}
-{{--            <div class="modal-content">--}}
-{{--                <div class="modal-header">--}}
-{{--                    <h5 class="modal-title" id="showModalLabel">User Detail</h5>--}}
-{{--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--}}
-{{--                </div>--}}
-{{--                <div class="modal-body">--}}
-{{--                    <div class="form-group mb-3">--}}
-{{--                        <label for="">Name</label>--}}
-{{--                        <input type="text" name="name" id="name" class="form-control" readonly>--}}
-{{--                    </div>--}}
-{{--                    <div class="form-group mb-3">--}}
-{{--                        <label for="">Email</label>--}}
-{{--                        <input type="text" name="email" id="email" class="form-control" readonly>--}}
-{{--                        <h1 id="data"></h1>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="modal-footer">--}}
-{{--                    <button type="button" id="close-modal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
+@section('modal')
+    <!-- Modal delete -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{route('admin.users.delete')}}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="user_id" id="user_id" value="0">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete User!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you want to delete this user?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal show -->
+    <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="showModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="showModalLabel">User Detail</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label for="">Name</label>
+                        <input type="text" name="name" id="name" class="form-control" readonly>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="">Email</label>
+                        <input type="text" name="email" id="email" class="form-control" readonly>
+                        <h1 id="data"></h1>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="close-modal" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-{{--@stop--}}
+@stop
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>

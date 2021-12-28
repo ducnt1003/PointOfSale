@@ -161,6 +161,9 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        App\Providers\UserServiceProvider::class,
+        App\Providers\RoleServiceProvider::class,
+        App\Providers\PermissionServiceProvider::class,
 
         /*
          * Package Service Providers...

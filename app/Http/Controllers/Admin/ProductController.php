@@ -45,7 +45,7 @@ class ProductController extends Controller
             'categories'=>$categories,
             'product_code'=>$product_code,
             'barcode'=>$barcode,
-            'users' => Auth::user(),
+            'currentusers' => Auth::user(),
             'brands'=>$brands,
             ]
         );
@@ -69,7 +69,7 @@ class ProductController extends Controller
             'categories'=>$categories,
             'product'=>$product,
             'brands'=>$brands,
-            'users' => Auth::user(),
+            'currentusers' => Auth::user(),
             ]
         );
     }
@@ -124,5 +124,48 @@ class ProductController extends Controller
 
     public function listProd(){
         return Product::all();
+    }
+
+    public function addProduct(Request $request){
+        $product = new Product();
+        $product_code = rand();
+        $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+        $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128);
+        $product->product_code = $product_code;
+        $product->barcode = $barcode;
+        $product->name = $request -> name;
+        $product->category_id = $request->category_id;
+        $product->brand_id = $request->brand_id;
+        $product->color =  $request->color;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->import_price = $request->import_price;
+//        if ($request->hasFile('img')){
+//            $file = $request->file('img');
+//            $file_name = time().'.'.$file->getClientOriginalName();
+//            $path = $file->move(public_path('image'),$file_name);
+//            $product->photo = $path;
+//        }
+        $product->save();
+        return $product;
+    }
+
+    public function editProduct(Request $request,$id){
+        $product = Product::find($id);
+        $product->name = $request -> name;
+        $product->category_id = $request->category_id;
+        $product->brand_id = $request->brand_id;
+        $product->color =  $request->color;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->import_price = $request->import_price;
+        $product->save();
+        return response()->json('successfully edited');
+    }
+
+    public function deleteProduct($id){
+        $product = Product::find($id);
+        $product->delete();
+        return response()->json('successfully deleted');
     }
 }

@@ -1,138 +1,59 @@
 @extends('admin.layouts.app')
-@section('css')
-<link rel="stylesheet" href="/template/plugins/select2/css/select2.min.css">
-<link rel="stylesheet" href="/template/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-<!-- Bootstrap4 Duallistbox -->
-<link rel="stylesheet" href="/template/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
-<!-- BS Stepper -->
-<link rel="stylesheet" href="/template/plugins/bs-stepper/css/bs-stepper.min.css">
-<!-- dropzonejs -->
-<link rel="stylesheet" href="/template/plugins/dropzone/min/dropzone.min.css">
-<!-- Theme style -->
-<link rel="stylesheet" href="/template/dist/css/adminlte.min.css">
-@stop
 @section('alert')
-@include('admin.alert')
+    @include('admin.alert')
+@stop
+@section('create')
+    <a type="button" class="btn btn-info btn-sm" style="float:right;" href="{{route('admin.users.index')}}" >User Manager</a>
 @stop
 @section('content')
-<form action="" method="post">
-    <div class="card-body">
-        <div class="form-group">
-            <label>Tên người dùng</label>
-            <input type="text" name="name" value="{{$user->name}}" class="form-control">
-        </div>
-        <div class="row">
-            <div class="col-md-6">
+    <section class="content">
+        <form method="post" action="{{ route('admin.users.edit.update' , $user->id) }}" enctype="multipart/form-data">
+            <div class="card-body">
+                <div class="form-group" data-select2-id="46">
+                    <label>Roles</label>
+                    <div class="select2-green" data-select2-id="45">
+                        <select class="select2 select2-hidden-accessible"  name="roles[]" id="roles" multiple="" data-placeholder="Select a Role" data-dropdown-css-class="select2-green" style="width: 100%;" data-select2-id="15" tabindex="-1" aria-hidden="true">
+                            @foreach($roles as $id => $roles)
+                                <option
+                                    value="{{ $roles->id }}"
+                                    {{
+                                        (in_array($id, old('roles', [])) ||
+                                         $user->roles->contains($roles->id)) ? 'selected' : ''
+                                    }}
+                                >
+                                    {{ $roles->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        {{--                                                <span class="select2 select2-container select2-container--default select2-container--below" dir="ltr" data-select2-id="16" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1" aria-disabled="false"><ul class="select2-selection__rendered"><li class="select2-selection__choice" title="Alaska" data-select2-id="165"><span class="select2-selection__choice__remove" role="presentation">×</span>Alaska</li><li class="select2-selection__choice" title="California" data-select2-id="166"><span class="select2-selection__choice__remove" role="presentation">×</span>California</li><li class="select2-selection__choice" title="Delaware" data-select2-id="167"><span class="select2-selection__choice__remove" role="presentation">×</span>Delaware</li><li class="select2-selection__choice" title="Texas" data-select2-id="168"><span class="select2-selection__choice__remove" role="presentation">×</span>Texas</li><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="searchbox" aria-autocomplete="list" placeholder="" style="width: 0.75em;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>--}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror"  value="{{ $user->name }}" name="name" placeholder="Enter name">
+                    @error('name')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="text" name="email" value="{{$user->email}}" class="form-control">
+                    <input type="text" class="form-control @error('email') is-invalid @enderror" value="{{ $user->email }}" name="email" placeholder="Email">
+                    @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Số điện thoại</label>
-                    <input type="text" name="phone" value="{{$user->phone}}" class="form-control">
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="birthday">Ngày sinh</label>
-            <input type="date" name="birthday" value="{{$user->birthday}}" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="upload">Ảnh</label>
-            <input type="file" class="form-control" id="upload">
-            <div id="image_show">
-                <a href="{{$user->photo}}" target="_blank">
-                    <img src="{{$user->photo}}" width="100px">
-                </a>
-            </div>
-            <input type="hidden" id="photo" value="{{$user->photo}}" name="photo">
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
-                <?php $roleUser = $user->roles->first() ?>
-                <label>Vai trò</label>
-                <select name="role" class="form-control select2 " style="width: 20%;">
-                    @foreach($roles as $role)
-                    @if($role->name == $roleUser->name)
-                    <option selected="selected">{{$roleUser->name }}</option>
-                    @endif
-                    @if($role->name != $roleUser->name)
-                    <option>{{$role->name}}</option>
-                    @endif
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group col-md-6">
-                <?php $storeUser = $user->store->first() ?>
-                <label>Cửa hàng</label>
-                <select name="store" class="form-control select2 " style="width: 20%;">
-                    @foreach($stores as $store)
-                    @if($store->name == $storeUser->name)
-                    <option selected="selected" value="{{$store->id}}">{{$storeUser->name }}</option>
-                    @endif
-                    @if($store->name != $storeUser->name)
-                    <option>{{$store->name}}</option>
-                    @endif
-                    @endforeach
-                </select>
 
             </div>
-        </div>
-    </div>
-
-
-    <div class="card-footer">
-        <button type="submit" class="btn btn-primary">Cập Nhật</button>
-    </div>
-    @csrf
-</form>
-@stop
-@section('js')
-<script src="/template/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="/template/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- Select2 -->
-<script src="/template/plugins/select2/js/select2.full.min.js"></script>
-<!-- Bootstrap4 Duallistbox -->
-<script src="/template/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
-<!-- InputMask -->
-<script src="/template/plugins/moment/moment.min.js"></script>
-<script src="/template/plugins/inputmask/jquery.inputmask.min.js"></script>
-<!-- date-range-picker -->
-<script src="/template/plugins/daterangepicker/daterangepicker.js"></script>
-<!-- bootstrap color picker -->
-<script src="/template/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="/template/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Bootstrap Switch -->
-<script src="/template/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<!-- BS-Stepper -->
-<script src="/template/plugins/bs-stepper/js/bs-stepper.min.js"></script>
-<!-- dropzonejs -->
-<script src="/template/plugins/dropzone/min/dropzone.min.js"></script>
-<!-- AdminLTE App -->
-<script src="/template/dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="/template/dist/js/demo.js"></script>
-<!-- Page specific script -->
-<script>
-    $(function() {
-        //Initialize Select2 Elements
-        $('.select2').select2()
-        $('.select2bs4').select2({
-
-            theme: 'bootstrap4'
-
-        })
-
-        //Bootstrap Duallistbox
-
-        $('.duallistbox').bootstrapDualListbox()
-
-    })
-</script>
-
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            @csrf
+        </form>
+    </section>
+    <!-- /.content -->
 @stop

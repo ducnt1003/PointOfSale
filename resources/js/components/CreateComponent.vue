@@ -1,5 +1,5 @@
 <template>
-  <div>
+   <div>
     <h1>Create A Brand</h1>
     <form @submit.prevent="addBrand">
       <div class="row">

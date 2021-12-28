@@ -30,8 +30,8 @@
             <div class="dropdown" style="margin-right:6px">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="{{ route('admin.users.edit') }}">Chỉnh sửa thông tin</a>
-                    <a class="dropdown-item" href="{{ route('admin.users.index') }}">Đổi mật khẩu</a>
+{{--                    <a class="dropdown-item" href="{{ route('admin.currentusers.edit') }}">Chỉnh sửa thông tin</a>--}}
+{{--                    <a class="dropdown-item" href="{{ route('admin.currentusers.index') }}">Đổi mật khẩu</a>--}}
                     <a class="dropdown-item" href="{{ route('admin.logout') }}">Đăng xuất</a>
                 </div>
             </div>
@@ -62,6 +62,7 @@
                             @yield('content')
 
                         </div>
+
                     </div>
                     <div class="col-md-6">
 

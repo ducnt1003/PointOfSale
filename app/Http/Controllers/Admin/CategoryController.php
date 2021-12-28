@@ -96,7 +96,6 @@ class CategoryController extends Controller
         $category->parent_id = $request->parent_id;
         $category->tax = $request->tax;
         $category->unit = $request->unit;
-
         $category->save();
         return $category;
         //return response()->json('successfully added');

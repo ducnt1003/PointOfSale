@@ -251,27 +251,76 @@
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-plus-square"></i>
+                        <i class="nav-icon fas fa-user"></i>
                         <p>
-                            Thêm
+                            User
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('admin.extras.manage-user')}}" class="nav-link">
+                            <a href="{{route('admin.users.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Quản lý nhân viên</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('admin.extras.create-user')}}" class="nav-link">
+                            <a href="{{route('admin.users.create')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Tạo nhân viên</p>
                             </a>
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-key"></i>
+                        <p>
+                            Role
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('admin.roles.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Roles Management</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('admin.roles.create')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create New Role</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-tree"></i>
+                        <p>
+                            Permission
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('admin.permissions.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Permission Management</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('admin.permissions.create')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Create New Permission</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-cart-plus"></i>

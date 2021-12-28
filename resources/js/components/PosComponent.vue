@@ -32,7 +32,7 @@
               <div class="col-md-3" v-for="stock in stocks" :key="stock['id']">
                 <figure class="card card-product">
                   <div class="img-wrap">
-                    <img src="/assets/images/items/3.jpg" />
+                    <img :src="stock['photo']" />
                   </div>
                   <figcaption class="info-wrap">
                     <a href="#" class="title">{{ stock["name"] }}</a>
@@ -115,8 +115,7 @@
                     <td>
                       <figure class="media">
                         <div class="img-wrap">
-                          <img
-                            src="/assets/images/items/1.jpg"
+                          <img :src="cart['photo']"
                             class="img-thumbnail img-xs"
                           />
                         </div>
@@ -277,6 +276,7 @@ import { ModelSelect } from "vue-search-select";
 import Modal from "./Modal.vue";
 
 export default {
+
   data() {
     return {
       stocks: [],

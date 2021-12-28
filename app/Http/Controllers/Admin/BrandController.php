@@ -157,4 +157,8 @@ class BrandController extends Controller
 
         return response()->json('successfully deleted');
     }
+
+    public function listBrand(){
+        return Brand::all();
+    }
 }

@@ -29,3 +29,12 @@
   <link rel="stylesheet" href="/template/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="/template/plugins/summernote/summernote-bs4.min.css">
+<!-- Select2 -->
+<link rel="stylesheet" href="/template/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="/template/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<!-- Bootstrap4 Duallistbox -->
+<link rel="stylesheet" href="/template/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+<!-- Bootstrap Color Picker -->
+<link rel="stylesheet" href="/template/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+<!-- daterange picker -->
+<link rel="stylesheet" href="/template/plugins/daterangepicker/daterangepicker.css">

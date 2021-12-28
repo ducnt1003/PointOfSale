@@ -6,11 +6,10 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\StoreController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ExtraController;
 use App\Http\Controllers\Admin\FeedController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\UploadController;
-use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\CurrentUserController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CartController;
 use App\Http\Controllers\Admin\CustomerController;
@@ -19,7 +18,9 @@ use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\WarehouseController;
-
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\PermissionController;
 Route::get('admin/login',
     [LoginController::class, 'login']
     )->name('admin.login');
@@ -67,6 +68,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/export',[ProductController::class,'export'])->name('export');
         Route::get('/quotation',[ProductController::class,'quotation'])->name('quotation');
         Route::get('/list',[ProductController::class,'listProd']);
+        Route::post('/add-product',[ProductController::class,'addProduct']);
+        Route::put('/edit-product/{id}',[ProductController::class,'editProduct']);
+        Route::delete('/delete-product/{id}',[ProductController::class,'deleteProduct']);
     });
     Route::prefix('banners')->name('banners.')->group(function (){
         Route::get('/create',[BannerController::class,'create'])->name('create');
@@ -75,6 +79,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/edit/{id}',[BannerController::class,'edit'])->name('edit');
         Route::post('/edit/{id}',[BannerController::class,'update'])->name('edit.update');
         Route::delete('/delete', [BannerController::class, 'destroy'])->name('delete');
+
     });
     Route::prefix('brands')->name('brands.')->group(function (){
         Route::get('/create',[BrandController::class,'create'])->name('create');
@@ -83,6 +88,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/edit/{id}',[BrandController::class,'edit'])->name('edit');
         Route::post('/edit/{id}',[BrandController::class,'update'])->name('edit.update');
         Route::delete('/delete', [BrandController::class, 'destroy'])->name('delete');
+        Route::get('/list',[BrandController::class,'listBrand']);
     });
     Route::prefix('stores')->name('stores.')->group(function (){
         Route::get('/list',[StoreController::class,'getList']);
@@ -101,12 +107,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     });
 
 
-    Route::prefix('users')->name('users.')->group(function (){
-        Route::get('/edit',[UserController::class,'edit'])->name('edit');
-        Route::post('/edit',[UserController::class,'update'])->name('edit.update');
-        Route::get('/changepassword', [UserController::class,'index'])->name('index');
-        Route::post('/changepassword',[UserController::class,'changePassword'])->name('changepassword');
-        Route::get('/get-user-login',[UserController::class,'getUserLogin']);
+    Route::prefix('current_users')->name('currentusers.')->group(function (){
+        Route::get('/edit',[CurrentUserController::class,'edit'])->name('edit');
+        Route::post('/edit',[CurrentUserController::class,'update'])->name('edit.update');
+        Route::get('/changepassword', [CurrentUserController::class,'index'])->name('index');
+        Route::post('/changepassword',[CurrentUserController::class,'changePassword'])->name('changepassword');
+        Route::get('/get-user-login',[CurrentUserController::class,'getUserLogin']);
     });
 
     Route::prefix('feeds')->name('feeds.')->group(function (){
@@ -116,15 +122,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
 
     });
 
-
-    Route::prefix('extras')->name('extras.')->group(function (){
-        Route::get('/create-user',[ExtraController::class,'createUser'])->middleware('role:Admin')->name('create-user');
-        Route::post('/create-user',[ExtraController::class,'storeUser'])->middleware('role:Admin')->name('create-user');
-        Route::get('/manage-user',[ExtraController::class,'manageUser'])->name('manage-user');
-        Route::get('/edit-user/{id}',[ExtraController::class,'editUser'])->middleware('role:Admin')->name('edit-user');
-        Route::post('/edit-user/{id}',[ExtraController::class,'updateUser'])->middleware('role:Admin')->name('edit-user.update');
-        Route::delete('/delete-user', [ExtraController::class, 'destroy'])->middleware('role:Admin')->name('delete-user');
-    });
 
     Route::prefix('orders')->name('orders.')->group(function (){
         Route::get('/',[OrderController::class,'order'])->name('order');
@@ -221,4 +218,34 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/list',[SupplierController::class,'getList']);
 
     });
+
+
+    Route::prefix('users')->name('users.')->group(function (){
+        Route::get('',[UserController::class,'index'])->name('index');
+        Route::get('/show/{id}',[UserController::class,'show'])->name('show');
+        Route::get('/create',[UserController::class,'create'])->name('create');
+        Route::post('/create',[UserController::class,'store'])->name('store');
+        Route::get('/edit/{id}',[UserController::class,'edit'])->name('edit');
+        Route::post('/edit/{id}',[UserController::class,'update'])->name('edit.update');
+        Route::delete('/delete',[UserController::class,'delete'])->name('delete');
+    });
+
+    Route::prefix('roles')->name('roles.')->group(function (){
+        Route::get('',[RoleController::class,'index'])->name('index');
+        Route::get('/create',[RoleController::class,'create'])->name('create');
+        Route::post('/create',[RoleController::class,'store'])->name('store');
+        Route::get('/edit/{id}',[RoleController::class,'edit'])->name('edit');
+        Route::post('/edit/{id}',[RoleController::class,'update'])->name('edit.update');
+        Route::delete('/delete',[RoleController::class,'delete'])->name('delete');
+    });
+
+    Route::prefix('permissions')->name('permissions.')->group(function (){
+        Route::get('',[PermissionController::class,'index'])->name('index');
+        Route::get('/create',[PermissionController::class,'create'])->name('create');
+        Route::post('/create',[PermissionController::class,'store'])->name('store');
+        Route::get('/edit/{id}',[PermissionController::class,'edit'])->name('edit');
+        Route::post('/edit/{id}',[PermissionController::class,'update'])->name('edit.update');
+        Route::delete('/delete',[PermissionController::class,'delete'])->name('delete');
+    });
+
 });

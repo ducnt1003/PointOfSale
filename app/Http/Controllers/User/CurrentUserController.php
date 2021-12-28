@@ -10,15 +10,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller
+class CurrentUserController extends Controller
 {
     public function index()
     {
-        return view('admin.users.changepassword',['title'=>'Chỉnh sửa thông tin người dùng']);
+        return view('admin.currentusers.changepassword',['title'=>'Chỉnh sửa thông tin người dùng']);
     }
     public function edit(){
         $user = Auth::user();
-        return view('admin.users.edit',[
+        return view('admin.currentusers.edit',[
             'title'=>'Chỉnh sửa thông tin người dùng',
             'user'=>$user,
         ]);
@@ -39,7 +39,7 @@ class UserController extends Controller
             Session::flash('error','Có lỗi vui lòng thử lại');
             \Log::info($err->getMessage());
         }
-        return redirect(route('admin.users.edit'));
+        return redirect(route('admin.currentusers.edit'));
     }
 
     public function changePassword(Request $request)

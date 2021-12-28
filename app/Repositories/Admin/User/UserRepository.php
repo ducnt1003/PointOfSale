@@ -4,7 +4,16 @@
 namespace App\Repositories\Admin\User;
 
 
-class UserRepository
-{
+use App\Repositories\BaseRepository;
 
+class UserRepository extends BaseRepository implements UserRepositoryInterface
+{
+    /**
+     * get model
+     * @return string
+     */
+    public function getModel()
+    {
+        return \App\Models\User::class;
+    }
 }

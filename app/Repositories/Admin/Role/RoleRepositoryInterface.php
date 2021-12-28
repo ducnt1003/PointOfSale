@@ -4,7 +4,9 @@
 namespace App\Repositories\Admin\Role;
 
 
-interface RoleRepositoryInterface
+use App\Repositories\BaseRepositoryInterface;
+
+interface RoleRepositoryInterface extends BaseRepositoryInterface
 {
 
 }
