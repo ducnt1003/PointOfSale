@@ -39524,7 +39524,9 @@ var render = function () {
                     { key: stock["id"], staticClass: "col-md-3" },
                     [
                       _c("figure", { staticClass: "card card-product" }, [
-                        _vm._m(0, true),
+                        _c("div", { staticClass: "img-wrap" }, [
+                          _c("img", { attrs: { src: stock["photo"] } }),
+                        ]),
                         _vm._v(" "),
                         _c("figcaption", { staticClass: "info-wrap" }, [
                           _c(
@@ -39571,7 +39573,7 @@ var render = function () {
           _c("div", { staticClass: "col-md-4" }, [
             _c("div", { staticClass: "card" }, [
               _c("table", { staticClass: "table " }, [
-                _vm._m(1),
+                _vm._m(0),
                 _vm._v(" "),
                 _c("tbody", [
                   _c("tr", [
@@ -39627,13 +39629,13 @@ var render = function () {
                   "table",
                   { staticClass: "table table-hover shopping-cart-wrap" },
                   [
-                    _vm._m(2),
+                    _vm._m(1),
                     _vm._v(" "),
                     _c(
                       "tbody",
                       _vm._l(_vm.carts, function (cart) {
                         return _c("tr", { key: cart["product_id"] }, [
-                          _vm._m(3, true),
+                          _vm._m(2, true),
                           _vm._v(" "),
                           _c("td", { staticClass: "text-center" }, [
                             _c(
@@ -39735,7 +39737,7 @@ var render = function () {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "box" }, [
-              _vm._m(4),
+              _vm._m(3),
               _vm._v(" "),
               _c("dl", { staticClass: "dlist-align" }, [
                 _c("dt", [_vm._v("Total:")]),
@@ -39971,14 +39973,6 @@ var render = function () {
   )
 }
 var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "img-wrap" }, [
-      _c("img", { attrs: { src: "/assets/images/items/3.jpg" } }),
-    ])
-  },
   function () {
     var _vm = this
     var _h = _vm.$createElement

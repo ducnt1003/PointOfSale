@@ -2,39 +2,32 @@
   <div class="wrapper">
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-      <!-- Left navbar links -->
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" data-widget="pushmenu" href="" role="button"
-            ><i class="fas fa-bars"></i
-          ></a>
-        </li>
-      </ul>
-      <ul class="navbar-nav ml-auto"></ul>
-      <!-- Right navbar links -->
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-            <i class="fas fa-expand-arrows-alt"></i>
-          </a>
-        </li>
-        <div class="dropdown" style="margin-right: 6px">
-          <button
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          ></button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Chỉnh sửa thông tin</a>
-            <a class="dropdown-item" href="#">Đổi mật khẩu</a>
-            <a class="dropdown-item" href="#">Đăng xuất</a>
-          </div>
-        </div>
-      </ul>
-    </nav>
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+
+            </ul>
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+                </li>
+                <div class="dropdown" style="margin-right:6px">
+                    <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="">Chỉnh sửa thông tin</a>
+                        <a class="dropdown-item" href="">Đổi mật khẩu</a>
+                        <a class="dropdown-item" href="">Đăng xuất</a>
+                    </div>
+                </div>
+            </ul>
+        </nav>
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
@@ -75,11 +68,11 @@
           >
             <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
-            <li class="nav-item">
-              <a href="" class="nav-link">
+            <li class="nav-item" >
+              <router-link to="/admin/vue/dashboard" class="nav-link" >
                 <i class="fas fa-chart-bar" style="margin-left: 4px"></i>
                 <p style="margin-left: 5px">Dashboard</p>
-              </a>
+              </router-link>
             </li>
             <li class="nav-item">
               <a href="/orders/pos" class="nav-link">
@@ -97,21 +90,35 @@
             </li>
             <!-- product-->
             <li class="nav-item">
-              <router-link to="/admin/vue/products" class="nav-link">
+              <a href="" class="nav-link">
                 <i class="nav-icon fas fa-store"></i>
                 <p>
                   Sản phẩm
                   <i class="right fas fa-angle-left"></i>
                 </p>
-              </router-link>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <router-link to="/admin/vue/products/create" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Thêm sản phẩm</p>
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="/admin/vue/products" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Danh sách sản phẩm</p>
+                  </router-link>
+                </li>
+              </ul>
             </li>
             <li class="nav-item">
               <a href="" class="nav-link">
-                  <i class="fas fa-money-check-alt" style="margin-left: 4px"></i>
-              <p style="margin-left: 5px">
-                Đơn nhập hàng
-                <i class="right fas fa-angle-left"></i>
-              </p>
+                <i class="fas fa-money-check-alt" style="margin-left: 4px"></i>
+                <p style="margin-left: 5px">
+                  Đơn nhập hàng
+                  <i class="right fas fa-angle-left"></i>
+                </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
@@ -124,12 +131,61 @@
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link
-                    to="/admin/vue/purchases/list"
-                    class="nav-link"
-                  >
+                  <router-link to="/admin/vue/purchases/list" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Danh sách đơn hàng</p>
+                  </router-link>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-store-alt" style="margin-left: 4px"></i>
+                <p style="margin-left: 5px">
+                  Cửa hàng
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <router-link to="" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Danh sách cửa hàng</p>
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Kho</p>
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Nhân viên</p>
+                  </router-link>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="" class="nav-link">
+                <i class="fas fa-users" style="margin-left: 4px"></i>
+                <p style="margin-left: 5px">
+                  Khách hàng
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <router-link to="/admin/vue/customer-list" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Danh sách khách hàng</p>
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to="" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Nhóm khách hàng</p>
                   </router-link>
                 </li>
               </ul>
@@ -144,21 +200,14 @@
     <div class="content-wrapper">
       <!-- Main content -->
       <section class="content">
-        <div class="container-fluid">
-          <!-- @include('admin.alert') -->
-
-          <div class="row">
-            <!-- left column -->
-            <div class="col-md-12">
-              <!-- jquery validation -->
-
+        
+      
               <transition name="fade">
                 <router-view></router-view>
               </transition>
-            </div>
-          </div>
+            
           <!-- /.row -->
-        </div>
+        
         <!-- /.container-fluid -->
       </section>
       <!-- /.content -->
@@ -178,5 +227,11 @@
 }
 </style>
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      active: null
+    };
+  },
+};
 </script>

@@ -216,10 +216,14 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/index',[CustomerController::class,'index'])->name('index');
         Route::get('/search',[CustomerController::class,'search'])->name('search');
         Route::post('/store',[CustomerController::class,'create'])->name('store');
+        Route::get('/list',[CustomerController::class,'getList']);
+        Route::get('/info/{id}',[CustomerController::class,'getInfo']);
+        Route::get('/order-list/{id}',[CustomerController::class,'getOrderList']);
     });
 
     Route::prefix('suppliers')->name('suppliers.')->group(function (){
         Route::get('/list',[SupplierController::class,'getList']);
 
     });
+    
 });

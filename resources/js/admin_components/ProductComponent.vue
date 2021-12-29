@@ -2,78 +2,38 @@
   <div class="card card-primary mt-3">
     <div class="card-header">
       <h3 class="card-title">PRODUCT</h3>
-      <button
+      <router-link :to="{name: 'products.create'}"
         type="button"
         class="btn btn-info btn-sm"
         style="float: right"
-        @click="showModal"
+        
       >
         Create new Product
-      </button>
+      </router-link>
     </div>
-    <table id="example" class="display nowrap" cellspacing="0" width="100%">
-      <thead>
-        <tr>
-          <td>ID</td>
-          <td>Tên sản phẩm</td>
-          <td>Danh mục</td>
-          <td>Mô tả</td>
-          <td>Giá bán</td>
-          <td>Giá nhập</td>
-          <td>Màu sắc</td>
-          <td>Active</td>
-          <td>Photo</td>
-          <td>Barcode</td>
-          <td style="width: 100px">&nbsp;</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="product in products_paginate" :key="product['id']">
-          <td>{{ product["id"] }}</td>
-          <td>{{ product["name"] }}</td>
-          <td>{{ product["category_id"] }}</td>
-          <td>{{ product["description"] }}</td>
-          <td>{{ product["price"] }}</td>
-          <td>{{ product["import_price"] }}</td>
-          <td>{{ product["color"] }}</td>
-          <td>
-            <span v-if="product['active'] == 0" class="btn btn-danger btn-xs"
-              >NO</span
-            >
-            <span v-if="product['active'] != 0" class="btn btn-success btn-xs"
-              >YES</span
-            >
-          </td>
-          <td>
-            <img
-              v-if="product['photo']"
-              class="img-thumbnail"
-              width="120px"
-              :src="product['photo']"
-              :alt="product['name']"
-            />
-          </td>
-          <td>
-            <a
-              class="btn btn-primary btn-sm"
-              href="/admin/products/barcodes/${product['id']}"
-            >
-              <i class="fas fa-barcode"></i>
-            </a>
-          </td>
-          <td>
-            <a class="edit btn-primary btn-sm" href="#">
-              <i class="fas fa-edit"></i>
-            </a>
-            <a class="btn btn-danger btn-sm" href="#">
-              <i class="fas fa-trash"></i>
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <Paginate :posts="products" @displayPrs="displayPosts()">
-    </Paginate>
+    <datatable title="List Product" :columns="tableColumns1" :rows="products" :perPage="[5,10]" >
+      <th slot="thead-tr">Ảnh</th>
+      <th slot="thead-tr">&nbsp;</th>
+      <template slot="tbody-tr" slot-scope="props">
+        <td>
+          <img
+            v-if="props.row['photo']"
+            class="img-thumbnail"
+            width="120px"
+            :src="props.row['photo']"
+            :alt="props.row['name']"
+          />
+        </td>
+        <td>
+          <a class="btn btn-primary btn-sm" href="#">
+            <i class="fas fa-edit"></i>
+          </a>
+          <a class="btn btn-danger btn-sm" href="#">
+            <i class="fas fa-trash"></i>
+          </a>
+        </td>
+      </template>
+    </datatable>
     <Modal v-show="isModalVisible" @close="closeModal">
       <div class="card-header" slot="header">
         <h3 class="card-title">Create new Product</h3>
@@ -85,7 +45,7 @@
 
 <script>
 import Modal from "../components/Modal.vue";
-import Paginate from "./PaginateComponent.vue"
+import DataTable from "vue-materialize-datatable";
 
 export default {
   data() {
@@ -94,22 +54,56 @@ export default {
       products: [],
       products_paginate: [],
       isModalVisible: false,
+      tableColumns1: [
+        {
+          label: "ID",
+          field: "id",
+          numeric: false,
+          html: false,
+        },
+        {
+          label: "Tên sản phẩm",
+          field: "name",
+          numeric: false,
+          html: false,
+        },
+        {
+          label: "Danh mục",
+          field: "category.name",
+          numeric: false,
+          html: false,
+        },
+        {
+          label: "Mô tả",
+          field: "description",
+          numeric: false,
+          html: false,
+        },
+        {
+          label: "Giá bán",
+          field: "price",
+          numeric: false,
+          html: false,
+        },
+        {
+          label: "Giá nhập",
+          field: "import_price",
+          numeric: false,
+          html: false,
+        },
+      ],
     };
   },
   created() {
     let uri = "http://127.0.0.1:8000/admin/products/list";
     this.axios.get(uri).then((response) => {
       this.products = response.data;
-      console.log();
+      console.log(this.products);
     });
   },
-  computed:{
-    
-  },
+  computed: {},
   methods: {
-    displayPrs(){
-      
-    },
+    displayPrs() {},
     showModal() {
       this.isModalVisible = true;
     },
@@ -117,20 +111,18 @@ export default {
       this.isModalVisible = false;
     },
     onChange(e) {
-      this.category["photo"] = e.target.files[0];
+      this.product["photo"] = e.target.files[0];
     },
-    setPages(e){
-        console.log(e);
-        this.products_paginate= e;
-    }
+    setPages(e) {
+      console.log(e);
+      this.products_paginate = e;
+    },
   },
   components: {
     Modal,
-    Paginate,
+    datatable: DataTable,
   },
 };
 </script>
-
-
 
 

@@ -13,4 +13,12 @@ class OrderDetail extends Model
         'order_id',
         'quatity',
     ];
+
+    public function warehouse(){
+        return $this->belongsTo(Warehouse::class,'warehouse_id');
+    }
+
+    public function getProduct(){
+        return $this->belongsTo(Warehouse::class,'warehouse_id')->with(['product']);
+    }
 }
