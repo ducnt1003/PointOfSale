@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -52,5 +53,18 @@ class CustomerController extends Controller
 
     public function getList()
     {
+        return Customer::with(['customer_group'])->get();
+    }
+
+    public function getInfo($id)
+    {
+        $customer = Customer::with(['customer_group'])->find($id);
+        return $customer;
+    }
+
+    public function getOrderList($id)
+    {
+        $orders = Order::where('customer_id', $id)->with(['user','orderDetail'])->get();
+        return $orders;
     }
 }

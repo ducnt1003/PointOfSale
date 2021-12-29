@@ -123,6 +123,6 @@ class ProductController extends Controller
     }
 
     public function listProd(){
-        return Product::all();
+        return Product::with(['category'])->get();
     }
 }

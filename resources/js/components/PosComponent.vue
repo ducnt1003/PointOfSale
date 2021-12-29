@@ -32,7 +32,7 @@
               <div class="col-md-3" v-for="stock in stocks" :key="stock['id']">
                 <figure class="card card-product">
                   <div class="img-wrap">
-                    <img src="/assets/images/items/3.jpg" />
+                    <img :src="stock['photo']" />
                   </div>
                   <figcaption class="info-wrap">
                     <a href="#" class="title">{{ stock["name"] }}</a>

@@ -35,7 +35,11 @@ class Customer extends Authenticatable
         return $this->hasMany(Cart::class,'customer_id','id');
     }
 
-    public function customer_groups(){
+    public function orders(){
+        return $this->hasMany(Order::class,'customer_id','id');
+    }
+
+    public function customer_group(){
         return $this->belongsTo(CustomerGroup::class,'group_id','id');
     }
 
