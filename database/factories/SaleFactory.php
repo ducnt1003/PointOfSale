@@ -29,6 +29,8 @@ class SaleFactory extends Factory
             'year'=> $this->faker->numberBetween(2017, 2021),
             'sold_quantity' => $this->faker->numberBetween(300, 3000),
             'money' => $this->faker->numberBetween(10000, 2000000),
+            'store' => $this->faker->numberBetween(1, 2),
+
         ];
     }
 }

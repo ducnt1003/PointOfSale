@@ -2760,6 +2760,7 @@ __webpack_require__.r(__webpack_exports__);
       var uri = "http://127.0.0.1:8000/admin/orders/charge-cart/".concat(id);
       this.axios.get(uri).then(function (response) {
         _this6.carts = [];
+        _this6.selected = {};
       });
     },
     cancel: function cancel() {
@@ -39140,7 +39141,7 @@ var staticRenderFns = [
                       {
                         staticClass:
                           "btn btn-primary m-btn m-btn--icon m-btn--icon-only",
-                        attrs: { href: "/admin/vue/categories" },
+                        attrs: { href: "/admin/vue/dashboard" },
                       },
                       [_c("i", { staticClass: "fa fa-home" })]
                     ),

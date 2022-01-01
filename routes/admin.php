@@ -41,6 +41,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
 
     Route::post('chartmonth',[DashboardController::class, 'chart_month'])->name('chart_month');
     Route::post('chartyear',[DashboardController::class, 'chart_year'])->name('chart_year');
+    Route::get('get-sale',[DashboardController::class, 'getSale']);
 
     Route::prefix('categories')->name('categories.')->group(function (){
         Route::get('/create',[CategoryController::class,'create'])->name('create');
@@ -107,6 +108,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/changepassword', [UserController::class,'index'])->name('index');
         Route::post('/changepassword',[UserController::class,'changePassword'])->name('changepassword');
         Route::get('/get-user-login',[UserController::class,'getUserLogin']);
+        Route::get('/list',[UserController::class,'getList']);
+        Route::get('/info/{id}',[UserController::class,'getInfo']);
     });
 
     Route::prefix('feeds')->name('feeds.')->group(function (){
@@ -219,6 +222,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/list',[CustomerController::class,'getList']);
         Route::get('/info/{id}',[CustomerController::class,'getInfo']);
         Route::get('/order-list/{id}',[CustomerController::class,'getOrderList']);
+        Route::get('/group',[CustomerController::class,'getCustomerGroup']);
     });
 
     Route::prefix('suppliers')->name('suppliers.')->group(function (){

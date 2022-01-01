@@ -12,7 +12,7 @@
     "devDependencies": {
         "axios": "^0.21",
         "bootstrap": "^4.6.1",
-        "jquery": "^3.6",
+        "jquery": "^3.6.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "popper.js": "^1.16.1",
@@ -26,10 +26,13 @@
     },
     "dependencies": {
         "bootstrap-vue": "^2.21.2",
+        "chart.js": "^2.7.1",
+        "datatables.net-dt": "^1.11.3",
         "material-design-icons-iconfont": "^6.1.1",
         "materialize-css": "^1.0.0-rc.2",
         "moment": "^2.29.1",
         "vue-axios": "^3.4.0",
+        "vue-chartjs": "^3.4.0",
         "vue-materialize-datatable": "^1.0.4",
         "vue-router": "^3.5.3",
         "vue-search-select": "^2.9.5",

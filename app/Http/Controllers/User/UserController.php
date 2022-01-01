@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserRequest;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -64,5 +65,27 @@ class UserController extends Controller
     public function getUserLogin()
     {
         return Auth::user();
+    }
+
+    public function getList()
+    {
+        return User::with(['store','roles'])->get();
+    }
+
+    public function getInfo($id){
+        $user = User::with(['store','roles'])->find($id);
+        $total_money = 0;
+        
+        $orders = Order::where('user_id','=',$id)->with(['orderDetails'])->get(); 
+        $num_products = 0;
+        foreach($orders as $order){
+            $total_money += $order->price;
+            //$num_products += $order->countProducts();
+            $order_details = $order->orderDetails;
+            foreach($order_details as $order_detail){
+                $num_products += $order_detail->quantity;
+            }
+        }
+        return [$user,$total_money,$num_products,$orders];
     }
 }

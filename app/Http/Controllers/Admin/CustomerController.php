@@ -64,7 +64,12 @@ class CustomerController extends Controller
 
     public function getOrderList($id)
     {
-        $orders = Order::where('customer_id', $id)->with(['user','orderDetail'])->get();
+        $orders = Order::where('customer_id','=', $id)->with(['user','orderDetails'])->get();
         return $orders;
+    }
+
+    public function getCustomerGroup()
+    {
+        return CustomerGroup::all();
     }
 }
