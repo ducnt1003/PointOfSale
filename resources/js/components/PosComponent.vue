@@ -357,6 +357,7 @@ export default {
       let uri = `http://127.0.0.1:8000/admin/orders/charge-cart/${id}`;
       this.axios.get(uri).then((response) => {
         this.carts = [];
+        this.selected = {};
       });
     },
     cancel() {

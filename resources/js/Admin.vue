@@ -21,9 +21,9 @@
                 <div class="dropdown" style="margin-right:6px">
                     <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="">Chỉnh sửa thông tin</a>
-                        <a class="dropdown-item" href="">Đổi mật khẩu</a>
-                        <a class="dropdown-item" href="">Đăng xuất</a>
+                        <router-link :to="{ name: 'edit-user', params: { id: user.id } }"  class="dropdown-item" >Chỉnh sửa thông tin</router-link>
+                        <router-link :to="{ name: 'change-password', params: { id: user.id } }" class="dropdown-item" href="">Đổi mật khẩu</router-link>
+                        <a class="dropdown-item" href="/admin/logout">Đăng xuất</a>
                     </div>
                 </div>
             </ul>
@@ -148,19 +148,19 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <router-link to="" class="nav-link">
+                  <router-link to="/admin/vue/store" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Danh sách cửa hàng</p>
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link to="" class="nav-link">
+                  <router-link to="/admin/vue/warehouse" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Kho</p>
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link to="" class="nav-link">
+                  <router-link to="/admin/vue/user-list" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Nhân viên</p>
                   </router-link>
@@ -183,7 +183,7 @@
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link to="" class="nav-link">
+                  <router-link to="/admin/vue/customer-group" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Nhóm khách hàng</p>
                   </router-link>
@@ -230,8 +230,15 @@
 export default {
   data() {
     return {
+      user : {},
       active: null
     };
+  },
+  created() {
+    let uri = "http://127.0.0.1:8000/admin/users/get-user-login";
+    this.axios.get(uri).then((response) => {
+      this.user = response.data;
+    });
   },
 };
 </script>

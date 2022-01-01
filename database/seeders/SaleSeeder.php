@@ -17,7 +17,7 @@ class SaleSeeder extends Seeder
     {
         DB::table('sales')->truncate();
         Sale::factory()
-        ->count(3000)
+        ->count(1000)
         ->create();
     }
 }

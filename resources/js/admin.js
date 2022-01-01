@@ -14,14 +14,22 @@ import 'vue-search-select/dist/VueSearchSelect.css';
 
 import Admin from './Admin.vue';
 import ExampleComponent from './components/ExampleComponent.vue';
-import DashboardComponent from './admin_components/DashboardComponent.vue';
-import CategoryComponent from './admin_components/CategoryComponent.vue';
-import ProductComponent from './admin_components/ProductComponent.vue';
-import CustomerComponent from './admin_components/CustomerComponent.vue';
-import CustomerListComponent from './admin_components/CustomerListComponent.vue';
-import CreateProductComponent from './admin_components/CreateProductComponent.vue';
-import PurchaseComponent from './admin_components/PurchaseComponent.vue';
-import PurchaseListComponent from './admin_components/PurchaseListComponent.vue';
+import DashboardComponent from './admin_components/Dashboard/DashboardComponent.vue';
+import CategoryComponent from './admin_components/Category/CategoryComponent.vue';
+import ProductComponent from './admin_components/Product/ProductComponent.vue';
+import CustomerComponent from './admin_components/Customer/CustomerComponent.vue';
+import CustomerListComponent from './admin_components/Customer/CustomerListComponent.vue';
+import CustomerGroupComponent from './admin_components/Customer/CustomerGroupComponent.vue';
+import CreateProductComponent from './admin_components/Product/CreateProductComponent.vue';
+import PurchaseComponent from './admin_components/Purchase/PurchaseComponent.vue';
+import PurchaseListComponent from './admin_components/Purchase/PurchaseListComponent.vue';
+import StoreComponent from './admin_components/Store/StoreComponent.vue';
+import WareHouseComponent from './admin_components/Store/WareHouseComponent.vue';
+import UserListComponent from './admin_components/User/UserListComponent.vue';
+import UserComponent from './admin_components/User/UserComponent.vue';
+import UserEditComponent from './admin_components/User/UserEditComponent.vue';
+import EditComponent from './admin_components/User/EditComponent.vue';
+import ChangePasswordComponent from './admin_components/User/ChangePasswordComponent.vue';
 Vue.use(VueAxios, axios);
 Vue.prototype.$user = document.querySelector("meta[name='user_id']").getAttribute('content');
 
@@ -70,6 +78,51 @@ const routes = [
         name: 'customer',
         path: '/admin/vue/customer/:id',
         component: CustomerComponent,
+    },
+    {
+        name: 'customer-group',
+        path: '/admin/vue/customer-group',
+        component: CustomerGroupComponent,
+    },
+    {
+        name: 'store',
+        path: '/admin/vue/store',
+        component: StoreComponent,
+    },
+    {
+        name: 'warehouse',
+        path: '/admin/vue/warehouse',
+        component: WareHouseComponent,
+    },
+    {
+        name: 'user-list',
+        path: '/admin/vue/user-list/:id',
+        component: UserListComponent,
+    },
+    {
+        name: 'user-list',
+        path: '/admin/vue/user-list',
+        component: UserListComponent,
+    },
+    {
+        name: 'user',
+        path: '/admin/vue/user/:id',
+        component: UserComponent,
+    },
+    {
+        name: 'user-edit',
+        path: '/admin/vue/user-edit/:id',
+        component: UserEditComponent,
+    },
+    {
+        name: 'change-password',
+        path: '/admin/vue/change-password/:id',
+        component: ChangePasswordComponent,
+    },
+    {
+        name: 'edit-user',
+        path: '/admin/vue/edit-user/:id',
+        component: EditComponent,
     },
 ];
 

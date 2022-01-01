@@ -15,5 +15,6 @@ class Sale extends Model
         'year',
         'sold_quantity',
         'money',
+        'store',
     ];
 }
