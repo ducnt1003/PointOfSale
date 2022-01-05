@@ -41,10 +41,10 @@
       let sum1= 0;
       let sum2= 0;
       this.sales[2].forEach(element => {
-          sum1+=parseInt(element.totalmoney);
+          sum1+=parseInt(element);
       });
       this.sales[3].forEach(element => {
-          sum2+=parseInt(element.totalmoney);
+          sum2+=parseInt(element);
       });
       this.chartData.datasets[0].data.push(sum1);
       this.chartData.datasets[0].data.push(sum2);

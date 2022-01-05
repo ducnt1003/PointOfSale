@@ -28,6 +28,7 @@ import WareHouseComponent from './admin_components/Store/WareHouseComponent.vue'
 import UserListComponent from './admin_components/User/UserListComponent.vue';
 import UserComponent from './admin_components/User/UserComponent.vue';
 import UserEditComponent from './admin_components/User/UserEditComponent.vue';
+import UserCreateComponent from './admin_components/User/UserCreateComponent.vue';
 import EditComponent from './admin_components/User/EditComponent.vue';
 import ChangePasswordComponent from './admin_components/User/ChangePasswordComponent.vue';
 Vue.use(VueAxios, axios);
@@ -115,6 +116,11 @@ const routes = [
         component: UserEditComponent,
     },
     {
+        name: 'user-create',
+        path: '/admin/vue/user-create',
+        component: UserCreateComponent,
+    },
+    {
         name: 'change-password',
         path: '/admin/vue/change-password/:id',
         component: ChangePasswordComponent,
@@ -124,6 +130,7 @@ const routes = [
         path: '/admin/vue/edit-user/:id',
         component: EditComponent,
     },
+
 ];
 
 const router = new VueRouter({ mode: 'history', routes: routes });

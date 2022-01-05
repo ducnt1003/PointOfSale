@@ -17,7 +17,7 @@
             <div class="small-box bg-info">
               <div class="inner">
                 <h3>150</h3>
-                <p>New Orders</p>
+                <p>Order mới</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
@@ -33,7 +33,7 @@
             <div class="small-box bg-success">
               <div class="inner">
                 <h3>53<sup style="font-size: 20px">%</sup></h3>
-                <p>Bounce Rate</p>
+                <p>Doanh thu</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
@@ -47,7 +47,7 @@
             <div class="small-box bg-warning">
               <div class="inner">
                 <h3>44</h3>
-                <p>User Registrations</p>
+                <p>Khách hàng</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
@@ -61,7 +61,7 @@
             <div class="small-box bg-danger">
               <div class="inner">
                 <h3>65</h3>
-                <p>Unique Visitors</p>
+                <p>Đơn nhập hàng</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
@@ -85,7 +85,7 @@
                     data-toggle="tab"
                     @click="selectLineChart()"
                   >
-                    Area
+                    Line
                   </button>
                 </li>
                 <li class="nav-item">
@@ -105,11 +105,59 @@
           <doughnut-chart v-if="saleOption == 0"></doughnut-chart>
         </div>
         <div class="row">
-          <div class="col-lg-6">
-            <bar-chart></bar-chart>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1">
+                    5 sản phẩm bán chạy nhất tháng
+                  </i>
+                </h3>
+                <select
+                  class="form-select"
+                  v-model="selectedMonth"
+                  @change="changeMonth()"
+                >
+                  <option v-for="month in months" v-bind:value="month">
+                    {{ month }}
+                  </option>
+                </select>
+              </div>
+              <!-- /.card-header -->
+              <bar-chart
+                v-if="loadedMonth"
+                :labels="labelMonth"
+                :data="valueMonth"
+                label="Đã bán trong tháng"
+              ></bar-chart>
+            </div>
           </div>
-          <div class="col-lg-6">
-            <doughnut-chart></doughnut-chart>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1">
+                    5 sản phẩm bán chạy nhất năm
+                  </i>
+                </h3>
+                <select
+                  class="form-select"
+                  v-model="selectedYear"
+                  @change="changeYear()"
+                >
+                  <option v-for="year in years" v-bind:value="year">
+                    {{ year }}
+                  </option>
+                </select>
+              </div>
+              <!-- /.card-header -->
+              <bar-chart
+                v-if="loadedYear"
+                :labels="labelYear"
+                :data="valueYear"
+                label="Đã bán trong năm"
+              ></bar-chart>
+            </div>
           </div>
         </div>
       </div>
@@ -121,21 +169,51 @@
 import LineChart from "./LineChart.vue";
 import BarChart from "./BarChart.vue";
 import DoughnutChart from "./DoughnutChart.vue";
-import PieChart from "./PieChart.vue";
-import RadarChart from "./RadarChart.vue";
-import PolarAreaChart from "./PolarAreaChart.vue";
-import BubbleChart from "./BubbleChart.vue";
-import ScatterChart from "./ScatterChart.vue";
 
 export default {
   data() {
     return {
       sale: [],
       saleOption: 1,
-      data: [600, 1150, 342, 6050, 2522, 3241, 1259, 157, 1545, 9841],
+      data: [],
+      months: [],
+      years: [],
+      selectedMonth: null,
+      selectedYear: "",
+      labelMonth: [],
+      labelYear: [],
+      valueYear: [],
+      valueMonth: [],
+      loadedMonth: false,
+      loadedYear: false,
     };
   },
-  created() {},
+  watch: {},
+  created() {
+    let uri = "http://127.0.0.1:8000/admin/get-monthyear";
+    this.axios.get(uri).then((response) => {
+      this.months = response.data[0];
+      this.years = response.data[1];
+
+      this.selectedMonth = this.months[0];
+      this.selectedYear = this.years[0];
+      console.log(response.data);
+    });
+    uri = "http://127.0.0.1:8000/admin/get-productmonth";
+    this.axios.post(uri, { month: "12/2021" }).then((response) => {
+      this.labelMonth = response.data[0];
+      this.valueMonth = response.data[1];
+      this.loadedMonth = true;
+      console.log(this.labelMonth);
+    });
+    uri = "http://127.0.0.1:8000/admin/get-productyear";
+    this.axios.post(uri, { year: "2021" }).then((response) => {
+      console.log(response.data);
+      this.labelYear = response.data[0];
+      this.valueYear = response.data[1];
+      this.loadedYear = true;
+    });
+  },
   watch: {},
   methods: {
     selectLineChart() {
@@ -144,16 +222,31 @@ export default {
     selectDonutChart() {
       this.saleOption = 0;
     },
+    changeMonth() {
+      this.loadedMonth = false;
+      let uri = "http://127.0.0.1:8000/admin/get-productmonth";
+      this.axios.post(uri, { month: this.selectedMonth }).then((response) => {
+        this.labelMonth = response.data[0];
+        this.valueMonth = response.data[1];
+        this.loadedMonth = true;
+        console.log(this.labelMonth);
+      });
+    },
+    changeYear() {
+      this.loadedYear = false;
+      let uri = "http://127.0.0.1:8000/admin/get-productyear";
+      this.axios.post(uri, { year: this.selectedYear }).then((response) => {
+        console.log(response.data);
+        this.labelYear = response.data[0];
+        this.valueYear = response.data[1];
+        this.loadedYear = true;
+      });
+    },
   },
   components: {
     LineChart,
     BarChart,
     DoughnutChart,
-    PieChart,
-    RadarChart,
-    PolarAreaChart,
-    BubbleChart,
-    ScatterChart,
   },
 };
 </script>

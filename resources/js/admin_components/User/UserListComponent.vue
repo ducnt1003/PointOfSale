@@ -8,9 +8,9 @@
           {{ store.name }}
         </option>
       </select>
-      <button type="button" class="btn btn-info btn-sm" style="float: right">
+      <router-link :to="{name:'user-create'}" type="button" class="btn btn-info btn-sm" style="float: right">
         New User
-      </button>
+      </router-link>
     </div>
     <div class="card-body">
     <table id="example" class="display nowrap" cellspacing="0" width="100%">
@@ -95,6 +95,7 @@ export default {
 
         setTimeout(() => {
           $("#example").DataTable({
+            autoWidth: true,
             responsive: true,
             destroy: true,
             retrieve: true,

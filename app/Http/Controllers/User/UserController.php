@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserRequest;
 use App\Models\Order;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -43,24 +44,24 @@ class UserController extends Controller
         return redirect(route('admin.users.edit'));
     }
 
-    public function changePassword(Request $request)
-    {
-        $request->validate([
-          'current_password' => 'required|current_password',
-          'password' => 'required|string|min:6|confirmed',
-          'password_confirmation' => 'required',
-        ]);
+    // public function changePassword(Request $request)
+    // {
+    //     $request->validate([
+    //       'current_password' => 'required',
+    //       'password' => 'required|string|min:6|confirmed',
+    //       'password_confirmation' => 'required|same:password',
+    //     ]);
 
-        $user = Auth::user();
+    //     $user = Auth::user();
 
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back();
-        }
+    //     if (!Hash::check($request->current_password, $user->password)) {
+    //         return back();
+    //     }
 
-        $user->password = Hash::make($request->password);
-        $user->save();
-        return redirect('login')->with('success', 'Mật khẩu đã bị thay đổi. Vui lòng đăng nhập lại!');
-    }
+    //     $user->password = Hash::make($request->password);
+    //     $user->save();
+    //     return redirect('login')->with('success', 'Mật khẩu đã bị thay đổi. Vui lòng đăng nhập lại!');
+    // }
 
     public function getUserLogin()
     {
@@ -87,5 +88,109 @@ class UserController extends Controller
             }
         }
         return [$user,$total_money,$num_products,$orders];
+    }
+
+    public function editInfo(Request $request,$id){
+        $request->validate([
+            'name' => "required|max:120",
+            'email' => 'required',
+            'phone' => 'required',
+        ]);
+
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->birthday = $request->birthday;
+        $path = $this->_upload($request);
+        if ($path) {
+            $user->photo = $path;
+        }
+        $user->save();
+        return $user;
+    }
+
+    public function editUser(Request $request,$id){
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->store_id = $request->store_id;
+        $user->birthday = $request->birthday;
+        $user->roles()->detach();
+        $user->roles()->attach($request->role_id);
+        $path = $this->_upload($request);
+        if ($path) {
+            $user->photo = $path;
+        }
+        $user->save();
+        return $user;
+    }
+    public function createUser(Request $request){
+        $request->validate([
+            'name' => "required|max:120",
+            'email' => 'required',
+            'phone' => 'required',
+        ]);
+        //return $request;
+        $user = new User();
+        $user->name = $request->name;
+        $user->username = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->store_id = $request->store_id;
+        $user->birthday = $request->birthday;
+        $user->password = Hash::make("password");
+        
+        $path = $this->_upload($request);
+        if ($path) {
+            $user->photo = $path;
+        }
+        $user->save();
+        $user->roles()->attach($request->role_id);
+        return $user;
+    }
+
+    public function changePassword(Request $request,$id)
+    {
+        $request->validate([
+          'current_password' => 'required',
+          'password' => 'required|string|min:6|confirmed',
+          'password_confirmation' => 'required|same:password',
+        ]);
+
+        $user = User::find($id);
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json(['errors' => ['current_password' => ['The password does not match.']]],422);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return response()->json('success');
+    }
+
+
+    private function _upload($request)
+    {
+        if ($request->file()) {
+            try {
+                $name = $request->file('photo')->getClientOriginalName();
+                $pathFull = 'uploads/' . date("Y/m/d");
+                $request->file('photo')->storeAs(
+                    'public/' . $pathFull,
+                    $name
+                );
+                return '/storage/' . $pathFull . '/' . $name;
+            } catch (\Exception $error) {
+                return false;
+            }
+            
+        }
+        return false;
+    }
+
+    public function getRoles(){
+        return Role::get();
     }
 }

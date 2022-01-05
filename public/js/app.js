@@ -2669,11 +2669,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      discount: 0,
       stocks: [],
       categories: [],
       carts: [],
       results: [],
       customers: [],
+      customers_list: [],
       customer: {},
       selected: {
         value: "",
@@ -2681,6 +2683,14 @@ __webpack_require__.r(__webpack_exports__);
       },
       isModalVisible: false
     };
+  },
+  watch: {
+    selected: function selected(newVal, oldVal) {
+      var index = this.customers_list.findIndex(function (x) {
+        return x.id == newVal.value;
+      });
+      this.discount = this.customers_list[index].customer_group.discount;
+    }
   },
   created: function created() {
     var _this = this;
@@ -2701,6 +2711,11 @@ __webpack_require__.r(__webpack_exports__);
     this.axios.get(uri).then(function (response) {
       _this.customers = response.data;
     });
+    uri = "http://127.0.0.1:8000/admin/customers/list";
+    this.axios.get(uri).then(function (response) {
+      _this.customers_list = response.data;
+      console.log(_this.customers_list);
+    });
   },
   computed: {
     Total: function Total() {
@@ -2710,6 +2725,7 @@ __webpack_require__.r(__webpack_exports__);
         total += this.carts[i].price * this.carts[i].quantity;
       }
 
+      total = total - total * this.discount / 100;
       return total;
     }
   },
@@ -2759,8 +2775,8 @@ __webpack_require__.r(__webpack_exports__);
       window.open("/admin/orders/print", "_blank");
       var uri = "http://127.0.0.1:8000/admin/orders/charge-cart/".concat(id);
       this.axios.get(uri).then(function (response) {
+        console.log(response);
         _this6.carts = [];
-        _this6.selected = {};
       });
     },
     cancel: function cancel() {
@@ -7319,7 +7335,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-mask {\r\n  position: fixed;\r\n  z-index: 9998;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  background-color: rgba(0, 0, 0, 0.5);\r\n  display: table;\r\n  transition: opacity 0.3s ease;\n}\n.modal-wrapper {\r\n  display: table-cell;\r\n  vertical-align: middle;\n}\n.modal-container {\r\n  width: 700px;\r\n  margin: 0px auto;\r\n  padding: 0px 30px;\r\n  background-color: #fff;\r\n  border-radius: 2px;\r\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);\r\n  transition: all 0.3s ease;\r\n  font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3 {\r\n  margin-top: 0;\r\n  color: #0f3688;\n}\n.modal-body {\r\n  margin: 0 0;\n}\n.modal-default-button {\r\n  float: right;\n}\r\n\r\n/*\r\n * The following styles are auto-applied to elements with\r\n * transition=\"modal\" when their visibility is toggled\r\n * by Vue.js.\r\n *\r\n * You can easily play with the modal transition by editing\r\n * these styles.\r\n */\n.modal-enter {\r\n  opacity: 0;\n}\n.modal-leave-active {\r\n  opacity: 0;\n}\n.modal-enter .modal-container,\r\n.modal-leave-active .modal-container {\r\n  transform: scale(1.1);\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.modal-mask {\r\n  position: fixed;\r\n  z-index: 9998;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  background-color: rgba(0, 0, 0, 0.5);\r\n  display: table;\r\n  transition: opacity 0.3s ease;\n}\n.modal-wrapper {\r\n  display: table-cell;\r\n  vertical-align: middle;\n}\n.modal-container {\r\n  width: 80%;\r\n  margin: 0px auto;\r\n  padding: 0px 30px;\r\n  background-color: #fff;\r\n  border-radius: 2px;\r\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);\r\n  transition: all 0.3s ease;\r\n  font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3 {\r\n  margin-top: 0;\r\n  color: #0f3688;\n}\n.modal-body {\r\n  margin: 0 0;\n}\n.modal-default-button {\r\n  float: right;\n}\r\n\r\n/*\r\n * The following styles are auto-applied to elements with\r\n * transition=\"modal\" when their visibility is toggled\r\n * by Vue.js.\r\n *\r\n * You can easily play with the modal transition by editing\r\n * these styles.\r\n */\n.modal-enter {\r\n  opacity: 0;\n}\n.modal-leave-active {\r\n  opacity: 0;\n}\n.modal-enter .modal-container,\r\n.modal-leave-active .modal-container {\r\n  transform: scale(1.1);\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39738,7 +39754,15 @@ var render = function () {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "box" }, [
-              _vm._m(3),
+              _c("dl", { staticClass: "dlist-align" }, [
+                _c("dt", [_vm._v("Discount:")]),
+                _vm._v(" "),
+                _c("dd", { staticClass: "text-right" }, [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _vm._v("%" + _vm._s(_vm.discount)),
+                  ]),
+                ]),
+              ]),
               _vm._v(" "),
               _c("dl", { staticClass: "dlist-align" }, [
                 _c("dt", [_vm._v("Total:")]),
@@ -40018,18 +40042,6 @@ var staticRenderFns = [
             attrs: { src: "/assets/images/items/1.jpg" },
           }),
         ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("dl", { staticClass: "dlist-align" }, [
-      _c("dt", [_vm._v("Discount:")]),
-      _vm._v(" "),
-      _c("dd", { staticClass: "text-right" }, [
-        _c("a", { attrs: { href: "#" } }, [_vm._v("%0")]),
       ]),
     ])
   },

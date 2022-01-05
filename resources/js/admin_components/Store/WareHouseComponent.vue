@@ -14,41 +14,19 @@
           <table id="example" class="display nowrap" cellspacing="0" width="100%">
       <thead>
         <tr>
-          <td>Avatar</td>
-          <td>ID</td>
-          <td>Tên nhân viên</td>
-          <td>Email</td>
-          <td>Cửa hàng</td>
-          <td>Vai trò</td>
-          <td style="width: 100px">&nbsp;</td>
+          <td>Sản phẩm</td>
+          <td>Giá nhập</td>
+          <td>Giá bán</td>
+          <td>Số lượng</td>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in usersCopy" :key="user.id">
+        <tr v-for="warehouse in warehousesCopy" :key="warehouse.id">
+          <td>{{ warehouse.product.name }}</td>
+          <td>{{ warehouse.product.price }}</td>
+          <td>{{ warehouse.product.import_price }}</td>
           <td>
-            <img
-              class="img-thumbnail"
-              width="120px"
-              src="/template/dist/img/avatar.png"
-            />
-          </td>
-          <td>{{ user.id }}</td>
-          <td>{{ user.name }}</td>
-          <td>{{ user.email }}</td>
-          <td>
-            {{ user.store.name }}
-          </td>
-          <td>{{ user.roles[0].name }}</td>
-          <td>
-            <router-link
-              :to="{ name: 'user', params: { id: user.id } }"
-              class="btn btn-primary btn-sm"
-            >
-              <i class="fas fa-eye"></i>
-            </router-link>
-            <button class="delete btn btn-danger btn-sm" data="">
-              <i class="fas fa-trash"></i>
-            </button>
+            {{ warehouse.quantity }}
           </td>
         </tr>
       </tbody>
@@ -67,33 +45,31 @@ import $ from "jquery";
 export default {
   data() {
     return {
+      warehouses: [],
       users: [],
       stores: [],
-      usersCopy: [],
+      warehousesCopy: [],
       selectedStore: 0,
     };
   },
   created() {
-    let uri = "http://127.0.0.1:8000/admin/stores/list";
-    this.axios.get(uri).then((response) => {
-      this.stores = response.data;
-    });
+    // let uri = "http://127.0.0.1:8000/admin/stores/list";
+    // this.axios.get(uri).then((response) => {
+    //   this.stores = response.data;
+    // });
   },
   mounted() {
-    fetch("http://127.0.0.1:8000/admin/users/list")
+    fetch("http://127.0.0.1:8000/admin/warehouses/get-products")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        this.users = data;
-        if (this.$route.params.id) {
-          this.selectedStore = this.$route.params.id;
-          this.changeStore();
-        } else {
-          this.usersCopy = this.users;
-        }
+        this.warehouses = data[0];
+        this.warehousesCopy = this.warehouses;
+        this.stores = data[1];
 
         setTimeout(() => {
           $("#example").DataTable({
+            autoWidth: true,
             responsive: true,
             destroy: true,
             retrieve: true,
@@ -107,9 +83,13 @@ export default {
   methods: {
     changeStore() {
       if (this.selectedStore != 0) {
-        this.usersCopy = this.users.filter(
-          (x) => x.store_id == this.selectedStore
-        );
+        let index = this.stores.findIndex((x) => x.id == this.selectedStore);
+        this.warehousesCopy = this.stores[index].warehouses;
+        // this.warehousesCopy = this.stores.warehouses.filter(
+        //   (x) => x.store_id == this.selectedStore
+        // );
+      }else{
+        this.warehousesCopy = this.warehouses;
       }
     },
   },

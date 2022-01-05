@@ -46,7 +46,7 @@ Route::post('admin/forgot-password', [ForgotPasswordController::class, 'submitFo
 Route::get('admin/reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
 Route::post('admin/reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
 
-Route::get('/',[HomeController::class,'index'])->name('home');
+Route::get('/home',[HomeController::class,'index'])->name('home');
 Route::get('/shop/{id?}',[ShopController::class,'index'])->name('shop');
 Route::get('/product/{id}',[ProductController::class,'index'])->name('product');
 Route::get('/checkout',[CheckoutController::class,'index'])->name('checkout');

@@ -12,10 +12,12 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\Store;
+use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -30,8 +32,9 @@ class OrderController extends Controller
             ->where('store_id', $store->id)
             ->get();
         return view(
-            'admin.orders.pos', [
-            'stocks' => $stocks,
+            'admin.orders.pos',
+            [
+                'stocks' => $stocks,
             ]
         );
     }
@@ -93,9 +96,10 @@ class OrderController extends Controller
     public function save(Request $request)
     {
         $this->validate(
-            $request, [
-            'name' => 'required',
-            'phone' => 'required'
+            $request,
+            [
+                'name' => 'required',
+                'phone' => 'required'
             ]
         );
         $customer = Customer::where('phone', $request->phone)->first();
@@ -268,13 +272,16 @@ class OrderController extends Controller
         $order->customer_id = $id;
         $order->user_id = $user->id;
         $order->save();
-
+        $warehouses = [];
         $total = 0;
-        foreach($carts as $cart){
+        foreach ($carts as $cart) {
             $total += $cart['quantity'] * $cart['price'];
             $warehouse = Warehouse::where('product_id', $cart['product_id'])
-                ->where('store_id', $user->store_id)->first();
+                ->where('store_id', $user->store_id)->with(['product'])->first();
             $warehouse->quantity = $warehouse->quantity - $cart['quantity'];
+            if ($warehouse->quantity < 10) {
+                array_push($warehouses, $warehouse);
+            }
             $warehouse->save();
             $orderDetail = new OrderDetail();
             $orderDetail->warehouse_id = $warehouse->id;
@@ -282,12 +289,23 @@ class OrderController extends Controller
             $orderDetail->order_id = $order->id;
             $orderDetail->save();
         }
-        $order->price = $total;
+        if (count($warehouses) > 0) {
+            $user_mail = User::find(1);
+            Mail::send('email.productNofitication', ['warehouses' => $warehouses], function ($message) use ($user_mail) {
+                $message->to($user_mail->email);
+                $message->subject('Out of stock Nofitication');
+            });
+        }
+        $customer = Customer::find($id);
+        $discount = $customer->customer_group->discount;
+        $order->discount = $discount;
+        $order->price = $total - $total*$discount/100;
         $order->save();
         $customerController = new CustomerController;
         $customerController->addMoney($id, $total);
         session()->forget('cart');
         return response()->json("Success charge");
-
     }
+
+    
 }

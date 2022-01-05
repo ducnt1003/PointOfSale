@@ -4,7 +4,7 @@
       <h3 class="card-title">Thanh toán</h3>
     </div>
     <div slot="body">
-      <form @submit.prevent="purchasePayment()">
+      <form >
         <div class="card-body">
           <div class="row">
             <div class="col-md-4">
@@ -42,7 +42,7 @@
             <textarea v-model="purchase.title" class="form-control"></textarea>
           </div>
           <div class="card-footer">
-            <button class="btn btn-primary pull-right" @click.prevent="purchasePayment()">Lưu</button>
+            <button class="btn btn-primary pull-right" @click.prevent="purchasePayment()">Thanh toán và nhập kho</button>
           </div>
         </div>
       </form>
@@ -57,20 +57,27 @@ export default {
   name: "PurchasePayment",
   props: ["purchase"],
   data() {
-    return {};
+    return {
+      submit:'0',
+      data:{},
+    };
   },
   methods: {
     close() {
-      this.$emit("close");
-      console.log(this.purchase);
+      this.$emit('close');
+    },
+    success(){
+      this.$emit('pay',this.data);
     },
     purchasePayment() {
       let uri = `http://127.0.0.1:8000/admin/purchases/purchase-payment`;
       this.axios.put(uri, this.purchase).then((response) => {
-        this.purchases = response.data;
-        this.close();
+        this.data = response.data;
+        this.success();
       });
+      
     },
+    
   },
   components: {
     Modal,

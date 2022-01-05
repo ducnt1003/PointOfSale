@@ -6,7 +6,7 @@
           <div class="card-header">Đổi mật khẩu</div>
 
           <div class="card-body">
-            <form method="POST" action="">
+            <form @submit.prevent="changePassword">
               <div class="form-group row">
                 <label
                   for="password"
@@ -16,13 +16,16 @@
                 <div class="col-md-6">
                   <input
                     type="password"
-                    class="
-                      form-control
-                      
-                    "
-                    name="current_password"
+                    class="form-control"
+                    v-model="user.current_password"
                     autocomplete="current_password"
                   />
+                  <div
+                    class="alert alert-danger"
+                    v-if="errors && errors.current_password"
+                  >
+                    {{ errors.current_password[0] }}
+                  </div>
                 </div>
               </div>
 
@@ -35,10 +38,16 @@
                 <div class="col-md-6">
                   <input
                     type="password"
-                    class="form-control is-invalid"
-                    name="password"
+                    class="form-control "
+                    v-model="user.password"
                     autocomplete="password"
                   />
+                  <div
+                    class="alert alert-danger"
+                    v-if="errors && errors.password"
+                  >
+                    {{ errors.password[0] }}
+                  </div>
                 </div>
               </div>
 
@@ -52,9 +61,15 @@
                   <input
                     type="password"
                     class="form-control"
-                    name="password_confirmation"
+                    v-model="user.password_confirmation"
                     autocomplete="password_confirmation"
                   />
+                  <div
+                    class="alert alert-danger"
+                    v-if="errors && errors.password_confirmation"
+                  >
+                    {{ errors.password_confirmation[0] }}
+                  </div>
                 </div>
               </div>
 
@@ -72,3 +87,33 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      user: {},
+      errors: [],
+    };
+  },
+  created() {},
+  methods: {
+    changePassword() {
+      let uri = `http://127.0.0.1:8000/admin/users/change-password/${this.$route.params.id}`;
+      this.axios
+        .post(uri, this.user)
+        .then((response) => {
+          console.log(response);
+          this.$router.push({ name: "dashboard" });
+        })
+        .catch((error) => {
+          if (error.response.status === 422) {
+            this.errors = error.response.data.errors;
+            console.log(this.errors);
+          }
+        });
+    },
+  },
+  components: {},
+};
+</script>
