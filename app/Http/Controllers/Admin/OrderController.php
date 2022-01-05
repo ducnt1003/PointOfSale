@@ -290,16 +290,17 @@ class OrderController extends Controller
             $orderDetail->save();
         }
         if (count($warehouses) > 0) {
-            $user_mail = User::find(1);
-            Mail::send('email.productNofitication', ['warehouses' => $warehouses], function ($message) use ($user_mail) {
-                $message->to($user_mail->email);
-                $message->subject('Out of stock Nofitication');
-            });
+            // $user_mail = User::find(1);
+            // Mail::send('email.productNofitication', ['warehouses' => $warehouses], function ($message) use ($user_mail) {
+            //     $message->to($user_mail->email);
+            //     $message->subject('Out of stock Nofitication');
+            // });
+            $t1 = $this->sendMail($warehouses);
         }
         $customer = Customer::find($id);
         $discount = $customer->customer_group->discount;
         $order->discount = $discount;
-        $order->price = $total - $total*$discount/100;
+        $order->price = $total - $total * $discount / 100;
         $order->save();
         $customerController = new CustomerController;
         $customerController->addMoney($id, $total);
@@ -307,5 +308,13 @@ class OrderController extends Controller
         return response()->json("Success charge");
     }
 
-    
+    public function sendMail($warehouses)
+    {
+        $user_mail = User::find(1);
+        if (Mail::send('email.productNofitication', ['warehouses' => $warehouses], function ($message) use ($user_mail) {
+            $message->to($user_mail->email);
+            $message->subject('Out of stock Nofitication');
+        })) return 1;
+        else return 0;
+    }
 }
