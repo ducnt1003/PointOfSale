@@ -25,9 +25,10 @@ class ProductController extends Controller
     public function index()
     {
         return view(
-            'admin.products.index', [
-            'title'=>'Danh sách sản phẩm',
-            'products'=>$this->productService->get(),
+            'admin.products.index',
+            [
+                'title' => 'Danh sách sản phẩm',
+                'products' => $this->productService->get(),
             ]
         );
     }
@@ -40,13 +41,14 @@ class ProductController extends Controller
         $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
         $barcode = $generator->getBarcode($product_code, $generator::TYPE_CODE_128);
         return view(
-            'admin.products.create', [
-            'title'=>'Thêm sản phẩm mới',
-            'categories'=>$categories,
-            'product_code'=>$product_code,
-            'barcode'=>$barcode,
-            'users' => Auth::user(),
-            'brands'=>$brands,
+            'admin.products.create',
+            [
+                'title' => 'Thêm sản phẩm mới',
+                'categories' => $categories,
+                'product_code' => $product_code,
+                'barcode' => $barcode,
+                'users' => Auth::user(),
+                'brands' => $brands,
             ]
         );
     }
@@ -64,12 +66,13 @@ class ProductController extends Controller
         $product = $this->productService->getById($id);
         $users = User::orderBy('id')->get();
         return view(
-            'admin.products.edit', [
-            'title'=>'Chỉnh sửa sản phẩm: ' . $product->name,
-            'categories'=>$categories,
-            'product'=>$product,
-            'brands'=>$brands,
-            'users' => Auth::user(),
+            'admin.products.edit',
+            [
+                'title' => 'Chỉnh sửa sản phẩm: ' . $product->name,
+                'categories' => $categories,
+                'product' => $product,
+                'brands' => $brands,
+                'users' => Auth::user(),
             ]
         );
     }
@@ -89,14 +92,14 @@ class ProductController extends Controller
         if ($result) {
             return response()->json(
                 [
-                'error'=>false,
-                'message'=>'Xóa thành công danh mục'
+                    'error' => false,
+                    'message' => 'Xóa thành công danh mục'
                 ]
             );
         }
         return response()->json(
             [
-            'error'=>true
+                'error' => true
             ]
         );
     }
@@ -105,8 +108,9 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         return view(
-            'admin.products.barcode', [
-            'product'=>$product,
+            'admin.products.barcode',
+            [
+                'product' => $product,
             ]
         );
     }
@@ -115,14 +119,70 @@ class ProductController extends Controller
     public function quotation()
     {
         return view(
-            'admin.products.quotation', [
-            'title'=>'Giá sản phẩm',
-            'products'=>$this->productService->get(),
+            'admin.products.quotation',
+            [
+                'title' => 'Giá sản phẩm',
+                'products' => $this->productService->get(),
             ]
         );
     }
 
-    public function listProd(){
-        return Product::with(['category'])->get();
+    public function listProd()
+    {
+        return Product::with(['category','brand'])->get();
+    }
+
+    public function addProd(Request $request)
+    {
+        $request->validate([
+            'name' => "required|max:120|unique:products",
+            'price' => 'required|min:0',
+            'active' => 'required',
+            'category_id' => 'required',
+        ]);
+        
+        $product = new Product(
+            [
+                'name' => $request->get('name'),
+                'category_id' => $request->get('category_id'),
+                'brand_id' => $request->get('brand_id'),
+                'price' => $request->get('price'),
+                'import_price' => $request->get('import_price'),
+                'active' => $request->get('active'),
+                'description' => $request->get('description'), 
+            ]
+        );
+        $path = $this->_upload($request);
+        if ($path) {
+            $product->photo = $path;
+        }
+        $product->save();
+        return  $product;
+    }
+
+    private function _upload($request)
+    {
+        if ($request->file()) {
+            try {
+                $name = $request->file('photo')->getClientOriginalName();
+                $pathFull = 'uploads/' . date("Y/m/d");
+                $request->file('photo')->storeAs(
+                    'public/' . $pathFull,
+                    $name
+                );
+                return '/storage/' . $pathFull . '/' . $name;
+            } catch (\Exception $error) {
+                return false;
+            }
+            
+        }
+        return false;
+    }
+
+    public function deleteProduct($id)
+    {
+        $product = Product::find($id);
+        $product->delete();
+        return Product::with(['category','brand'])->get();
     }
 }

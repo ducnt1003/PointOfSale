@@ -10,7 +10,8 @@ class CustomerGroup extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'condition'
+        'condition',
+        'discount'
 
     ];
 

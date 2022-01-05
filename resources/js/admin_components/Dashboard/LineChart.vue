@@ -71,18 +71,22 @@ export default {
     let uri = "http://127.0.0.1:8000/admin/get-sale";
     this.axios.get(uri).then((response) => {
       this.sales = response.data;
-      this.sales[2].forEach(element => {
-          this.chartData.datasets[0].data.push(element.totalmoney);
-      });
-      this.sales[1].forEach(element => {
-          this.chartData.datasets[2].data.push(element);
-      });
-      this.sales[3].forEach(element => {
-          this.chartData.datasets[1].data.push(element.totalmoney);
-      });
+      // this.sales[2].forEach(element => {
+      //     this.chartData.datasets[0].data.push(element.totalmoney);
+      // });
+      this.chartData.datasets[0].data= this.sales[2]
+      // this.sales[1].forEach(element => {
+      //     this.chartData.datasets[2].data.push(element);
+      // });
+      this.chartData.datasets[2].data = this.sales[1]
+      // this.sales[3].forEach(element => {
+      //     this.chartData.datasets[1].data.push(element.totalmoney);
+      // });
+       this.chartData.datasets[1].data = this.sales[3]
       this.sales[0].forEach(element => {
           this.chartData.labels.push(element);
       });
+
       this.renderChart(this.chartData, this.options);
     });
     

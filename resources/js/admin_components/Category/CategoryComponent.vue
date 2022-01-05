@@ -282,6 +282,7 @@ export default {
               [0, "asc"],
               [3, "desc"],
             ],
+            autoWidth: true,
             responsive: true,
             destroy: true,
             retrieve: true,
@@ -289,7 +290,7 @@ export default {
             colReorder: true,
             buttons: ["copy", "excel", "pdf"],
           });
-        },300);
+        },500);
       });
   },
   methods: {

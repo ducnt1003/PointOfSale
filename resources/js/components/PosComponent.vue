@@ -178,7 +178,7 @@
           <div class="box">
             <dl class="dlist-align">
               <dt>Discount:</dt>
-              <dd class="text-right"><a href="#">%0</a></dd>
+              <dd class="text-right"><a href="#">%{{ discount }}</a></dd>
             </dl>
             <dl class="dlist-align">
               <dt>Total:</dt>
@@ -279,11 +279,13 @@ import Modal from "./Modal.vue";
 export default {
   data() {
     return {
+      discount: 0,
       stocks: [],
       categories: [],
       carts: [],
       results: [],
       customers: [],
+      customers_list:[],
       customer: {},
       selected: {
         value: "",
@@ -292,7 +294,12 @@ export default {
       isModalVisible: false,
     };
   },
-
+  watch: {
+    selected(newVal,oldVal){
+      let index = this.customers_list.findIndex((x) => x.id == newVal.value);
+      this.discount = this.customers_list[index].customer_group.discount;
+    }
+  },
   created() {
     let uri = "http://127.0.0.1:8000/admin/orders/index";
     this.axios.get(uri).then((response) => {
@@ -310,6 +317,11 @@ export default {
     this.axios.get(uri).then((response) => {
       this.customers = response.data;
     });
+    uri = "http://127.0.0.1:8000/admin/customers/list";
+    this.axios.get(uri).then((response) => {
+      this.customers_list = response.data;
+      console.log(this.customers_list)
+    });
   },
   computed: {
     Total() {
@@ -317,6 +329,7 @@ export default {
       for (let i = 0; i < this.carts.length; i++) {
         total += this.carts[i].price * this.carts[i].quantity;
       }
+      total = total - total*this.discount/100;
       return total;
     },
   },
@@ -356,8 +369,8 @@ export default {
       window.open("/admin/orders/print", "_blank");
       let uri = `http://127.0.0.1:8000/admin/orders/charge-cart/${id}`;
       this.axios.get(uri).then((response) => {
+        console.log(response)
         this.carts = [];
-        this.selected = {};
       });
     },
     cancel() {

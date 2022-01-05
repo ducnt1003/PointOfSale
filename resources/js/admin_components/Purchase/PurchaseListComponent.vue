@@ -33,7 +33,7 @@
           </div>
           <div class="col-sm">
             <div class="form-group">
-              <label for="menu">Trạng thái thanh toán</label>
+              <label for="menu">Trạng thái</label>
               <model-select
                 :options="optionPaid"
                 v-model="selectPaid"
@@ -42,7 +42,7 @@
               </model-select>
             </div>
           </div>
-          <div class="col-sm">
+          <!-- <div class="col-sm">
             <div class="form-group">
               <label for="menu">Trạng thái nhập</label>
               <model-select
@@ -52,7 +52,7 @@
               >
               </model-select>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -69,13 +69,13 @@
               <th>Nhà cung cấp</th>
               <th>Cửa hàng nhận</th>
               <th>Tổng</th>
-              <th>Tình trạng thanh toán</th>
-              <th>Tình trạng nhập</th>
+              <th>Trạng thái</th>
+              <!-- <th>Tình trạng nhập</th> -->
             </tr>
           </thead>
           <tbody>
-            <tr v-for="purchase in cpPurchases" :key="purchase['id']">
-              <td>{{ purchase["id"] }}</td>
+            <tr v-for="(purchase,index) in cpPurchases" :key="index">
+              <td>{{ purchase['id'] }}</td>
               <td>{{ format_date(purchase["created_at"]) }}</td>
               <td>{{ purchase["place_order"] }}</td>
               <td>{{ findStore(purchase["stock_id"]) }}</td>
@@ -84,7 +84,7 @@
                 <button
                   v-if="purchase['paid'] == 0"
                   class="btn btn-danger"
-                  @click.prevent="showModal(purchase)"
+                  @click.prevent="showModal(index)"
                 >
                   Chưa thanh toán
                 </button>
@@ -92,14 +92,14 @@
                   >Đã thanh toán</span
                 >
               </td>
-              <td>
+              <!-- <td>
                 <button v-if="purchase['status'] == 0" class="btn btn-danger">
                   Chưa nhập
                 </button>
                 <span v-if="purchase['status'] != 0" class="btn btn-success"
                   >Đã nhập</span
                 >
-              </td>
+              </td> -->
             </tr>
           </tbody>
         </table>
@@ -107,8 +107,9 @@
     </div>
     <PurchasePayment
       v-show="isModalPurchase"
-      @close="closeModal()"
       :purchase="purchase"
+      @close="closeModal()"
+      @pay="handlePay"
     >
     </PurchasePayment>
   </div>
@@ -122,6 +123,8 @@ import PurchasePayment from "./PurchasePayment.vue";
 export default {
   data() {
     return {
+      index : 0,
+      submit: 0,
       isModalPurchase: false,
       purchases: [],
       purchase: {},
@@ -148,8 +151,7 @@ export default {
   computed: {},
   watch: {
     purchase(newVal,oldVal) {
-        let index = this.purchases.findIndex((x) => x.id == newVal.id);
-        this.purchases[index].paid="1";
+        
     },
     selectedSupplier(newVal, oldVal) {
       this.filterPurchase(
@@ -189,7 +191,6 @@ export default {
     this.axios.get(uri).then((response) => {
       this.suppliers = response.data;
       this.suppliers.push({ id: 0, name: "Tất cả" });
-      console.log(this.suppliers);
     });
     uri = "http://127.0.0.1:8000/admin/stores/list";
     this.axios.get(uri).then((response) => {
@@ -203,9 +204,15 @@ export default {
     });
   },
   methods: {
-    showModal(purchase) {
+    handlePay(data){
+      console.log(data);
+      this.purchases[this.index] = data;
+      this.closeModal();
+    },
+    showModal(index) {
+      this.index = index;
+      this.purchase = this.purchases[index];
       this.isModalPurchase = true;
-      this.purchase = purchase;
     },
     closeModal() {
       this.isModalPurchase = false;

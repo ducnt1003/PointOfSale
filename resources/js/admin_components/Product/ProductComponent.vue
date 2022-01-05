@@ -11,116 +11,195 @@
         Create new Product
       </router-link>
     </div>
-    <datatable title="List Product" :columns="tableColumns1" :rows="products" :perPage="[5,10]" >
-      <th slot="thead-tr">Ảnh</th>
-      <th slot="thead-tr">&nbsp;</th>
-      <template slot="tbody-tr" slot-scope="props">
-        <td>
-          <img
-            v-if="props.row['photo']"
-            class="img-thumbnail"
-            width="120px"
-            :src="props.row['photo']"
-            :alt="props.row['name']"
-          />
-        </td>
-        <td>
-          <a class="btn btn-primary btn-sm" href="#">
-            <i class="fas fa-edit"></i>
-          </a>
-          <a class="btn btn-danger btn-sm" href="#">
-            <i class="fas fa-trash"></i>
-          </a>
-        </td>
-      </template>
-    </datatable>
+    <table id="example" class="display nowrap table" width="100%">
+        <thead>
+          <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Category</td>
+            <td>Brand</td>
+            <td>Giá bán</td>
+            <td>Giá nhập</td>
+            <td>Active</td>
+            <td>Photo</td>
+            <td>&nbsp;</td>
+          </tr>
+        </thead>
+        <tbody v-if="loaded">
+          <tr v-for="product in products" :key="product.id">
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.category.name }}</td>
+            <td>{{ product.brand.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.import_price }}</td>
+            <td>
+            <span v-if="product['active'] == 0" class="btn btn-danger btn-xs"
+              >NO</span
+            >
+            <span v-if="product['active'] != 0" class="btn btn-success btn-xs"
+              >YES</span
+            >
+          </td>
+            <td>
+              <img
+                class="img-thumbnail"
+                width="60px"
+                :src="product['photo']"
+              />
+            </td>
+            <td>
+              <button
+                class="btn btn-primary btn-sm"
+                
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+              <a
+                class="btn btn-danger btn-sm"
+                @click="showModal(product.id)"
+              >
+                <i class="fas fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     <Modal v-show="isModalVisible" @close="closeModal">
       <div class="card-header" slot="header">
-        <h3 class="card-title">Create new Product</h3>
-      </div>
-      <div slot="body"></div>
+          <h3 class="card-title">Delete Product</h3>
+        </div>
+        <div class="card-body" slot="body">Bạn có muốn xóa Product này?</div>
+        <div class="card-footer" slot="footer">
+          <button
+            class="modal-default-button btn-warning"
+            @click="deleteProd()"
+          >
+            Delete
+          </button>
+          <button
+            class="modal-default-button btn-error"
+            @click="closeModal"
+          >
+            Exit
+          </button>
+        </div>
     </Modal>
   </div>
 </template>
 
 <script>
 import Modal from "../../components/Modal.vue";
-import DataTable from "vue-materialize-datatable";
+import "jquery/dist/jquery.min.js";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "datatables.net-dt/js/dataTables.dataTables";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import $ from "jquery";
 
 export default {
   data() {
     return {
       product: {},
       products: [],
-      products_paginate: [],
       isModalVisible: false,
-      tableColumns1: [
-        {
-          label: "ID",
-          field: "id",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "Tên sản phẩm",
-          field: "name",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "Danh mục",
-          field: "category.name",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "Mô tả",
-          field: "description",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "Giá bán",
-          field: "price",
-          numeric: false,
-          html: false,
-        },
-        {
-          label: "Giá nhập",
-          field: "import_price",
-          numeric: false,
-          html: false,
-        },
-      ],
+      id: null,
+      loaded:false,
+      data:null,
     };
+  },
+  mounted() {
+    // fetch("http://127.0.0.1:8000/admin/products/list")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     this.products = data;
+    //     setTimeout(() => {
+    //       $("#example").DataTable({
+    //         order: [
+    //           [0, "asc"],
+    //           [3, "desc"],
+    //         ],
+    //         responsive: true,
+    //         destroy: true,
+    //         retrieve: true,
+    //         autoFill: true,
+    //         colReorder: true,
+    //         buttons: ["copy", "excel", "pdf"],
+    //       });
+    //     },300);
+    //     this.loaded = true;
+    //   });
   },
   created() {
     let uri = "http://127.0.0.1:8000/admin/products/list";
     this.axios.get(uri).then((response) => {
       this.products = response.data;
-      console.log(this.products);
+      setTimeout(() => {
+          this.data = $("#example").DataTable({
+            order: [
+              [0, "asc"],
+              [3, "desc"],
+            ],
+            
+            responsive: true,
+            destroy: true,
+            retrieve: true,
+            autoFill: true,
+            colReorder: true,
+            buttons: ["copy", "excel", "pdf"],
+          });
+        },300);
+        this.loaded = true;
     });
   },
   computed: {},
   methods: {
     displayPrs() {},
-    showModal() {
+    showModal(index) {
+      this.id = index;
       this.isModalVisible = true;
     },
     closeModal() {
       this.isModalVisible = false;
     },
-    onChange(e) {
-      this.product["photo"] = e.target.files[0];
-    },
-    setPages(e) {
-      console.log(e);
-      this.products_paginate = e;
-    },
+    deleteProd(){
+      this.loaded = false;
+      try {
+        let uri = `http://127.0.0.1:8000/admin/products/delete-prod/${this.id}`;
+        this.axios.delete(uri).then((response) => {
+          console.log(response.data);
+          this.products = response.data;
+          this.data.destroy();
+          
+          //this.products.push(this.category);
+          // let index = this.products.findIndex((x) => x.id == this.id);
+          // this.products.splice(this.products.indexOf(index), 1);
+          // console.log(index)
+          this.isModalVisible = false;
+          setTimeout(() => {
+          this.data = $("#example").DataTable({
+            order: [
+              [0, "asc"],
+              [3, "desc"],
+            ],
+            autoWidth: true,
+            responsive: true,
+            destroy: true,
+            retrieve: true,
+            autoFill: true,
+            colReorder: true,
+            buttons: ["copy", "excel", "pdf"],
+          });
+        },300);
+        });
+      } catch (error) {
+        console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
+      }
+      this.loaded=true;
+    }
   },
   components: {
     Modal,
-    datatable: DataTable,
   },
 };
 </script>

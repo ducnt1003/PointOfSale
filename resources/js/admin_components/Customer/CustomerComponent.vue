@@ -121,7 +121,7 @@
                   <table class="table">
                     <tr>
                       <th>Discount (0%)</th>
-                      <td>$0</td>
+                      <td>%{{ discount }}</td>
                     </tr>
                     <tr>
                       <th>Total:</th>
@@ -147,6 +147,7 @@ export default {
     return {
       isModalVisible: false,
       total_money: 0,
+      discount:0,
       customer: {},
       orders: [],
       selectedOrder: {},
@@ -203,8 +204,9 @@ export default {
       let index = this.orders.findIndex((x) => x.id == id);
       this.order_details = this.orders[index].order_details;
       this.total_money = this.orders[index].price;
+      this.discount = this.orders[index].discount;
       this.selectedOrder = this.orders[index];
-      console.log(this.order_details);
+      console.log(this.discount);
       this.isModalVisible = true;
     },
     closeModal() {

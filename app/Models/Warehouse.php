@@ -16,8 +16,8 @@ class Warehouse extends Model
     public function product(){
         return $this->belongsTo(Product::class,'product_id');
     }
-    public function stores(){
-        return $this->hasMany(Store::class,'store_id');
+    public function store(){
+        return $this->belongsTo(Store::class,'store_id');
     }
 
     public function inOrder(){

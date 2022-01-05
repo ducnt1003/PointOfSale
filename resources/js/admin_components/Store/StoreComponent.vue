@@ -25,7 +25,7 @@
             <td>{{ store.address }}</td>
             <td>{{ store.phone }}</td>
             <td>
-              <a class="btn btn-primary" href="">Kho</a>
+              <router-link :to="{ name: 'warehouse' }"  class="btn btn-primary" >Kho</router-link>
               <router-link
                 :to="{ name: 'user-list', params: { id: store.id } }"
                 class="btn btn-primary"
@@ -35,12 +35,12 @@
             </td>
             <td>
               <div class="btn-group" role="group" aria-label="Basic example">
-                <router-link
-                  :to="{ name: 'user-list', params: { id: store.id } }"
-                  class="btn btn-primary btn-sm"
+                <a
+                  
+                  class="btn btn-primary "
                 >
                   <i class="fas fa-edit"></i>
-                </router-link>
+                </a>
                 <button type="button" class="delete btn btn-danger">
                   <i class="fas fa-trash"></i>
                 </button>
@@ -77,6 +77,7 @@ export default {
               [0, "asc"],
               [3, "desc"],
             ],
+            autoWidth: true,
             responsive: true,
             destroy: true,
             retrieve: true,

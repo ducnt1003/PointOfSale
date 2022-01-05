@@ -14,4 +14,8 @@ class Store extends Model
       'address',
       'phone'
     ];
+
+    public function warehouses(){
+      return $this->hasMany(Warehouse::class,'store_id')->with('product');
+    }
 }

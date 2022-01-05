@@ -20,7 +20,7 @@ use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\WarehouseController;
 
-Route::get('admin/login',
+Route::get('/',
     [LoginController::class, 'login']
     )->name('admin.login');
 Route::post('admin/login',
@@ -42,6 +42,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::post('chartmonth',[DashboardController::class, 'chart_month'])->name('chart_month');
     Route::post('chartyear',[DashboardController::class, 'chart_year'])->name('chart_year');
     Route::get('get-sale',[DashboardController::class, 'getSale']);
+    Route::get('get-monthyear',[DashboardController::class, 'getMonthYear']);
+    Route::post('get-productmonth',[DashboardController::class, 'getProductMonth']);
+    Route::post('get-productyear',[DashboardController::class, 'getProductYear']);
 
     Route::prefix('categories')->name('categories.')->group(function (){
         Route::get('/create',[CategoryController::class,'create'])->name('create');
@@ -68,6 +71,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/export',[ProductController::class,'export'])->name('export');
         Route::get('/quotation',[ProductController::class,'quotation'])->name('quotation');
         Route::get('/list',[ProductController::class,'listProd']);
+        Route::post('/add-product',[ProductController::class,'addProd']);
+        Route::delete('delete-prod/{id}', [ProductController::class, 'deleteProduct']);
     });
     Route::prefix('banners')->name('banners.')->group(function (){
         Route::get('/create',[BannerController::class,'create'])->name('create');
@@ -84,6 +89,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/edit/{id}',[BrandController::class,'edit'])->name('edit');
         Route::post('/edit/{id}',[BrandController::class,'update'])->name('edit.update');
         Route::delete('/delete', [BrandController::class, 'destroy'])->name('delete');
+        Route::get('list',[BrandController::class,'listBrand']);
     });
     Route::prefix('stores')->name('stores.')->group(function (){
         Route::get('/list',[StoreController::class,'getList']);
@@ -99,6 +105,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('',[WarehouseController::class,'index'])->name('index');
         Route::get('/edit/{id}',[WarehouseController::class,'edit'])->name('edit');
         Route::get('/search',[WarehouseController::class,'search'])->name('search');
+        Route::get('/get-products',[WarehouseController::class,'getProducts']);
     });
 
 
@@ -106,10 +113,14 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/edit',[UserController::class,'edit'])->name('edit');
         Route::post('/edit',[UserController::class,'update'])->name('edit.update');
         Route::get('/changepassword', [UserController::class,'index'])->name('index');
-        Route::post('/changepassword',[UserController::class,'changePassword'])->name('changepassword');
+        Route::post('/change-password/{id}',[UserController::class,'changePassword']);
         Route::get('/get-user-login',[UserController::class,'getUserLogin']);
         Route::get('/list',[UserController::class,'getList']);
+        Route::get('/roles',[UserController::class,'getRoles']);
         Route::get('/info/{id}',[UserController::class,'getInfo']);
+        Route::post('/edit-info/{id}',[UserController::class,'editInfo']);
+        Route::post('/edit-user/{id}',[UserController::class,'editUser']);
+        Route::post('/create-user',[UserController::class,'createUser']);
     });
 
     Route::prefix('feeds')->name('feeds.')->group(function (){
