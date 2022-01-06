@@ -65,18 +65,25 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Thời gian</th>
+              <th>Ngày tạo đơn</th>
+              <th>Ngày thanh toán</th>
               <th>Nhà cung cấp</th>
               <th>Cửa hàng nhận</th>
               <th>Tổng</th>
               <th>Trạng thái</th>
+              <th>Chi tiết</th>
               <!-- <th>Tình trạng nhập</th> -->
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(purchase,index) in cpPurchases" :key="index">
-              <td>{{ purchase['id'] }}</td>
+            <tr v-for="(purchase, index) in cpPurchases" :key="index">
+              <td>{{ purchase["id"] }}</td>
               <td>{{ format_date(purchase["created_at"]) }}</td>
+              <td>
+                <div v-if="purchase['paid'] == 1">
+                  {{ format_date(purchase["updated_at"]) }}
+                </div>
+              </td>
               <td>{{ purchase["place_order"] }}</td>
               <td>{{ findStore(purchase["stock_id"]) }}</td>
               <td>${{ purchase["money"] }}</td>
@@ -91,6 +98,14 @@
                 <span v-if="purchase['paid'] != 0" class="btn btn-success"
                   >Đã thanh toán</span
                 >
+              </td>
+              <td>
+                <button
+                  class="btn btn-primary btn-sm"
+                  @click="showDetail(purchase['id'])"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
               </td>
               <!-- <td>
                 <button v-if="purchase['status'] == 0" class="btn btn-danger">
@@ -112,6 +127,37 @@
       @pay="handlePay"
     >
     </PurchasePayment>
+    <Modal v-show="isModalVisible" @close="closeDetail">
+      <div class="card-header" slot="header">
+        <h3 class="card-title">Thông tin đơn</h3>
+      </div>
+      <div slot="body">
+        <div class="card-body">
+          <table class="table text-center">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Sản phẩm</th>
+                <th>Giá nhập</th>
+                <th>Số lượng</th>
+                <th>Tổng tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(detail, index) in details" :key="index">
+                <td>{{ detail["id"] }}</td>
+                <td>{{ detail.product.name }}</td>
+                <td>
+                  {{ detail.product.import_price }}
+                </td>
+                <td>{{ detail["quantity"] }}</td>
+                <td>{{ detail["money"] }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -119,11 +165,14 @@
 import { ModelSelect, ModelListSelect } from "vue-search-select";
 import moment from "moment";
 import PurchasePayment from "./PurchasePayment.vue";
+import Modal from "../../components/Modal.vue";
 
 export default {
   data() {
     return {
-      index : 0,
+      isModalVisible: false,
+      details: [],
+      index: 0,
       submit: 0,
       isModalPurchase: false,
       purchases: [],
@@ -150,9 +199,7 @@ export default {
   },
   computed: {},
   watch: {
-    purchase(newVal,oldVal) {
-        
-    },
+    purchase(newVal, oldVal) {},
     selectedSupplier(newVal, oldVal) {
       this.filterPurchase(
         newVal,
@@ -204,7 +251,7 @@ export default {
     });
   },
   methods: {
-    handlePay(data){
+    handlePay(data) {
       console.log(data);
       this.purchases[this.index] = data;
       this.closeModal();
@@ -250,12 +297,25 @@ export default {
         this.cpPurchases = this.cpPurchases.filter((x) => x.paid == paid.value);
       }
     },
+    showDetail(id) {
+      let uri = `http://127.0.0.1:8000/admin/purchases/details/${id}`;
+      this.axios.get(uri).then((response) => {
+        console.log(response.data);
+        this.details = response.data;
+        this.isModalVisible = true;
+      });
+      
+    },
+    closeDetail() {
+      this.isModalVisible = false;
+    },
   },
   components: {
     ModelSelect,
     ModelListSelect,
     moment,
     PurchasePayment,
+    Modal,
   },
 };
 </script>

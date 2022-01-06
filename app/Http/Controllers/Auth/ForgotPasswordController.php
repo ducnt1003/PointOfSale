@@ -66,6 +66,6 @@ class ForgotPasswordController extends Controller
  
           DB::table('password_resets')->where(['email'=> $updatePassword->email])->delete();
   
-          return redirect('admin/login')->with('message', 'Your password has been changed!');
+          return redirect('/')->with('message', 'Your password has been changed!');
       }
 }

@@ -72,4 +72,13 @@ class CustomerController extends Controller
     {
         return CustomerGroup::all();
     }
+
+    public function editCustomerGroup(Request $request ,$id){
+        $customer_group = CustomerGroup::find($id);
+        $customer_group->group_name = $request->group_name;
+        $customer_group->condition = $request->condition;
+        $customer_group->discount = $request->discount;
+        $customer_group->save();
+        return $customer_group;
+    }
 }
