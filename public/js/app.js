@@ -2164,7 +2164,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      user: {},
+      active: null
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    var uri = "http://127.0.0.1:8000/admin/users/get-user-login";
+    this.axios.get(uri).then(function (response) {
+      _this.user = response.data;
+    });
+  }
+});
 
 /***/ }),
 
@@ -39095,7 +39110,47 @@ var render = function () {
   return _c(
     "div",
     [
-      _vm._m(0),
+      _c("section", { staticClass: "header-main" }, [
+        _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "row align-items-center" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._m(1),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-lg-3 col-sm-6" }, [
+              _c(
+                "div",
+                { staticClass: "widgets-wrap d-flex justify-content-end" },
+                [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "widget-header dropdown" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "ml-3 icontext",
+                        attrs: {
+                          href: "#",
+                          "data-toggle": "dropdown",
+                          "data-offset": "20,10",
+                        },
+                      },
+                      [
+                        _c("img", {
+                          staticClass: "avatar",
+                          attrs: { src: _vm.user.photo, alt: "" },
+                        }),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._m(3),
+                  ]),
+                ]
+              ),
+            ]),
+          ]),
+        ]),
+      ]),
       _vm._v(" "),
       _c("br"),
       _vm._v(" "),
@@ -39109,102 +39164,65 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "header-main" }, [
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "row align-items-center" }, [
-          _c("div", { staticClass: "col-lg-3" }, [
-            _c("div", { staticClass: "brand-wrap" }, [
-              _c("img", {
-                staticClass: "logo",
-                attrs: { src: "/template/web/images/favicon.png" },
-              }),
-              _vm._v(" "),
-              _c("h2", { staticClass: "logo-text" }, [_vm._v("RHUST POS")]),
-            ]),
-          ]),
+    return _c("div", { staticClass: "col-lg-3" }, [
+      _c("div", { staticClass: "brand-wrap" }, [
+        _c("img", {
+          staticClass: "logo",
+          attrs: { src: "/template/web/images/favicon.png" },
+        }),
+        _vm._v(" "),
+        _c("h2", { staticClass: "logo-text" }, [_vm._v("RHUST POS")]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-lg-6 col-sm-6" }, [
+      _c("form", { staticClass: "search-wrap", attrs: { action: "#" } }, [
+        _c("div", { staticClass: "input-group" }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Search" },
+          }),
           _vm._v(" "),
-          _c("div", { staticClass: "col-lg-6 col-sm-6" }, [
-            _c("form", { staticClass: "search-wrap", attrs: { action: "#" } }, [
-              _c("div", { staticClass: "input-group" }, [
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text", placeholder: "Search" },
-                }),
-                _vm._v(" "),
-                _c("div", { staticClass: "input-group-append" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "submit" },
-                    },
-                    [_c("i", { staticClass: "fa fa-search" })]
-                  ),
-                ]),
-              ]),
-            ]),
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-3 col-sm-6" }, [
+          _c("div", { staticClass: "input-group-append" }, [
             _c(
-              "div",
-              { staticClass: "widgets-wrap d-flex justify-content-end" },
-              [
-                _c("div", { staticClass: "widget-header" }, [
-                  _c("a", { staticClass: "icontext", attrs: { href: "#" } }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass:
-                          "btn btn-primary m-btn m-btn--icon m-btn--icon-only",
-                        attrs: { href: "/admin/vue/dashboard" },
-                      },
-                      [_c("i", { staticClass: "fa fa-home" })]
-                    ),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "widget-header dropdown" }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "ml-3 icontext",
-                      attrs: {
-                        href: "#",
-                        "data-toggle": "dropdown",
-                        "data-offset": "20,10",
-                      },
-                    },
-                    [
-                      _c("img", {
-                        staticClass: "avatar",
-                        attrs: {
-                          src: "/assets/images/avatars/bshbsh.png",
-                          alt: "",
-                        },
-                      }),
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "dropdown-menu dropdown-menu-right" },
-                    [
-                      _c(
-                        "a",
-                        { staticClass: "dropdown-item", attrs: { href: "#" } },
-                        [
-                          _c("i", { staticClass: "fa fa-sign-out-alt" }),
-                          _vm._v(" Logout"),
-                        ]
-                      ),
-                    ]
-                  ),
-                ]),
-              ]
+              "button",
+              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+              [_c("i", { staticClass: "fa fa-search" })]
             ),
           ]),
         ]),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "widget-header" }, [
+      _c("a", { staticClass: "icontext", attrs: { href: "#" } }, [
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-primary m-btn m-btn--icon m-btn--icon-only",
+            attrs: { href: "/admin/vue/dashboard" },
+          },
+          [_c("i", { staticClass: "fa fa-home" })]
+        ),
+      ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "dropdown-menu dropdown-menu-right" }, [
+      _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
+        _c("i", { staticClass: "fa fa-sign-out-alt" }),
+        _vm._v(" Logout"),
       ]),
     ])
   },

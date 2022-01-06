@@ -45,7 +45,7 @@
                   data-offset="20,10"
                 >
                   <img
-                    src="/assets/images/avatars/bshbsh.png"
+                    :src="user.photo"
                     class="avatar"
                     alt=""
                   />
@@ -98,5 +98,18 @@
 </style>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      user : {},
+      active: null
+    };
+  },
+  created() {
+    let uri = "http://127.0.0.1:8000/admin/users/get-user-login";
+    this.axios.get(uri).then((response) => {
+      this.user = response.data;
+    });
+  },
+};
 </script>

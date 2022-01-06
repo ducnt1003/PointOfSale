@@ -70,8 +70,9 @@ export default {
       this.$emit('pay',this.data);
     },
     purchasePayment() {
+      console.log(this.purchase);
       let uri = `http://127.0.0.1:8000/admin/purchases/purchase-payment`;
-      this.axios.put(uri, this.purchase).then((response) => {
+      this.axios.post(uri, this.purchase).then((response) => {
         this.data = response.data;
         this.success();
       });

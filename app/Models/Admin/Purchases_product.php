@@ -19,9 +19,9 @@ class Purchases_product extends Model
         'status'
     ];
 
-    public function products()
+    public function product()
     {
-        return $this->hasMany(Product::class, 'id', 'product_id');
+        return $this->belongsTo(Product::class,'product_id');
     }
     public static function insertData($data)
     {

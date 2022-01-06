@@ -69,6 +69,19 @@
           <label for="menu">Nội dung</label>
           <textarea class="form-control" v-model="purchase.title"></textarea>
         </div>
+        <div class="col-md-12">
+          <form @submit.prevent="addFile" enctype="multipart/form-data">
+            <div class="form-group">
+              <div class="mb-3">
+              <label for="upload">Upload CSV File</label>
+              <input type="file" class="form-control" v-on:change="onChange" />
+              <br>
+              <button type="submit" class="btn btn-primary">Import</button>
+              </div>
+            </div>
+          </form>
+        
+      </div>
       </div>
     </div>
     <div class="card mt-3 card-info">
@@ -89,9 +102,10 @@
         </div>
         <button type="button" class="btn">
           <i class="fa fa-plus"></i>
-          New product
+          New Product
         </button>
       </div>
+
       <label for="menu">Danh sách sản phẩm</label>
       <div>
         <table class="table text-center">
@@ -129,95 +143,11 @@
         </div>
       </div>
       <div class="card-footer">
-        <button class="btn btn-primary pull-right" @click.prevent="save()">Lưu</button>
+        <button class="btn btn-primary pull-right" @click.prevent="save()">
+          Lưu
+        </button>
       </div>
     </div>
-    <!-- <div class="card mt-3 card-info">
-      <div class="card-header">
-        <h3 class="card-title">Giảm giá</h3>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="menu">Loại giảm</label>
-              <input
-                type="text"
-                name="purchase_id"
-                class="form-control"
-                placeholder="Nhập mã đơn hàng"
-              />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="menu">Lượng giảm</label>
-              <input
-                type="text"
-                name="title"
-                class="form-control"
-                placeholder="Nhập tên đơn hàng"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12">
-          <label for="menu">Ghi chú</label>
-          <textarea class="form-control"></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="card mt-3 card-info">
-      <div class="card-header">
-        <h3 class="card-title">Thanh toán</h3>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="menu">Tổng tiền</label>
-              <input
-                type="text"
-                name="purchase_id"
-                class="form-control"
-                placeholder="Nhập mã đơn hàng"
-              />
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="menu">Ngày trả</label>
-              <input
-                type="text"
-                name="title"
-                class="form-control"
-                placeholder="Nhập tên đơn hàng"
-              />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="menu">Phương thức thanh toán</label>
-              <input
-                type="text"
-                name="title"
-                class="form-control"
-                placeholder="Nhập tên đơn hàng"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-12">
-          <label for="menu">Ghi chú</label>
-          <textarea class="form-control"></textarea>
-        </div>
-        <div class="card-footer">
-          <button class="btn btn-primary pull-right">Lưu</button>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -227,6 +157,7 @@ import { ModelSelect, ModelListSelect } from "vue-search-select";
 export default {
   data() {
     return {
+      file:null,
       purchase: {},
       selectedProduct: {},
       selectedProducts: [],
@@ -295,6 +226,18 @@ export default {
     });
   },
   methods: {
+    onChange(e) {
+      this.file = e.target.files[0];
+    },
+    addFile(){
+      const data = new FormData();
+      data.append("file", this.file);
+      let uri = `http://127.0.0.1:8000/admin/purchases/add-file/`;
+      this.axios.post(uri, data).then((response) => {
+        console.log(response.data);
+        this.selectedProducts = response.data;
+      });
+    },
     resetSelectedProduct() {
       this.selectedProduct = {};
     },
@@ -310,29 +253,27 @@ export default {
         this.selectedProducts.splice(index, 1);
       }
     },
-    save(){
-        this.purchase.stock_id = this.selectedStore.id;
-        this.purchase.place_order = this.selectedSupplier.name;
-        console.log(this.purchase);
-        try {
+    save() {
+      this.purchase.stock_id = this.selectedStore.id;
+      this.purchase.place_order = this.selectedSupplier.name;
+      console.log(this.purchase);
+      try {
         let uri = "http://127.0.0.1:8000/admin/purchases/new-purchase";
         this.axios.post(uri, this.purchase).then((response) => {
-            this.purchase = response.data;
-            this.addProduct(this.purchase.id);
-
+          this.purchase = response.data;
+          this.addProduct(this.purchase.id);
         });
-
       } catch (error) {
         console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
       }
     },
-    addProduct(id){
-        let uri = `http://127.0.0.1:8000/admin/purchases/add-product/${id}`;
-        this.axios.post(uri, this.selectedProducts).then((response) => {
-            console.log(response.data);
-            this.$router.push({name: 'purchases.list'});
-        });
-    }
+    addProduct(id) {
+      let uri = `http://127.0.0.1:8000/admin/purchases/add-product/${id}`;
+      this.axios.post(uri, this.selectedProducts).then((response) => {
+        console.log(response.data);
+        this.$router.push({ name: "purchases.list" });
+      });
+    },
   },
   components: {
     ModelSelect,
