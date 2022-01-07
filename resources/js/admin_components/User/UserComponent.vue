@@ -16,7 +16,7 @@
               <div class="text-center">
                 <img
                   class="profile-user-img img-fluid img-circle"
-                  src="/template/dist/img/user4-128x128.jpg"
+                  :src="user.photo"
                   alt="User profile picture"
                 />
               </div>

@@ -31,7 +31,7 @@
             <img
               class="img-thumbnail"
               width="120px"
-              src="/template/dist/img/avatar.png"
+              :src="user.photo"
             />
           </td>
           <td>{{ user.id }}</td>
