@@ -129,6 +129,10 @@ export default {
             this.errors = error.response.data.errors;
             console.log(this.errors);
           }
+          if (error.response.status === 403) {
+            console.log(error.response)
+            alert(error.response.data.message);
+          }
         });
     },
   },

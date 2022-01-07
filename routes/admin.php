@@ -41,18 +41,20 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::post('get-productyear',[DashboardController::class, 'getProductYear']);
 
     Route::prefix('categories')->name('categories.')->group(function (){
-       
-        Route::get('/list',[CategoryController::class,'listCate']);
-        Route::post('/add-cate',[CategoryController::class,'addCate']);
-        Route::post('/edit-cate/{id}',[CategoryController::class,'editCate']);
-        Route::delete('/delete-cate/{id}', [CategoryController::class, 'deleteCate']);
+        Route::get('/list',[CategoryController::class,'listCate'])->middleware('role:Manager');
+        Route::post('/add-cate',[CategoryController::class,'addCate'])->middleware('role:Manager');
+        Route::post('/edit-cate/{id}',[CategoryController::class,'editCate'])->middleware('role:Manager');
+        Route::delete('/delete-cate/{id}', [CategoryController::class, 'deleteCate'])->middleware('role:Manager');
 
     });
 
     Route::prefix('products')->name('products.')->group(function (){
         Route::get('/list',[ProductController::class,'listProd']);
         Route::post('/add-product',[ProductController::class,'addProd'])->middleware('role:Manager');
-        Route::delete('delete-prod/{id}', [ProductController::class, 'deleteProduct']);
+        Route::delete('delete-prod/{id}', [ProductController::class, 'deleteProduct'])->middleware('role:Manager');;
+        Route::get('/info/{id}',[ProductController::class,'getInfo']);
+        Route::post('/edit-product/{id}',[ProductController::class,'editProd'])->middleware('role:Manager');
+        
     });
     
     Route::prefix('brands')->name('brands.')->group(function (){
@@ -77,8 +79,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/roles',[UserController::class,'getRoles']);
         Route::get('/info/{id}',[UserController::class,'getInfo']);
         Route::post('/edit-info/{id}',[UserController::class,'editInfo']);
-        Route::post('/edit-user/{id}',[UserController::class,'editUser']);
-        Route::post('/create-user',[UserController::class,'createUser']);
+        Route::post('/edit-user/{id}',[UserController::class,'editUser'])->middleware('role:Admin');;
+        Route::post('/create-user',[UserController::class,'createUser'])->middleware('role:Admin');;
     });
 
     Route::prefix('feeds')->name('feeds.')->group(function (){
@@ -138,6 +140,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     });
 
     Route::prefix('customers')->name('customers.')->group(function (){
+        Route::get('/index',[CustomerController::class,'index'])->name('index');
         Route::get('/list',[CustomerController::class,'getList']);
         Route::get('/info/{id}',[CustomerController::class,'getInfo']);
         Route::get('/order-list/{id}',[CustomerController::class,'getOrderList']);
