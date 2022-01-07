@@ -264,6 +264,10 @@ export default {
           this.addProduct(this.purchase.id);
         });
       } catch (error) {
+        if (error.response.status === 403) {
+            console.log(error.response)
+            alert(error.response.data.message);
+          }
         console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
       }
     },

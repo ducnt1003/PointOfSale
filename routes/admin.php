@@ -41,10 +41,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::post('get-productyear',[DashboardController::class, 'getProductYear']);
 
     Route::prefix('categories')->name('categories.')->group(function (){
-        Route::get('/list',[CategoryController::class,'listCate']);
-        Route::post('/add-cate',[CategoryController::class,'addCate']);
-        Route::post('/edit-cate/{id}',[CategoryController::class,'editCate']);
-        Route::delete('/delete-cate/{id}', [CategoryController::class, 'deleteCate']);
+        Route::get('/list',[CategoryController::class,'listCate'])->middleware('role:Manager');
+        Route::post('/add-cate',[CategoryController::class,'addCate'])->middleware('role:Manager');
+        Route::post('/edit-cate/{id}',[CategoryController::class,'editCate'])->middleware('role:Manager');
+        Route::delete('/delete-cate/{id}', [CategoryController::class, 'deleteCate'])->middleware('role:Manager');
 
     });
 
@@ -79,8 +79,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
         Route::get('/roles',[UserController::class,'getRoles']);
         Route::get('/info/{id}',[UserController::class,'getInfo']);
         Route::post('/edit-info/{id}',[UserController::class,'editInfo']);
-        Route::post('/edit-user/{id}',[UserController::class,'editUser']);
-        Route::post('/create-user',[UserController::class,'createUser']);
+        Route::post('/edit-user/{id}',[UserController::class,'editUser'])->middleware('role:Admin');;
+        Route::post('/create-user',[UserController::class,'createUser'])->middleware('role:Admin');;
     });
 
     Route::prefix('feeds')->name('feeds.')->group(function (){

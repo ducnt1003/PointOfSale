@@ -343,6 +343,10 @@ export default {
           this.closeModal();
         });
       } catch (error) {
+        if (error.response.status === 403) {
+            console.log(error.response)
+            alert(error.response.data.message);
+          }
         console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
       }
     },
@@ -366,6 +370,10 @@ export default {
           //this.categories.push(this.category);
         });
       } catch (error) {
+        if (error.response.status === 403) {
+            console.log(error.response)
+            alert(error.response.data.message);
+          }
         console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
       }
     },
@@ -381,6 +389,10 @@ export default {
           this.isDeleteModalVisible = false;
         });
       } catch (error) {
+        if (error.response.status === 403) {
+            console.log(error.response)
+            alert(error.response.data.message);
+          }
         console.error(error.response.data); // NOTE - use "error.response.data` (not "error")
       }
     },
