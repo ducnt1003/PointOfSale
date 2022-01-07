@@ -3,9 +3,6 @@
     <div class="card card-primary mt-3">
       <div class="card-header">
         <h3 class="card-title">STORE</h3>
-        <button type="button" class="btn btn-info btn-sm" style="float: right">
-          New Store
-        </button>
       </div>
       <table id="example" class="display nowrap" cellspacing="0" width="100%">
         <thead>
@@ -15,7 +12,7 @@
             <td>Địa Chỉ</td>
             <td>Số Điện Thoại</td>
             <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            <!-- <td>&nbsp;</td> -->
           </tr>
         </thead>
         <tbody>
@@ -33,7 +30,7 @@
                 Nhân viên
               </router-link>
             </td>
-            <td>
+            <!-- <td>
               <div class="btn-group" role="group" aria-label="Basic example">
                 <a
                   
@@ -45,7 +42,7 @@
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>

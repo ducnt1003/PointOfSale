@@ -20,6 +20,10 @@ class ProductController extends Controller
         return Product::with(['category','brand'])->get();
     }
 
+    public function getInfo($id){
+        return Product::with(['category','brand'])->find($id);
+    }
+
     public function addProd(Request $request)
     {
         $request->validate([
@@ -40,6 +44,31 @@ class ProductController extends Controller
                 'description' => $request->get('description'), 
             ]
         );
+        $path = $this->_upload($request);
+        if ($path) {
+            $product->photo = $path;
+        }
+        $product->save();
+        return  $product;
+    }
+
+    public function editProd(Request $request, $id)
+    {
+        $request->validate([
+            'name' => "required|max:120",
+            'price' => 'required|min:0',
+            'active' => 'required',
+            'category_id' => 'required',
+        ]);
+        $product = Product::find($id);
+        
+        $product->name = $request->get('name');
+        $product->category_id = $request->get('category_id');
+        $product->brand_id = $request->get('brand_id');
+        $product->price = $request->get('price');
+        $product->import_price = $request->get('import_price');
+        $product->active = $request->get('active');
+        $product->description = $request->get('description'); 
         $path = $this->_upload($request);
         if ($path) {
             $product->photo = $path;

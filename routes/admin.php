@@ -41,7 +41,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::post('get-productyear',[DashboardController::class, 'getProductYear']);
 
     Route::prefix('categories')->name('categories.')->group(function (){
-       
         Route::get('/list',[CategoryController::class,'listCate']);
         Route::post('/add-cate',[CategoryController::class,'addCate']);
         Route::post('/edit-cate/{id}',[CategoryController::class,'editCate']);
@@ -52,7 +51,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::prefix('products')->name('products.')->group(function (){
         Route::get('/list',[ProductController::class,'listProd']);
         Route::post('/add-product',[ProductController::class,'addProd'])->middleware('role:Manager');
-        Route::delete('delete-prod/{id}', [ProductController::class, 'deleteProduct']);
+        Route::delete('delete-prod/{id}', [ProductController::class, 'deleteProduct'])->middleware('role:Manager');;
+        Route::get('/info/{id}',[ProductController::class,'getInfo']);
+        Route::post('/edit-product/{id}',[ProductController::class,'editProd'])->middleware('role:Manager');
+        
     });
     
     Route::prefix('brands')->name('brands.')->group(function (){
@@ -138,6 +140,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     });
 
     Route::prefix('customers')->name('customers.')->group(function (){
+        Route::get('/index',[CustomerController::class,'index'])->name('index');
         Route::get('/list',[CustomerController::class,'getList']);
         Route::get('/info/{id}',[CustomerController::class,'getInfo']);
         Route::get('/order-list/{id}',[CustomerController::class,'getOrderList']);

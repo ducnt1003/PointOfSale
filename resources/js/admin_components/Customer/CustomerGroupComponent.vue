@@ -3,9 +3,6 @@
     <div class="card card-primary mt-3">
       <div class="card-header">
         <h3 class="card-title">CUSTOMER GROUP</h3>
-        <button type="button" class="btn btn-info btn-sm" style="float: right">
-          Create new Group
-        </button>
       </div>
       <table id="example" class="display nowrap table" width="100%">
         <thead>

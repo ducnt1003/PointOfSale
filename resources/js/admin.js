@@ -21,6 +21,7 @@ import CustomerComponent from './admin_components/Customer/CustomerComponent.vue
 import CustomerListComponent from './admin_components/Customer/CustomerListComponent.vue';
 import CustomerGroupComponent from './admin_components/Customer/CustomerGroupComponent.vue';
 import CreateProductComponent from './admin_components/Product/CreateProductComponent.vue';
+import EditProductComponent from './admin_components/Product/EditProductComponent.vue';
 import PurchaseComponent from './admin_components/Purchase/PurchaseComponent.vue';
 import PurchaseListComponent from './admin_components/Purchase/PurchaseListComponent.vue';
 import StoreComponent from './admin_components/Store/StoreComponent.vue';
@@ -59,6 +60,11 @@ const routes = [
         name: 'products.create',
         path: '/admin/vue/products/create',
         component: CreateProductComponent,
+    },
+    {
+        name: 'products.edit',
+        path: '/admin/vue/products/edit/:id',
+        component: EditProductComponent,
     },
     {
         name: 'purchases.create',

@@ -32,15 +32,15 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3>530312<sup style="font-size: 20px">$</sup></h3>
                 <p>Doanh thu</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="#" class="small-box-footer"
+              <router-link :to="{name:'dashboard'}" class="small-box-footer"
                 >More info <i class="fas fa-arrow-circle-right"></i
-              ></a>
+              ></router-link>
             </div>
           </div>
           <div class="col-lg-3 col-6">
@@ -52,23 +52,23 @@
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="#" class="small-box-footer"
+              <router-link :to="{name:'customers-list'}" class="small-box-footer"
                 >More info <i class="fas fa-arrow-circle-right"></i
-              ></a>
+              ></router-link>
             </div>
           </div>
           <div class="col-lg-3 col-6">
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
+                <h3>3</h3>
                 <p>Đơn nhập hàng</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="#" class="small-box-footer"
+              <router-link :to="{name:'purchases.list'}" class="small-box-footer"
                 >More info <i class="fas fa-arrow-circle-right"></i
-              ></a>
+              ></router-link>
             </div>
           </div>
         </div>
