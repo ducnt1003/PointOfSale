@@ -9,7 +9,7 @@
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
--Step 1: composer install <br>
+-Step 1: composer install <br>npm install <br>
 -Step 2: cp .env.example .env <br>
        then config .env file <br>
 -Step 3:	

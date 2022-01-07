@@ -83,6 +83,7 @@ class UserSeeder extends Seeder
 
         // add user to user role and admin to admin role
         $user->roles()->attach($memberRole);
+        $user->roles()->attach($managerRole);
         $admin->roles()->attach($adminRole);
         $editor->roles()->attach($managerRole);
 
