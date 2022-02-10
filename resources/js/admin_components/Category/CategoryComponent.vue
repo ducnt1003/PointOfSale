@@ -12,6 +12,7 @@
           Create new Category
         </button>
       </div>
+      <br>
       <table id="example" class="display nowrap table" width="100%">
         <thead>
           <tr>

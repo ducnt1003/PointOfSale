@@ -25,7 +25,7 @@
               </span> -->
             </div>
             <div class="alert alert-danger" v-if="errors && errors.name">
-            {{ errors.name[0] }}
+              {{ errors.name[0] }}
             </div>
           </div>
           <div class="col-md-6">
@@ -41,7 +41,7 @@
               </select>
             </div>
             <div class="alert alert-danger" v-if="errors && errors.category_id">
-            {{ errors.category_id[0] }}
+              {{ errors.category_id[0] }}
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
               </select>
             </div>
             <div class="alert alert-danger" v-if="errors && errors.brand_id">
-            {{ errors.brand_id[0] }}
+              {{ errors.brand_id[0] }}
             </div>
           </div>
           <div class="col-md-6">
@@ -79,7 +79,7 @@
               />
             </div>
             <div class="alert alert-danger" v-if="errors && errors.price">
-            {{ errors.price[0] }}
+              {{ errors.price[0] }}
             </div>
           </div>
           <div class="col-md-4">
@@ -103,7 +103,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="form-group">
           <label>Mô tả</label>
           <textarea
@@ -112,12 +112,28 @@
           ></textarea>
         </div>
 
-        <div class="form-group">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Upload</span>
+          </div>
+          <div class="custom-file">
+            <input
+              type="file"
+              class="custom-file-input"
+              v-on:change="onChange"
+            />
+            <label class="custom-file-label" for="inputGroupFile01"
+              >Choose file</label
+            >
+          </div>
+        </div>
+
+        <!-- <div class="form-group">
           <label for="upload">Ảnh</label>
           <input type="file" class="form-control" v-on:change="onChange" />
           <div id="image_show"></div>
-          <input type="hidden" id="photo"  />
-        </div>
+          <input type="hidden" id="photo" />
+        </div> -->
         <div class="form-group">
           <label>Kích Hoạt</label>
           <div class="form-check">
@@ -159,7 +175,7 @@ export default {
       categories: [],
       brands: [],
       errors: [],
-      user:{},
+      user: {},
     };
   },
   created() {
@@ -213,7 +229,7 @@ export default {
             console.log(this.errors);
           }
           if (error.response.status === 403) {
-            console.log(error.response)
+            console.log(error.response);
             alert(error.response.data.message);
           }
         });

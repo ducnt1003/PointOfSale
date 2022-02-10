@@ -80,7 +80,7 @@ class OrderController extends Controller
                 "name" => $product->name,
                 "quantity" => 1,
                 "price" => $product->price,
-                "image" => $product->image
+                "photo" => $product->image
             ];
         } else {
             $cart[$count]['quantity']++;
@@ -154,11 +154,6 @@ class OrderController extends Controller
             $orderDetail->save();
         }
         if (count($warehouses) > 0) {
-            // $user_mail = User::find(1);
-            // Mail::send('email.productNofitication', ['warehouses' => $warehouses], function ($message) use ($user_mail) {
-            //     $message->to($user_mail->email);
-            //     $message->subject('Out of stock Nofitication');
-            // });
             $t1 = $this->sendMail($warehouses);
         }
         $customer = Customer::find($id);

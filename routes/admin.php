@@ -41,10 +41,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::post('get-productyear',[DashboardController::class, 'getProductYear']);
 
     Route::prefix('categories')->name('categories.')->group(function (){
-        Route::get('/list',[CategoryController::class,'listCate'])->middleware('role:Manager');
+        Route::get('/list',[CategoryController::class,'listCate']);
         Route::post('/add-cate',[CategoryController::class,'addCate'])->middleware('role:Manager');
         Route::post('/edit-cate/{id}',[CategoryController::class,'editCate'])->middleware('role:Manager');
-        Route::delete('/delete-cate/{id}', [CategoryController::class, 'deleteCate'])->middleware('role:Manager');
+        Route::delete('/delete-cate/{id}', [CategoryController::class, 'deleteCate']);
 
     });
 
@@ -141,6 +141,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
 
     Route::prefix('customers')->name('customers.')->group(function (){
         Route::get('/index',[CustomerController::class,'index'])->name('index');
+        Route::post('/store',[CustomerController::class,'create'])->name('store');
         Route::get('/list',[CustomerController::class,'getList']);
         Route::get('/info/{id}',[CustomerController::class,'getInfo']);
         Route::get('/order-list/{id}',[CustomerController::class,'getOrderList']);

@@ -2679,6 +2679,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -39168,7 +39169,7 @@ var staticRenderFns = [
       _c("div", { staticClass: "brand-wrap" }, [
         _c("img", {
           staticClass: "logo",
-          attrs: { src: "/template/web/images/favicon.png" },
+          attrs: { src: "/images/Logo-1.jpg" },
         }),
         _vm._v(" "),
         _c("h2", { staticClass: "logo-text" }, [_vm._v("RHUST POS")]),
@@ -39670,7 +39671,13 @@ var render = function () {
                       "tbody",
                       _vm._l(_vm.carts, function (cart) {
                         return _c("tr", { key: cart["product_id"] }, [
-                          _vm._m(2, true),
+                          _c("td", [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(cart.name) +
+                                "\n                  "
+                            ),
+                          ]),
                           _vm._v(" "),
                           _c("td", { staticClass: "text-center" }, [
                             _c(
@@ -40044,21 +40051,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { staticClass: "text-right", attrs: { scope: "col" } }, [
           _vm._v("Delete"),
-        ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("figure", { staticClass: "media" }, [
-        _c("div", { staticClass: "img-wrap" }, [
-          _c("img", {
-            staticClass: "img-thumbnail img-xs",
-            attrs: { src: "/assets/images/items/1.jpg" },
-          }),
         ]),
       ]),
     ])

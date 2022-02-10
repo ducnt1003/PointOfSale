@@ -236,7 +236,7 @@ export default {
     this.axios.get(uri).then((response) => {
       this.info = response.data;
       this.user = this.info[0];
-      this.money = this.info[1];
+      this.money = parseFloat(this.info[1]).toFixed(2);
       this.quantity = this.info[2];
       this.orders = this.info[3];
       setTimeout(() => {

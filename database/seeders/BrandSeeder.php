@@ -17,7 +17,7 @@ class BrandSeeder extends Seeder
     {
         DB::table('brands')->truncate();
         Brand::factory()
-            ->count(20)
+            ->count(5)
             ->create();
     }
 }

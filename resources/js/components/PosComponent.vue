@@ -113,14 +113,15 @@
                 <tbody>
                   <tr v-for="cart in carts" :key="cart['product_id']">
                     <td>
-                      <figure class="media">
+                      <!-- <figure class="media">
                         <div class="img-wrap">
                           <img
-                            src="/assets/images/items/1.jpg"
+                            :src="cart['photo']"
                             class="img-thumbnail img-xs"
                           />
                         </div>
-                      </figure>
+                      </figure> -->
+                      {{cart.name}}
                     </td>
                     <td class="text-center">
                       <div
