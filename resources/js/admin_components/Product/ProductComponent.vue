@@ -11,6 +11,7 @@
         Create new Product
       </router-link>
     </div>
+    <br>
     <table id="example" class="display nowrap table" width="100%">
       <thead>
         <tr>

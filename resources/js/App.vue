@@ -5,7 +5,7 @@
         <div class="row align-items-center">
           <div class="col-lg-3">
             <div class="brand-wrap">
-              <img class="logo" src="/template/web/images/favicon.png" />
+              <img class="logo" src="/images/Logo-1.jpg" />
               <h2 class="logo-text">RHUST POS</h2>
             </div>
             <!-- brand-wrap.// -->

@@ -25,7 +25,7 @@
               </span> -->
             </div>
             <div class="alert alert-danger" v-if="errors && errors.name">
-            {{ errors.name[0] }}
+              {{ errors.name[0] }}
             </div>
           </div>
           <div class="col-md-6">
@@ -41,7 +41,7 @@
               </select>
             </div>
             <div class="alert alert-danger" v-if="errors && errors.category_id">
-            {{ errors.category_id[0] }}
+              {{ errors.category_id[0] }}
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
               </select>
             </div>
             <div class="alert alert-danger" v-if="errors && errors.brand_id">
-            {{ errors.brand_id[0] }}
+              {{ errors.brand_id[0] }}
             </div>
           </div>
           <div class="col-md-6">
@@ -79,7 +79,7 @@
               />
             </div>
             <div class="alert alert-danger" v-if="errors && errors.price">
-            {{ errors.price[0] }}
+              {{ errors.price[0] }}
             </div>
           </div>
           <div class="col-md-4">
@@ -103,7 +103,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="form-group">
           <label>Mô tả</label>
           <textarea
@@ -112,12 +112,28 @@
           ></textarea>
         </div>
 
-        <div class="form-group">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Upload</span>
+          </div>
+          <div class="custom-file">
+            <input
+              type="file"
+              class="custom-file-input"
+              v-on:change="onChange"
+            />
+            <label class="custom-file-label" for="inputGroupFile01"
+              >Choose file</label
+            >
+          </div>
+        </div>
+
+        <!-- <div class="form-group">
           <label for="upload">Ảnh</label>
           <input type="file" class="form-control" v-on:change="onChange" />
           <div id="image_show"></div>
           <input type="hidden" id="photo"  />
-        </div>
+        </div> -->
         <div class="form-group">
           <label>Kích Hoạt</label>
           <div class="form-check">
@@ -145,7 +161,7 @@
       </div>
 
       <div class="card-footer">
-        <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+        <button type="submit" class="btn btn-primary">Sửa sản phẩm</button>
       </div>
     </form>
   </div>
@@ -159,7 +175,7 @@ export default {
       categories: [],
       brands: [],
       errors: [],
-      user:{},
+      user: {},
     };
   },
   created() {
@@ -170,12 +186,12 @@ export default {
     uri = "http://127.0.0.1:8000/admin/brands/list";
     this.axios.get(uri).then((response) => {
       this.brands = response.data;
-      console.log(this.brands)
+      console.log(this.brands);
     });
     uri = `http://127.0.0.1:8000/admin/products/info/${this.$route.params.id}`;
     this.axios.get(uri).then((response) => {
       this.product = response.data;
-      console.log(this.product)
+      console.log(this.product);
     });
     uri = "http://127.0.0.1:8000/admin/users/get-user-login";
     this.axios.get(uri).then((response) => {
@@ -219,7 +235,7 @@ export default {
             console.log(this.errors);
           }
           if (error.response.status === 403) {
-            console.log(error.response)
+            console.log(error.response);
             alert(error.response.data.message);
           }
         });
