@@ -66,8 +66,17 @@ class PurchaseController extends Controller
         foreach($purchase_products as $purchase_product){
             $warehouse = Warehouse::where('store_id',$purchase->stock_id)
             ->where('product_id',$purchase_product->product_id)->first();
-            $warehouse->quantity += $purchase_product->quantity;
-            $warehouse->save();
+            if ($warehouse != NULL){
+                $warehouse->quantity += $purchase_product->quantity;
+                $warehouse->save();
+            }else {
+                $warehouse = new Warehouse();
+                $warehouse->store_id = $purchase->stock_id;
+                $warehouse->product_id = $purchase_product->product_id;
+                $warehouse->quantity = $purchase_product->quantity;
+                $warehouse->save();
+            }
+            
         }
         return $purchase;
     }
