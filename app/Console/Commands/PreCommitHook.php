@@ -48,7 +48,7 @@ class PreCommitHook extends Command
         $end = now();
         $this->output->writeln('Checked ' . count($changed) . ' file(s) in ' . $end->diffInRealSeconds($start) . ' second(s)');
         $output->writeLine('Your code is perfect, no syntax error found!', TextOutputColored::TYPE_OK);
-        // return true;
+    
     }
     /**
      * Get a list of changed PHP files
