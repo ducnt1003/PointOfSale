@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
@@ -47,7 +48,7 @@ class PreCommitHook extends Command
         $end = now();
         $this->output->writeln('Checked ' . count($changed) . ' file(s) in ' . $end->diffInRealSeconds($start) . ' second(s)');
         $output->writeLine('Your code is perfect, no syntax error found!', TextOutputColored::TYPE_OK);
-        return true;
+        //retrun true;
     }
     /**
      * Get a list of changed PHP files
@@ -217,4 +218,3 @@ class PreCommitHook extends Command
         return $status;
     }
 }
-

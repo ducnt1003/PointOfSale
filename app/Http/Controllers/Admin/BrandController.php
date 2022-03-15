@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -6,6 +7,7 @@ use App\Http\Requests\Admin\BrandRequest;
 use App\Models\Brand;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+
 
 class BrandController extends Controller
 {
@@ -40,7 +42,7 @@ class BrandController extends Controller
     {
         $brand = Brand::find($id);
         if ($brand) {
-            $path = $this->upload($request);
+            $path = $this->_upload($request);
             if ($path) {
                 $brand->photo = $path;
             }
@@ -94,12 +96,12 @@ class BrandController extends Controller
     }
 
 
-    private function upload($request)
+    private function _upload($request)
     {
         if ($request->hasFile('photo')) {
             try {
                 $name = $request->file('photo')->getClientOriginalName();
-                $pathFull = 'uploads/' . date('Y/m/d');
+                $pathFull = 'uploads/' . date("Y/m/d");
                 $request->file('file')->storeAs(
                     'public/' . $pathFull,
                     $name
@@ -113,18 +115,6 @@ class BrandController extends Controller
     }
 
 
-    // public function storeBrand(Request $request)
-    // {
-    //     $brand = new Brand(
-    //         [
-    //         'name' => $request->get('name'),
-    //         ]
-    //     );
-
-    //     $brand->save();
-
-    //     return response()->json('successfully added');
-    // }
     public function storeBrand(Request $request)
     {
         $brand = new Brand(
