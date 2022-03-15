@@ -13,7 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \App\Console\Commands\PrecommitHook::class,
+        \App\Console\Commands\InstallHooks::class,
+        
     ];
 
     /**
